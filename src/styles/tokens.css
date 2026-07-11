@@ -1,0 +1,33 @@
+:root {
+  /* brand (overridable) */
+  --pomi-color-primary: #5b6cff;
+  --pomi-color-danger: #e5484d;
+  --pomi-color-success: #30a46c;
+  --pomi-color-neutral: #6b7280;
+
+  /* surface / text */
+  --pomi-bg: #ffffff;
+  --pomi-fg: #111827;
+  --pomi-muted: #6b7280;
+  --pomi-border: #e5e7eb;
+
+  /* shape / type */
+  --pomi-radius: 12px;
+  --pomi-font: system-ui, sans-serif;
+  --pomi-font-mono: ui-monospace, monospace;
+
+  /* focus (a11y) */
+  --pomi-focus-ring: 0 0 0 3px
+    color-mix(in srgb, var(--pomi-color-primary) 35%, transparent);
+
+  /* spacing scale (minimal) */
+  --pomi-space-1: 0.25rem;
+  --pomi-space-2: 0.5rem;
+  --pomi-space-3: 0.75rem;
+  --pomi-space-4: 1rem;
+  --pomi-space-6: 1.5rem;
+
+  /* elevation */
+  --pomi-shadow: 0 1px 2px rgb(0 0 0 / 6%), 0 4px 12px rgb(0 0 0 / 6%);
+  --pomi-overlay: rgb(17 24 39 / 45%);
+}

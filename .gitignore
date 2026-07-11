@@ -1,0 +1,15 @@
+# Editor
+.vscode/*
+!.vscode/extensions.json
+.idea
+
+# Dependencies / build
+node_modules
+dist
+storybook-static
+coverage
+*.local
+.DS_Store
+*.log
+.vite
+.turbo

@@ -1,0 +1,11 @@
+/* Lightweight resets scoped to Pomikit classes — never a global page reset */
+[class^='pomi-'],
+[class*=' pomi-'] {
+  box-sizing: border-box;
+}
+
+.pomi-button,
+.pomi-input__field,
+.pomi-dialog__close {
+  font: inherit;
+}

@@ -1,0 +1,90 @@
+.pomi-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--pomi-space-1);
+  font-family: var(--pomi-font);
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  border-radius: 999px;
+  border: 1px solid transparent;
+}
+
+.pomi-badge--sm {
+  padding: 0.15rem 0.45rem;
+  font-size: 0.7rem;
+}
+
+.pomi-badge--md {
+  padding: 0.25rem 0.55rem;
+  font-size: 0.75rem;
+}
+
+.pomi-badge--lg {
+  padding: 0.35rem 0.7rem;
+  font-size: 0.85rem;
+}
+
+.pomi-badge--solid.pomi-badge--primary {
+  background: var(--pomi-color-primary);
+  color: #fff;
+}
+
+.pomi-badge--solid.pomi-badge--neutral {
+  background: var(--pomi-color-neutral);
+  color: #fff;
+}
+
+.pomi-badge--solid.pomi-badge--danger {
+  background: var(--pomi-color-danger);
+  color: #fff;
+}
+
+.pomi-badge--solid.pomi-badge--success {
+  background: var(--pomi-color-success);
+  color: #fff;
+}
+
+.pomi-badge--soft.pomi-badge--primary {
+  background: color-mix(in srgb, var(--pomi-color-primary) 14%, transparent);
+  color: var(--pomi-color-primary);
+}
+
+.pomi-badge--soft.pomi-badge--neutral {
+  background: color-mix(in srgb, var(--pomi-color-neutral) 14%, transparent);
+  color: var(--pomi-fg);
+}
+
+.pomi-badge--soft.pomi-badge--danger {
+  background: color-mix(in srgb, var(--pomi-color-danger) 14%, transparent);
+  color: var(--pomi-color-danger);
+}
+
+.pomi-badge--soft.pomi-badge--success {
+  background: color-mix(in srgb, var(--pomi-color-success) 14%, transparent);
+  color: var(--pomi-color-success);
+}
+
+.pomi-badge--outline.pomi-badge--primary {
+  border-color: color-mix(in srgb, var(--pomi-color-primary) 40%, transparent);
+  color: var(--pomi-color-primary);
+  background: transparent;
+}
+
+.pomi-badge--outline.pomi-badge--neutral {
+  border-color: var(--pomi-border);
+  color: var(--pomi-fg);
+  background: transparent;
+}
+
+.pomi-badge--outline.pomi-badge--danger {
+  border-color: color-mix(in srgb, var(--pomi-color-danger) 40%, transparent);
+  color: var(--pomi-color-danger);
+  background: transparent;
+}
+
+.pomi-badge--outline.pomi-badge--success {
+  border-color: color-mix(in srgb, var(--pomi-color-success) 40%, transparent);
+  color: var(--pomi-color-success);
+  background: transparent;
+}

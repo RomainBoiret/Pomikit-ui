@@ -1,0 +1,113 @@
+.pomi-dialog__overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--pomi-overlay);
+  animation: pomi-fade-in 160ms ease;
+}
+
+.pomi-dialog__content {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(calc(100vw - 2rem), 28rem);
+  max-height: calc(100vh - 2rem);
+  overflow: auto;
+  padding: var(--pomi-space-6);
+  background: var(--pomi-bg);
+  color: var(--pomi-fg);
+  border: 1px solid var(--pomi-border);
+  border-radius: calc(var(--pomi-radius) + 2px);
+  box-shadow: var(--pomi-shadow);
+  font-family: var(--pomi-font);
+  animation: pomi-dialog-in 180ms ease;
+}
+
+.pomi-dialog__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--pomi-space-3);
+  margin-bottom: var(--pomi-space-3);
+}
+
+.pomi-dialog__title {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 650;
+  line-height: 1.3;
+}
+
+.pomi-dialog__description {
+  margin: 0 0 var(--pomi-space-4);
+  color: var(--pomi-muted);
+  font-size: 0.925rem;
+  line-height: 1.5;
+}
+
+.pomi-dialog__description--empty {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.pomi-dialog__body {
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.pomi-dialog__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--pomi-space-2);
+  margin-top: var(--pomi-space-6);
+}
+
+.pomi-dialog__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  border-radius: calc(var(--pomi-radius) - 2px);
+  background: transparent;
+  color: var(--pomi-muted);
+  cursor: pointer;
+}
+
+.pomi-dialog__close:hover {
+  background: color-mix(in srgb, var(--pomi-color-neutral) 12%, transparent);
+  color: var(--pomi-fg);
+}
+
+.pomi-dialog__close:focus-visible {
+  outline: none;
+  box-shadow: var(--pomi-focus-ring);
+}
+
+@keyframes pomi-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes pomi-dialog-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, calc(-50% + 6px)) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}

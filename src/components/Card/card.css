@@ -1,0 +1,47 @@
+.pomi-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pomi-space-3);
+  padding: var(--pomi-space-4);
+  background: var(--pomi-bg);
+  color: var(--pomi-fg);
+  border: 1px solid var(--pomi-border);
+  border-radius: var(--pomi-radius);
+  font-family: var(--pomi-font);
+  box-shadow: var(--pomi-shadow);
+}
+
+.pomi-card__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pomi-space-1);
+}
+
+.pomi-card__title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 650;
+  line-height: 1.3;
+}
+
+.pomi-card__description {
+  margin: 0;
+  color: var(--pomi-muted);
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.pomi-card__body {
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.pomi-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--pomi-space-2);
+  margin-top: var(--pomi-space-1);
+  padding-top: var(--pomi-space-3);
+  border-top: 1px solid var(--pomi-border);
+}

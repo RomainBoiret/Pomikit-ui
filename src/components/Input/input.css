@@ -1,0 +1,85 @@
+.pomi-input {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pomi-space-2);
+  font-family: var(--pomi-font);
+  width: 100%;
+}
+
+.pomi-input__label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--pomi-fg);
+}
+
+.pomi-input__field {
+  width: 100%;
+  border: 1px solid var(--pomi-border);
+  border-radius: var(--pomi-radius);
+  background: var(--pomi-bg);
+  color: var(--pomi-fg);
+  transition:
+    border-color 140ms ease,
+    box-shadow 140ms ease;
+}
+
+.pomi-input__field::placeholder {
+  color: var(--pomi-muted);
+}
+
+.pomi-input__field:focus {
+  outline: none;
+}
+
+.pomi-input__field:focus-visible {
+  border-color: color-mix(in srgb, var(--pomi-color-primary) 55%, var(--pomi-border));
+  box-shadow: var(--pomi-focus-ring);
+}
+
+.pomi-input__field:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: color-mix(in srgb, var(--pomi-border) 25%, var(--pomi-bg));
+}
+
+.pomi-input--sm .pomi-input__field {
+  min-height: 2rem;
+  padding: 0 var(--pomi-space-3);
+  font-size: 0.8125rem;
+}
+
+.pomi-input--md .pomi-input__field {
+  min-height: 2.5rem;
+  padding: 0 var(--pomi-space-3);
+  font-size: 0.9375rem;
+}
+
+.pomi-input--lg .pomi-input__field {
+  min-height: 3rem;
+  padding: 0 var(--pomi-space-4);
+  font-size: 1rem;
+}
+
+.pomi-input--invalid .pomi-input__field {
+  border-color: color-mix(in srgb, var(--pomi-color-danger) 70%, var(--pomi-border));
+}
+
+.pomi-input--invalid .pomi-input__field:focus-visible {
+  box-shadow: 0 0 0 3px
+    color-mix(in srgb, var(--pomi-color-danger) 28%, transparent);
+}
+
+.pomi-input__hint,
+.pomi-input__error {
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+.pomi-input__hint {
+  color: var(--pomi-muted);
+}
+
+.pomi-input__error {
+  color: var(--pomi-color-danger);
+}

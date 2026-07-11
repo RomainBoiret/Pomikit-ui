@@ -1,0 +1,184 @@
+.pomi-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--pomi-space-2);
+  border-radius: var(--pomi-radius);
+  border: 1px solid transparent;
+  font-family: var(--pomi-font);
+  font-weight: 600;
+  line-height: 1.2;
+  cursor: pointer;
+  user-select: none;
+  text-decoration: none;
+  transition:
+    background-color 140ms ease,
+    color 140ms ease,
+    border-color 140ms ease,
+    box-shadow 140ms ease,
+    transform 140ms ease,
+    opacity 140ms ease;
+}
+
+.pomi-button:focus-visible {
+  outline: none;
+  box-shadow: var(--pomi-focus-ring);
+}
+
+.pomi-button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.pomi-button:disabled,
+.pomi-button[aria-disabled='true'] {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.pomi-button--sm {
+  min-height: 2rem;
+  padding: 0 var(--pomi-space-3);
+  font-size: 0.8125rem;
+}
+
+.pomi-button--md {
+  min-height: 2.5rem;
+  padding: 0 var(--pomi-space-4);
+  font-size: 0.9375rem;
+}
+
+.pomi-button--lg {
+  min-height: 3rem;
+  padding: 0 var(--pomi-space-6);
+  font-size: 1rem;
+}
+
+.pomi-button--solid.pomi-button--primary {
+  background: var(--pomi-color-primary);
+  color: #fff;
+}
+
+.pomi-button--solid.pomi-button--neutral {
+  background: var(--pomi-fg);
+  color: #fff;
+}
+
+.pomi-button--solid.pomi-button--danger {
+  background: var(--pomi-color-danger);
+  color: #fff;
+}
+
+.pomi-button--solid.pomi-button--success {
+  background: var(--pomi-color-success);
+  color: #fff;
+}
+
+.pomi-button--outline.pomi-button--primary {
+  background: transparent;
+  border-color: color-mix(in srgb, var(--pomi-color-primary) 45%, transparent);
+  color: var(--pomi-color-primary);
+}
+
+.pomi-button--outline.pomi-button--neutral {
+  background: transparent;
+  border-color: var(--pomi-border);
+  color: var(--pomi-fg);
+}
+
+.pomi-button--outline.pomi-button--danger {
+  background: transparent;
+  border-color: color-mix(in srgb, var(--pomi-color-danger) 45%, transparent);
+  color: var(--pomi-color-danger);
+}
+
+.pomi-button--outline.pomi-button--success {
+  background: transparent;
+  border-color: color-mix(in srgb, var(--pomi-color-success) 45%, transparent);
+  color: var(--pomi-color-success);
+}
+
+.pomi-button--ghost.pomi-button--primary {
+  background: transparent;
+  color: var(--pomi-color-primary);
+}
+
+.pomi-button--ghost.pomi-button--neutral {
+  background: transparent;
+  color: var(--pomi-fg);
+}
+
+.pomi-button--ghost.pomi-button--danger {
+  background: transparent;
+  color: var(--pomi-color-danger);
+}
+
+.pomi-button--ghost.pomi-button--success {
+  background: transparent;
+  color: var(--pomi-color-success);
+}
+
+.pomi-button--soft.pomi-button--primary {
+  background: color-mix(in srgb, var(--pomi-color-primary) 12%, transparent);
+  color: var(--pomi-color-primary);
+}
+
+.pomi-button--soft.pomi-button--neutral {
+  background: color-mix(in srgb, var(--pomi-color-neutral) 12%, transparent);
+  color: var(--pomi-fg);
+}
+
+.pomi-button--soft.pomi-button--danger {
+  background: color-mix(in srgb, var(--pomi-color-danger) 12%, transparent);
+  color: var(--pomi-color-danger);
+}
+
+.pomi-button--soft.pomi-button--success {
+  background: color-mix(in srgb, var(--pomi-color-success) 12%, transparent);
+  color: var(--pomi-color-success);
+}
+
+.pomi-button--solid.pomi-button--primary:hover:not(:disabled),
+.pomi-button--solid.pomi-button--neutral:hover:not(:disabled),
+.pomi-button--solid.pomi-button--danger:hover:not(:disabled),
+.pomi-button--solid.pomi-button--success:hover:not(:disabled) {
+  filter: brightness(0.96);
+}
+
+.pomi-button--outline:hover:not(:disabled),
+.pomi-button--ghost:hover:not(:disabled),
+.pomi-button--soft:hover:not(:disabled) {
+  background: color-mix(in srgb, currentColor 10%, transparent);
+}
+
+.pomi-button--loading {
+  pointer-events: none;
+}
+
+.pomi-button__spinner {
+  width: 1em;
+  height: 1em;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: pomi-spin 0.7s linear infinite;
+}
+
+.pomi-button__label--hidden {
+  opacity: 0;
+}
+
+.pomi-button__spinner-overlay {
+  position: absolute;
+  inset: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes pomi-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

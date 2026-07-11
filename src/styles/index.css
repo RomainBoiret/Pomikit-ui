@@ -1,0 +1,7 @@
+@import './tokens.css';
+@import './reset.css';
+@import '../components/Badge/badge.css';
+@import '../components/Button/button.css';
+@import '../components/Card/card.css';
+@import '../components/Input/input.css';
+@import '../components/Dialog/dialog.css';

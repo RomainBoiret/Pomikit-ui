@@ -1,0 +1,4 @@
+# Single-package repo — pnpm 11 keeps project settings here.
+allowBuilds:
+  esbuild: true
+  vue-demi: true
