@@ -1,0 +1,57 @@
+.pomi-feedback {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--pomi-space-2);
+  width: 100%;
+  max-width: var(--pomi-feedback-max-width);
+  margin-inline: auto;
+  padding: var(--pomi-space-6) var(--pomi-space-4);
+  text-align: center;
+  font-family: var(--pomi-font);
+  box-sizing: border-box;
+  animation: pomi-fade-in var(--pomi-duration-mid) var(--pomi-ease);
+}
+
+.pomi-feedback__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  margin-bottom: var(--pomi-space-1);
+  color: var(--pomi-muted);
+  border-radius: var(--pomi-radius-pill);
+  background: color-mix(in srgb, var(--pomi-muted) 10%, transparent);
+}
+
+.pomi-error-state .pomi-feedback__icon {
+  color: var(--pomi-danger);
+  background: color-mix(in srgb, var(--pomi-danger) 12%, transparent);
+}
+
+.pomi-feedback__title {
+  margin: 0;
+  font-family: var(--pomi-font-display);
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--pomi-fg);
+  line-height: 1.3;
+}
+
+.pomi-feedback__description {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: var(--pomi-muted);
+}
+
+.pomi-feedback__action {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--pomi-space-2);
+  justify-content: center;
+  margin-top: var(--pomi-space-2);
+}

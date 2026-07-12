@@ -1,52 +1,83 @@
 # Pomikit
 
-Elegant, predictable, effortless Vue 3 UI components.
+**Beautiful by default. Components that understand your intent.**
 
 ```bash
 pnpm add pomikit-ui
 ```
 
-```ts
-import { Button, Input } from 'pomikit-ui'
-import 'pomikit-ui/styles.css'
+## Documentation
+
+```bash
+pnpm docs
 ```
 
-## Philosophy
+Site VitePress dans [`docs/`](./docs) — installation, thème, intent, API de chaque composant.
 
-- **Elegant** — clean interface, subtle motion, timeless defaults
-- **Predictable** — shared sizes, variants, and tones across components
-- **Effortless** — a few lines should be enough for a polished result
+| Ressource | Commande |
+| --- | --- |
+| Docs | `pnpm docs` |
+| Playground | `pnpm dev` |
+| Storybook | `pnpm storybook` |
 
-Defaults are overridable via CSS variables. Pomikit does not impose a brand.
+## Quick start
 
-## Components (MVP)
+```ts
+import { createApp } from 'vue'
+import {
+  Pomikit,
+  createTheme,
+  DialogProvider,
+  ToastProvider,
+} from 'pomikit-ui'
+import 'pomikit-ui/styles.css'
 
-- `Button`
-- `Badge`
-- `Card`
-- `Input`
-- `Dialog` (built on [Reka UI](https://reka-ui.com) for accessibility primitives)
+createApp(App)
+  .use(Pomikit, { theme: createTheme({ accent: '#5B5FFF' }) })
+  .mount('#app')
 
-## Local development
+// Root template:
+// <ToastProvider><DialogProvider><App /></DialogProvider></ToastProvider>
+```
+
+## Catalog (focused)
+
+| Component | Intent highlights |
+| --- | --- |
+| **Button** | Promise → busy → success/error; `confirm` |
+| **Field** + **Input** | Chrome vs typing; rules on blur/submit |
+| **Select** | `options` + `pending` (no 70-prop API) |
+| **Checkbox** / **Switch** / **Radio** | Same family; Field-aware |
+| **Dropdown** | Trigger slot + items |
+| **Dialog** + `useDialog().confirm()` | Promise confirm |
+| **Toast** + `useToast` | `success` / `error` / `show` |
+| **Collection** | `pending` first-load vs refresh |
+| **Card** | `href` / `selectable` |
+| **Skeleton** | Shimmer placeholders |
+
+Supporting primitives: `EmptyState`, `ErrorState`.
+
+## Theme DNA
+
+```ts
+createTheme({
+  accent: '#5B5FFF',
+  radius: 'soft',
+  density: 'comfortable',
+  motion: 'expressive',
+  personality: 'glass', // minimal | glass | playful
+})
+```
+
+## Develop
 
 ```bash
 pnpm install
-pnpm storybook    # docs & variants
-pnpm dev          # playground app
+pnpm docs
+pnpm storybook
+pnpm dev
 pnpm test
 pnpm build
 ```
 
-## Theming
-
-Override tokens once in your app:
-
-```css
-:root {
-  --pomi-color-primary: #0f766e;
-  --pomi-radius: 10px;
-  --pomi-font: "Source Sans 3", system-ui, sans-serif;
-}
-```
-
-See [CONVENTIONS.md](./CONVENTIONS.md) for API rules and [ROADMAP.md](./ROADMAP.md) for what’s next.
+See [ROADMAP.md](./ROADMAP.md) and [CONTRIBUTING.md](./CONTRIBUTING.md).

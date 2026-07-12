@@ -30,6 +30,20 @@ describe('Dialog', () => {
     wrapper.unmount()
   })
 
+  it('always exposes an accessible title', async () => {
+    const wrapper = mount(Dialog, {
+      props: { open: true },
+      slots: { default: 'Untitled body' },
+      attachTo: document.body,
+    })
+
+    await nextTick()
+    const title = document.body.querySelector('.pomi-dialog__title')
+    expect(title?.textContent).toContain('Dialog')
+    expect(title?.classList.contains('pomi-sr-only')).toBe(true)
+    wrapper.unmount()
+  })
+
   it('works with Button trigger', async () => {
     const wrapper = mount(Dialog, {
       props: {

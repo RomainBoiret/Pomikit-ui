@@ -1,0 +1,248 @@
+.pomi-check,
+.pomi-switch,
+.pomi-radio {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--pomi-space-2);
+  font-family: var(--pomi-font);
+  color: var(--pomi-fg);
+  cursor: pointer;
+  user-select: none;
+}
+
+.pomi-check--disabled,
+.pomi-switch--disabled,
+.pomi-radio--disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.pomi-check__label,
+.pomi-switch__label,
+.pomi-radio__label {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.35;
+  transition: color var(--pomi-duration-fast) var(--pomi-ease);
+}
+
+/* Shared control reset — reka renders buttons with UA chrome */
+.pomi-check__control,
+.pomi-radio__control,
+.pomi-switch__control {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  flex-shrink: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  font: inherit;
+  line-height: 0;
+  cursor: pointer;
+  color: inherit;
+}
+
+.pomi-check__control,
+.pomi-radio__control {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.125rem;
+  height: 1.125rem;
+  border: 1.5px solid color-mix(in srgb, var(--pomi-fg) 14%, var(--pomi-border));
+  background: var(--pomi-surface);
+  box-shadow: 0 1px 0 rgb(255 255 255 / 40%);
+  color: var(--pomi-accent-fg);
+  transition:
+    background-color var(--pomi-duration-fast) var(--pomi-ease),
+    border-color var(--pomi-duration-fast) var(--pomi-ease),
+    box-shadow var(--pomi-duration-fast) var(--pomi-ease),
+    color var(--pomi-duration-fast) var(--pomi-ease),
+    transform var(--pomi-duration-fast) var(--pomi-ease);
+}
+
+.pomi-check__control {
+  border-radius: calc(var(--pomi-radius-sm) - 2px);
+}
+
+.pomi-radio__control {
+  border-radius: var(--pomi-radius-pill);
+}
+
+.pomi-check:hover:not(.pomi-check--disabled) .pomi-check__control,
+.pomi-radio:hover:not(.pomi-radio--disabled) .pomi-radio__control {
+  border-color: color-mix(in srgb, var(--pomi-accent) 40%, var(--pomi-border));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--pomi-accent) 10%, transparent);
+}
+
+.pomi-check:active:not(.pomi-check--disabled) .pomi-check__control,
+.pomi-radio:active:not(.pomi-radio--disabled) .pomi-radio__control {
+  transform: scale(0.92);
+}
+
+.pomi-check--sm .pomi-check__control,
+.pomi-radio-group--sm .pomi-radio__control {
+  width: 1rem;
+  height: 1rem;
+}
+
+.pomi-check--lg .pomi-check__control,
+.pomi-radio-group--lg .pomi-radio__control {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.pomi-check__control[data-state='checked'],
+.pomi-check__control[data-state='indeterminate'] {
+  background: var(--pomi-accent);
+  border-color: var(--pomi-accent);
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--pomi-accent) 35%, transparent);
+  color: var(--pomi-accent-fg);
+}
+
+.pomi-radio__control[data-state='checked'] {
+  background: var(--pomi-surface);
+  border-color: var(--pomi-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--pomi-accent) 16%, transparent);
+  color: var(--pomi-accent);
+}
+
+.pomi-check__control:focus-visible,
+.pomi-radio__control:focus-visible,
+.pomi-switch__control:focus-visible {
+  outline: none;
+  box-shadow: var(--pomi-focus-ring);
+}
+
+.pomi-check__indicator {
+  display: block;
+  width: 0.7rem;
+  height: 0.7rem;
+  animation: pomi-choice-in var(--pomi-duration-mid) var(--pomi-ease-out);
+}
+
+.pomi-check--sm .pomi-check__indicator {
+  width: 0.6rem;
+  height: 0.6rem;
+}
+
+.pomi-check--lg .pomi-check__indicator {
+  width: 0.8rem;
+  height: 0.8rem;
+}
+
+.pomi-radio__indicator {
+  display: block;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: var(--pomi-radius-pill);
+  background: currentColor;
+  animation: pomi-choice-in var(--pomi-duration-mid) var(--pomi-ease-out);
+}
+
+.pomi-radio-group--sm .pomi-radio__indicator {
+  width: 0.4rem;
+  height: 0.4rem;
+}
+
+.pomi-radio-group--lg .pomi-radio__indicator {
+  width: 0.5625rem;
+  height: 0.5625rem;
+}
+
+/* Switch — minimal flat track + centered thumb */
+.pomi-switch__control {
+  --pomi-switch-track: 2.5rem;
+  --pomi-switch-height: 1.375rem;
+  --pomi-switch-inset: 0.125rem;
+  --pomi-switch-thumb: calc(var(--pomi-switch-height) - (2 * var(--pomi-switch-inset)));
+  position: relative;
+  display: inline-block;
+  width: var(--pomi-switch-track);
+  height: var(--pomi-switch-height);
+  padding: 0;
+  border: none;
+  border-radius: var(--pomi-radius-pill);
+  background: color-mix(in srgb, var(--pomi-fg) 12%, var(--pomi-border));
+  transition: background-color var(--pomi-duration-mid) var(--pomi-ease);
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+.pomi-switch:hover:not(.pomi-switch--disabled) .pomi-switch__control:not([data-state='checked']) {
+  background: color-mix(in srgb, var(--pomi-fg) 18%, var(--pomi-border));
+}
+
+.pomi-switch--sm .pomi-switch__control {
+  --pomi-switch-track: 2.125rem;
+  --pomi-switch-height: 1.2rem;
+  --pomi-switch-inset: 0.125rem;
+}
+
+.pomi-switch--lg .pomi-switch__control {
+  --pomi-switch-track: 2.875rem;
+  --pomi-switch-height: 1.55rem;
+  --pomi-switch-inset: 0.15rem;
+}
+
+.pomi-switch__control[data-state='checked'] {
+  background: var(--pomi-accent);
+}
+
+.pomi-switch__control:focus-visible {
+  outline: none;
+  box-shadow: var(--pomi-focus-ring);
+}
+
+.pomi-switch__thumb {
+  position: absolute;
+  top: var(--pomi-switch-inset);
+  left: var(--pomi-switch-inset);
+  display: block;
+  width: var(--pomi-switch-thumb);
+  height: var(--pomi-switch-thumb);
+  border-radius: var(--pomi-radius-pill);
+  background: var(--pomi-surface);
+  box-shadow: 0 1px 2px rgb(18 20 26 / 12%);
+  transform: translateX(0);
+  transition: transform var(--pomi-duration-mid) var(--pomi-ease-out);
+  will-change: transform;
+}
+
+.pomi-switch__control[data-state='checked'] .pomi-switch__thumb {
+  transform: translateX(
+    calc(var(--pomi-switch-track) - (2 * var(--pomi-switch-inset)) - var(--pomi-switch-thumb))
+  );
+}
+
+.pomi-radio-group {
+  display: flex;
+  gap: var(--pomi-space-3);
+  font-family: var(--pomi-font);
+}
+
+.pomi-radio-group--vertical {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.pomi-radio-group--horizontal {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+@keyframes pomi-choice-in {
+  from {
+    opacity: 0;
+    transform: scale(0.55);
+  }
+  70% {
+    transform: scale(1.08);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

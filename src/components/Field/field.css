@@ -1,0 +1,46 @@
+.pomi-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pomi-space-2);
+  font-family: var(--pomi-font);
+  width: 100%;
+}
+
+.pomi-field__label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--pomi-fg);
+}
+
+.pomi-field__required {
+  margin-left: 0.15em;
+  color: var(--pomi-danger);
+}
+
+.pomi-field__control {
+  width: 100%;
+  min-width: 0;
+}
+
+.pomi-field__message {
+  margin: 0;
+  min-height: var(--pomi-message-min-height);
+  font-size: var(--pomi-message-fs);
+  line-height: var(--pomi-message-lh);
+}
+
+.pomi-field__helper,
+.pomi-field__error {
+  margin: 0;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.pomi-field__helper {
+  color: var(--pomi-muted);
+}
+
+.pomi-field__error {
+  color: var(--pomi-danger);
+}

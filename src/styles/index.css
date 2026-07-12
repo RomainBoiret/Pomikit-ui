@@ -1,7 +1,16 @@
-@import './tokens.css';
-@import './reset.css';
-@import '../components/Badge/badge.css';
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap');
+
+@import '../tokens/dna.css';
+@import './base.css';
 @import '../components/Button/button.css';
 @import '../components/Card/card.css';
+@import '../components/Field/field.css';
 @import '../components/Input/input.css';
 @import '../components/Dialog/dialog.css';
+@import '../components/Skeleton/skeleton.css';
+@import '../components/feedback/feedback.css';
+@import '../components/Collection/collection.css';
+@import '../components/choice/choice.css';
+@import '../components/Select/select.css';
+@import '../components/Dropdown/dropdown.css';
+@import '../components/Toast/toast.css';

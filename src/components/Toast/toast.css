@@ -1,0 +1,104 @@
+.pomi-toast__viewport {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 80;
+  display: flex;
+  flex-direction: column;
+  gap: var(--pomi-space-2);
+  width: min(24rem, calc(100vw - 2rem));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  outline: none;
+}
+
+.pomi-toast {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--pomi-space-3);
+  padding: 0.85rem 0.9rem;
+  border: 1px solid var(--pomi-border);
+  border-radius: var(--pomi-radius);
+  background: var(--pomi-surface-elevated);
+  box-shadow: var(--pomi-shadow);
+  font-family: var(--pomi-font);
+  color: var(--pomi-fg);
+  animation: pomi-toast-in var(--pomi-duration-mid) var(--pomi-ease);
+}
+
+.pomi-toast[data-state='closed'] {
+  animation: pomi-toast-out var(--pomi-duration-fast) var(--pomi-ease);
+}
+
+.pomi-toast--success {
+  border-color: color-mix(in srgb, var(--pomi-success) 35%, var(--pomi-border));
+}
+
+.pomi-toast--danger {
+  border-color: color-mix(in srgb, var(--pomi-danger) 35%, var(--pomi-border));
+}
+
+.pomi-toast--primary {
+  border-color: color-mix(in srgb, var(--pomi-accent) 35%, var(--pomi-border));
+}
+
+.pomi-toast__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.pomi-toast__title {
+  margin: 0;
+  font-size: 0.925rem;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+.pomi-toast__description {
+  margin: 0.2rem 0 0;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: var(--pomi-muted);
+}
+
+.pomi-toast__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border: none;
+  border-radius: var(--pomi-radius-sm);
+  background: transparent;
+  color: var(--pomi-muted);
+  cursor: pointer;
+}
+
+.pomi-toast__close:hover {
+  color: var(--pomi-fg);
+  background: color-mix(in srgb, var(--pomi-neutral) 12%, transparent);
+}
+
+.pomi-toast__close:focus-visible {
+  outline: none;
+  box-shadow: var(--pomi-focus-ring);
+}
+
+@keyframes pomi-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes pomi-toast-out {
+  to {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}

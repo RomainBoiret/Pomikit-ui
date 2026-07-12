@@ -2,25 +2,55 @@
   position: fixed;
   inset: 0;
   background: var(--pomi-overlay);
-  animation: pomi-fade-in 160ms ease;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.pomi-dialog__overlay[data-state='open'] {
+  animation: pomi-fade-in var(--pomi-duration-mid) var(--pomi-ease);
+}
+
+.pomi-dialog__overlay[data-state='closed'] {
+  animation: pomi-fade-out var(--pomi-duration-fast) var(--pomi-ease);
 }
 
 .pomi-dialog__content {
   position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
   width: min(calc(100vw - 2rem), 28rem);
   max-height: calc(100vh - 2rem);
-  overflow: auto;
+  overflow: hidden;
   padding: var(--pomi-space-6);
-  background: var(--pomi-bg);
+  background: var(--pomi-surface-elevated);
   color: var(--pomi-fg);
   border: 1px solid var(--pomi-border);
-  border-radius: calc(var(--pomi-radius) + 2px);
+  border-radius: var(--pomi-radius-lg);
   box-shadow: var(--pomi-shadow);
   font-family: var(--pomi-font);
-  animation: pomi-dialog-in 180ms ease;
+  transform: translate(-50%, -50%);
+}
+
+.pomi-dialog__content--sm {
+  width: min(calc(100vw - 2rem), 22rem);
+}
+
+.pomi-dialog__content--md {
+  width: min(calc(100vw - 2rem), 28rem);
+}
+
+.pomi-dialog__content--lg {
+  width: min(calc(100vw - 2rem), 36rem);
+}
+
+.pomi-dialog__content[data-state='open'] {
+  animation: pomi-dialog-in var(--pomi-duration-mid) var(--pomi-ease);
+}
+
+.pomi-dialog__content[data-state='closed'] {
+  animation: pomi-dialog-out var(--pomi-duration-fast) var(--pomi-ease);
 }
 
 .pomi-dialog__header {
@@ -28,36 +58,31 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: var(--pomi-space-3);
+  flex-shrink: 0;
   margin-bottom: var(--pomi-space-3);
 }
 
 .pomi-dialog__title {
   margin: 0;
-  font-size: 1.125rem;
-  font-weight: 650;
+  font-family: var(--pomi-font-display);
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
   line-height: 1.3;
 }
 
 .pomi-dialog__description {
+  flex-shrink: 0;
   margin: 0 0 var(--pomi-space-4);
   color: var(--pomi-muted);
   font-size: 0.925rem;
   line-height: 1.5;
 }
 
-.pomi-dialog__description--empty {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-
 .pomi-dialog__body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
   font-size: 0.95rem;
   line-height: 1.5;
 }
@@ -66,7 +91,9 @@
   display: flex;
   justify-content: flex-end;
   gap: var(--pomi-space-2);
+  flex-shrink: 0;
   margin-top: var(--pomi-space-6);
+  padding-top: var(--pomi-space-1);
 }
 
 .pomi-dialog__close {
@@ -75,6 +102,7 @@
   justify-content: center;
   width: 2rem;
   height: 2rem;
+  margin-left: auto;
   border: none;
   border-radius: calc(var(--pomi-radius) - 2px);
   background: transparent;
@@ -101,6 +129,15 @@
   }
 }
 
+@keyframes pomi-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
 @keyframes pomi-dialog-in {
   from {
     opacity: 0;
@@ -109,5 +146,16 @@
   to {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes pomi-dialog-out {
+  from {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, calc(-50% + 4px)) scale(0.98);
   }
 }

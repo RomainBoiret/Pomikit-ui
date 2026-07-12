@@ -1,0 +1,46 @@
+[class^='pomi-'],
+[class*=' pomi-'] {
+  box-sizing: border-box;
+}
+
+.pomi-button,
+.pomi-input__field,
+.pomi-dialog__close,
+.pomi-input__clear {
+  font: inherit;
+}
+
+.pomi-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --pomi-duration-fast: 0ms;
+    --pomi-duration-mid: 0ms;
+    --pomi-duration-slow: 0ms;
+  }
+
+  [class^='pomi-'],
+  [class*=' pomi-'],
+  [class^='pomi-']::before,
+  [class*=' pomi-']::before,
+  [class^='pomi-']::after,
+  [class*=' pomi-']::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+
+  .pomi-button:active:not(:disabled) {
+    transform: none;
+  }
+}
