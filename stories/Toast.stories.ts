@@ -24,14 +24,40 @@ export const Basic: Story = {
         },
         template: `
           <div style="display:flex;gap:0.5rem;flex-wrap:wrap">
-            <Button @click="toast.success('Saved', 'Profile updated')">Success</Button>
-            <Button tone="danger" variant="outline" @click="toast.error('Failed', 'Try again')">Error</Button>
-            <Button variant="soft" @click="toast.show('Hello from Pomikit')">Neutral</Button>
+            <Button @click="toast.success('Saved', 'Your changes are live')">Success</Button>
+            <Button @click="toast.error('Something went wrong', 'Please try again')">Error</Button>
+            <Button @click="toast.warning('Heads up', 'This action cannot be undone')">Warning</Button>
+            <Button @click="toast.info('New update', 'Keyboard shortcuts are available')">Info</Button>
           </div>
         `,
       }),
     },
-    setup: () => () => h(ToastProvider, null, { default: () => h('div') }),
+    template: `
+      <ToastProvider>
+        <Demo />
+      </ToastProvider>
+    `,
+  }),
+}
+
+export const Stack: Story = {
+  render: () => ({
+    components: {
+      ToastProvider,
+      Demo: defineComponent({
+        components: { Button },
+        setup() {
+          const toast = useToast()
+          function burst() {
+            toast.info('Synced', 'Workspace is up to date')
+            window.setTimeout(() => toast.success('Published', 'Landing page is live'), 180)
+            window.setTimeout(() => toast.warning('Quota', '80% of your plan used'), 360)
+          }
+          return { burst }
+        },
+        template: `<Button @click="burst">Stack three toasts</Button>`,
+      }),
+    },
     template: `
       <ToastProvider>
         <Demo />

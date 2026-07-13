@@ -7,43 +7,60 @@
   border-radius: var(--pomi-radius);
   border: 1px solid transparent;
   font-family: var(--pomi-font);
-  font-weight: 600;
-  letter-spacing: -0.01em;
+  font-weight: 500;
+  letter-spacing: -0.011em;
   line-height: 1.2;
   cursor: pointer;
   user-select: none;
   text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
   transition:
-    background-color var(--pomi-duration-fast) var(--pomi-ease),
-    color var(--pomi-duration-fast) var(--pomi-ease),
-    border-color var(--pomi-duration-fast) var(--pomi-ease),
+    background-color var(--pomi-duration-mid) var(--pomi-ease),
+    color var(--pomi-duration-mid) var(--pomi-ease),
+    border-color var(--pomi-duration-mid) var(--pomi-ease),
     box-shadow var(--pomi-duration-mid) var(--pomi-ease),
     transform var(--pomi-duration-fast) var(--pomi-ease),
-    opacity var(--pomi-duration-fast) var(--pomi-ease),
-    filter var(--pomi-duration-fast) var(--pomi-ease);
-  will-change: transform;
+    opacity var(--pomi-duration-fast) var(--pomi-ease);
+}
+
+.pomi-button::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: inherit;
+  box-shadow: var(--pomi-focus-ring);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--pomi-duration-fast) var(--pomi-ease);
 }
 
 .pomi-button:focus-visible {
   outline: none;
-  box-shadow: var(--pomi-focus-ring);
 }
 
-.pomi-button:hover:not(:disabled):not([aria-disabled='true']) {
-  filter: brightness(1.03);
+.pomi-button:focus-visible::after {
+  opacity: 1;
 }
 
-.pomi-button:active:not(:disabled):not([aria-disabled='true']) {
-  transform: translateY(1px) scale(0.985);
+.pomi-button:hover:not(:disabled):not([aria-disabled='true']):not(.pomi-button--loading):not(
+    [data-state='open']
+  ) {
+  transform: translateY(calc(var(--pomi-motion-lift) * -1));
+}
+
+.pomi-button:active:not(:disabled):not([aria-disabled='true']):not(.pomi-button--loading):not(
+    [data-state='open']
+  ) {
+  transform: scale(var(--pomi-motion-press));
 }
 
 .pomi-button:disabled,
 .pomi-button[aria-disabled='true'] {
-  opacity: 0.55;
+  opacity: 0.5;
   cursor: not-allowed;
   transform: none;
   pointer-events: none;
-  filter: none;
+  box-shadow: none;
 }
 
 .pomi-button--block {
@@ -61,13 +78,13 @@
 .pomi-button--md {
   min-height: var(--pomi-control-h-md);
   padding: 0 var(--pomi-control-px-md);
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
 }
 
 .pomi-button--lg {
   min-height: var(--pomi-control-h-lg);
   padding: 0 var(--pomi-control-px-lg);
-  font-size: 1rem;
+  font-size: 0.9375rem;
   border-radius: var(--pomi-radius-lg);
 }
 
@@ -77,127 +94,162 @@
   padding: 0;
 }
 
+/* Solid */
 .pomi-button--solid.pomi-button--primary {
   background: var(--pomi-accent);
   color: var(--pomi-accent-fg);
-  box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 18%),
-    0 1px 2px rgb(18 20 26 / 8%),
-    0 8px 20px color-mix(in srgb, var(--pomi-accent) 28%, transparent);
-}
-
-.pomi-button--solid.pomi-button--neutral {
-  background: var(--pomi-neutral-solid);
-  color: var(--pomi-neutral-fg);
-}
-
-.pomi-button--solid.pomi-button--danger {
-  background: var(--pomi-danger);
-  color: var(--pomi-danger-fg);
-  box-shadow: 0 8px 20px color-mix(in srgb, var(--pomi-danger) 22%, transparent);
-}
-
-.pomi-button--solid.pomi-button--success {
-  background: var(--pomi-success);
-  color: var(--pomi-success-fg);
-  box-shadow: 0 8px 20px color-mix(in srgb, var(--pomi-success) 22%, transparent);
-}
-
-.pomi-button--outline.pomi-button--primary {
-  background: color-mix(in srgb, var(--pomi-surface) 80%, transparent);
-  border-color: color-mix(in srgb, var(--pomi-accent) 35%, var(--pomi-border));
-  color: var(--pomi-accent);
-}
-
-.pomi-button--outline.pomi-button--neutral {
-  background: color-mix(in srgb, var(--pomi-surface) 80%, transparent);
-  border-color: var(--pomi-border);
-  color: var(--pomi-fg);
-}
-
-.pomi-button--outline.pomi-button--danger {
-  background: transparent;
-  border-color: color-mix(in srgb, var(--pomi-danger) 40%, var(--pomi-border));
-  color: var(--pomi-danger);
-}
-
-.pomi-button--outline.pomi-button--success {
-  background: transparent;
-  border-color: color-mix(in srgb, var(--pomi-success) 40%, var(--pomi-border));
-  color: var(--pomi-success);
-}
-
-.pomi-button--ghost.pomi-button--primary {
-  background: transparent;
-  color: var(--pomi-accent);
-}
-
-.pomi-button--ghost.pomi-button--neutral {
-  background: transparent;
-  color: var(--pomi-fg);
-}
-
-.pomi-button--ghost.pomi-button--danger {
-  background: transparent;
-  color: var(--pomi-danger);
-}
-
-.pomi-button--ghost.pomi-button--success {
-  background: transparent;
-  color: var(--pomi-success);
-}
-
-.pomi-button--soft.pomi-button--primary {
-  background: var(--pomi-accent-soft);
-  color: var(--pomi-accent);
-}
-
-.pomi-button--soft.pomi-button--neutral {
-  background: color-mix(in srgb, var(--pomi-neutral) 12%, transparent);
-  color: var(--pomi-fg);
-}
-
-.pomi-button--soft.pomi-button--danger {
-  background: color-mix(in srgb, var(--pomi-danger) 12%, transparent);
-  color: var(--pomi-danger);
-}
-
-.pomi-button--soft.pomi-button--success {
-  background: color-mix(in srgb, var(--pomi-success) 12%, transparent);
-  color: var(--pomi-success);
+  box-shadow: var(--pomi-shadow);
 }
 
 .pomi-button--solid.pomi-button--primary:hover:not(:disabled):not([aria-disabled='true']) {
   background: var(--pomi-accent-hover);
 }
 
-.pomi-button--outline:hover:not(:disabled):not([aria-disabled='true']),
-.pomi-button--ghost:hover:not(:disabled):not([aria-disabled='true']) {
-  background: color-mix(in srgb, currentColor 10%, transparent);
+.pomi-button--solid.pomi-button--neutral {
+  background: var(--pomi-neutral-solid);
+  color: var(--pomi-neutral-fg);
+  box-shadow: var(--pomi-shadow);
+}
+
+.pomi-button--solid.pomi-button--neutral:hover:not(:disabled):not([aria-disabled='true']) {
+  background: color-mix(in srgb, var(--pomi-neutral-solid) 88%, white);
+}
+
+.pomi-button--solid.pomi-button--danger {
+  background: var(--pomi-danger);
+  color: var(--pomi-danger-fg);
+  box-shadow: var(--pomi-shadow);
+}
+
+.pomi-button--solid.pomi-button--danger:hover:not(:disabled):not([aria-disabled='true']) {
+  background: color-mix(in srgb, var(--pomi-danger) 88%, black);
+}
+
+.pomi-button--solid.pomi-button--success {
+  background: var(--pomi-success);
+  color: var(--pomi-success-fg);
+  box-shadow: var(--pomi-shadow);
+}
+
+.pomi-button--solid.pomi-button--success:hover:not(:disabled):not([aria-disabled='true']) {
+  background: color-mix(in srgb, var(--pomi-success) 88%, black);
+}
+
+/* Soft */
+.pomi-button--soft.pomi-button--primary {
+  background: var(--pomi-accent-soft);
+  color: color-mix(in srgb, var(--pomi-accent) 72%, var(--pomi-fg));
 }
 
 .pomi-button--soft.pomi-button--primary:hover:not(:disabled):not([aria-disabled='true']) {
-  background: color-mix(in srgb, var(--pomi-accent) 18%, var(--pomi-accent-soft));
+  background: color-mix(in srgb, var(--pomi-accent-soft) 70%, var(--pomi-accent));
+}
+
+.pomi-button--soft.pomi-button--neutral {
+  background: var(--pomi-surface-hover);
+  color: var(--pomi-fg);
 }
 
 .pomi-button--soft.pomi-button--neutral:hover:not(:disabled):not([aria-disabled='true']) {
-  background: color-mix(in srgb, var(--pomi-neutral) 20%, transparent);
+  background: color-mix(in srgb, var(--pomi-fg) 6%, var(--pomi-surface-hover));
+}
+
+.pomi-button--soft.pomi-button--danger {
+  background: color-mix(in srgb, var(--pomi-danger) 10%, transparent);
+  color: var(--pomi-danger);
 }
 
 .pomi-button--soft.pomi-button--danger:hover:not(:disabled):not([aria-disabled='true']) {
-  background: color-mix(in srgb, var(--pomi-danger) 20%, transparent);
+  background: color-mix(in srgb, var(--pomi-danger) 14%, transparent);
+}
+
+.pomi-button--soft.pomi-button--success {
+  background: color-mix(in srgb, var(--pomi-success) 10%, transparent);
+  color: var(--pomi-success);
 }
 
 .pomi-button--soft.pomi-button--success:hover:not(:disabled):not([aria-disabled='true']) {
-  background: color-mix(in srgb, var(--pomi-success) 20%, transparent);
+  background: color-mix(in srgb, var(--pomi-success) 14%, transparent);
 }
 
-.pomi-button--soft:hover:not(:disabled):not([aria-disabled='true']) {
-  filter: none;
+/* Outline */
+.pomi-button--outline {
+  background: var(--pomi-surface-elevated);
+  border-color: var(--pomi-border);
+  color: var(--pomi-fg);
+  box-shadow: var(--pomi-shadow);
 }
 
-.pomi-button--armed {
-  outline: none;
+.pomi-button--outline:hover:not(:disabled):not([aria-disabled='true']) {
+  background: var(--pomi-surface-hover);
+  border-color: color-mix(in srgb, var(--pomi-fg) 12%, var(--pomi-border));
+}
+
+.pomi-button--outline.pomi-button--primary {
+  color: color-mix(in srgb, var(--pomi-accent) 75%, var(--pomi-fg));
+  border-color: color-mix(in srgb, var(--pomi-accent) 28%, var(--pomi-border));
+}
+
+.pomi-button--outline.pomi-button--primary:hover:not(:disabled):not([aria-disabled='true']) {
+  background: var(--pomi-accent-soft);
+  border-color: color-mix(in srgb, var(--pomi-accent) 40%, var(--pomi-border));
+}
+
+.pomi-button--outline.pomi-button--danger {
+  color: var(--pomi-danger);
+  border-color: color-mix(in srgb, var(--pomi-danger) 28%, var(--pomi-border));
+}
+
+.pomi-button--outline.pomi-button--danger:hover:not(:disabled):not([aria-disabled='true']) {
+  background: color-mix(in srgb, var(--pomi-danger) 6%, transparent);
+}
+
+.pomi-button--outline.pomi-button--success {
+  color: var(--pomi-success);
+  border-color: color-mix(in srgb, var(--pomi-success) 28%, var(--pomi-border));
+}
+
+.pomi-button--outline.pomi-button--success:hover:not(:disabled):not([aria-disabled='true']) {
+  background: color-mix(in srgb, var(--pomi-success) 6%, transparent);
+}
+
+/* Ghost */
+.pomi-button--ghost {
+  background: transparent;
+  color: var(--pomi-fg);
+}
+
+.pomi-button--ghost:hover:not(:disabled):not([aria-disabled='true']) {
+  background: var(--pomi-surface-hover);
+}
+
+.pomi-button--ghost.pomi-button--primary {
+  color: color-mix(in srgb, var(--pomi-accent) 80%, var(--pomi-fg));
+}
+
+.pomi-button--ghost.pomi-button--primary:hover:not(:disabled):not([aria-disabled='true']) {
+  background: var(--pomi-accent-soft);
+}
+
+.pomi-button--ghost.pomi-button--danger {
+  color: var(--pomi-danger);
+}
+
+.pomi-button--ghost.pomi-button--danger:hover:not(:disabled):not([aria-disabled='true']) {
+  background: color-mix(in srgb, var(--pomi-danger) 8%, transparent);
+}
+
+.pomi-button--ghost.pomi-button--success {
+  color: var(--pomi-success);
+}
+
+.pomi-button--ghost.pomi-button--success:hover:not(:disabled):not([aria-disabled='true']) {
+  background: color-mix(in srgb, var(--pomi-success) 8%, transparent);
+}
+
+/* Loading / feedback */
+.pomi-button--loading {
+  cursor: wait;
 }
 
 .pomi-button--loading,
@@ -206,19 +258,21 @@
   pointer-events: none;
 }
 
-.pomi-button--success {
-  animation: pomi-button-pop var(--pomi-duration-mid) var(--pomi-ease);
-}
-
-.pomi-button--error {
-  animation: pomi-button-shake var(--pomi-duration-mid) var(--pomi-ease);
-}
-
 .pomi-button__content {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: var(--pomi-space-2);
+}
+
+.pomi-button__label {
+  display: inline-flex;
+  align-items: center;
+  gap: inherit;
+}
+
+.pomi-button__label--hidden {
+  opacity: 0;
 }
 
 .pomi-button__spinner {
@@ -236,10 +290,6 @@
   display: block;
 }
 
-.pomi-button__label--hidden {
-  opacity: 0;
-}
-
 .pomi-button__status-overlay {
   position: absolute;
   inset: 0;
@@ -249,44 +299,19 @@
   animation: pomi-fade-in var(--pomi-duration-fast) var(--pomi-ease);
 }
 
-@keyframes pomi-spin {
-  to {
-    transform: rotate(360deg);
-  }
+.pomi-button--armed {
+  outline: none;
 }
 
-@keyframes pomi-fade-in {
-  from {
-    opacity: 0;
-    transform: scale(0.92);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+.pomi-button--error:not(.pomi-button--loading) {
+  animation: pomi-shake var(--pomi-duration-mid) var(--pomi-ease);
 }
 
-@keyframes pomi-button-pop {
-  0% {
-    transform: scale(1);
-  }
-  40% {
-    transform: scale(1.03);
-  }
-  100% {
-    transform: scale(1);
-  }
+.pomi-button--success .pomi-button__icon {
+  animation: pomi-fade-in var(--pomi-duration-fast) var(--pomi-ease);
 }
 
-@keyframes pomi-button-shake {
-  0%,
-  100% {
-    transform: translateX(0);
-  }
-  25% {
-    transform: translateX(-2px);
-  }
-  75% {
-    transform: translateX(2px);
-  }
+[data-pomi-motion='none'] .pomi-button:hover:not(:disabled),
+[data-pomi-motion='none'] .pomi-button:active:not(:disabled) {
+  transform: none;
 }

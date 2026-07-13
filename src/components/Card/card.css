@@ -6,11 +6,16 @@
   color: var(--pomi-fg);
   border-radius: var(--pomi-radius);
   font-family: var(--pomi-font);
+  transition:
+    border-color var(--pomi-duration-mid) var(--pomi-ease),
+    box-shadow var(--pomi-duration-mid) var(--pomi-ease),
+    background-color var(--pomi-duration-mid) var(--pomi-ease),
+    transform var(--pomi-duration-mid) var(--pomi-ease);
 }
 
 .pomi-card--elevated {
   border: 1px solid var(--pomi-border);
-  box-shadow: var(--pomi-shadow);
+  box-shadow: var(--pomi-shadow), var(--pomi-border-highlight, none);
 }
 
 .pomi-card--outline {
@@ -40,23 +45,24 @@
 
 .pomi-card--interactive {
   cursor: pointer;
-  transition:
-    border-color var(--pomi-duration-fast) var(--pomi-ease),
-    box-shadow var(--pomi-duration-mid) var(--pomi-ease),
-    background-color var(--pomi-duration-fast) var(--pomi-ease),
-    transform var(--pomi-duration-fast) var(--pomi-ease);
   text-decoration: none;
   color: inherit;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .pomi-card--interactive:hover {
-  border-color: color-mix(in srgb, var(--pomi-accent) 35%, var(--pomi-border));
-  transform: translateY(-1px);
+  transform: translateY(calc(var(--pomi-card-lift) * -1));
+  box-shadow: var(--pomi-shadow-lg, var(--pomi-shadow));
+}
+
+.pomi-card--interactive:active {
+  transform: translateY(0) scale(var(--pomi-motion-press));
 }
 
 .pomi-card--interactive:focus-visible {
   outline: none;
-  box-shadow: var(--pomi-focus-ring);
+  border-color: var(--pomi-accent);
+  box-shadow: var(--pomi-focus-ring), var(--pomi-shadow);
 }
 
 .pomi-card--selected {
@@ -100,23 +106,25 @@
 
 .pomi-card__title {
   margin: 0;
-  font-size: 1.05rem;
-  font-weight: 650;
+  font-family: var(--pomi-font-display);
+  font-size: 0.975rem;
+  font-weight: 600;
+  letter-spacing: var(--pomi-title-tracking, -0.015em);
   line-height: 1.3;
 }
 
 .pomi-card--sm .pomi-card__title {
-  font-size: 0.95rem;
+  font-size: 0.875rem;
 }
 
 .pomi-card--lg .pomi-card__title {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
 }
 
 .pomi-card__description {
   margin: 0;
   color: var(--pomi-muted);
-  font-size: 0.9rem;
+  font-size: 0.8125rem;
   line-height: 1.45;
 }
 
@@ -128,7 +136,7 @@
 }
 
 .pomi-card__body {
-  font-size: 0.95rem;
+  font-size: 0.875rem;
   line-height: 1.5;
 }
 
@@ -145,4 +153,23 @@
 .pomi-card--ghost .pomi-card__footer {
   border-top-color: transparent;
   padding-top: 0;
+}
+
+[data-pomi-elevation='flat'] .pomi-card--elevated {
+  box-shadow: none;
+}
+
+[data-pomi-elevation='flat'] .pomi-card--interactive:hover {
+  transform: none;
+  box-shadow: none;
+  background: var(--pomi-surface-hover);
+}
+
+[data-pomi-motion='none'] .pomi-card {
+  transition: none;
+}
+
+[data-pomi-motion='none'] .pomi-card--interactive:hover,
+[data-pomi-motion='none'] .pomi-card--interactive:active {
+  transform: none;
 }

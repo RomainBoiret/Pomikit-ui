@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
 import { ref } from 'vue'
 import Input from '../src/components/Input/Input.vue'
+import Field from '../src/components/Field/Field.vue'
+import { rules } from '../src/utils/rules'
 
 const meta = {
   title: 'Components/Input',
@@ -18,8 +20,7 @@ const meta = {
     clearable: { control: 'boolean' },
   },
   args: {
-    label: 'Email',
-    placeholder: 'you@example.com',
+    placeholder: 'john@company.com',
     size: 'md',
     disabled: false,
     readonly: false,
@@ -31,114 +32,104 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const Default: Story = {
-  render: (args) => ({
-    components: { Input },
-    setup() {
-      const value = ref('')
-      return { args, value }
-    },
-    template: '<Input v-bind="args" v-model="value" style="max-width:320px" />',
-  }),
-}
-
-export const WithHint: Story = {
+export const WithField: Story = {
+  name: 'Field + Input',
   render: () => ({
-    components: { Input },
+    components: { Field, Input },
     setup() {
       const value = ref('')
       return { value }
     },
     template: `
-      <Input
-        v-model="value"
-        label="Username"
-        hint="Visible on your public profile"
-        placeholder="romain"
-        style="max-width:320px"
-      />
+      <Field
+        label="Email"
+        helper="We'll never share your email."
+        required
+        style="max-width:360px"
+      >
+        <Input v-model="value" type="email" placeholder="john@company.com" />
+      </Field>
     `,
   }),
 }
 
 export const WithError: Story = {
   render: () => ({
-    components: { Input },
+    components: { Field, Input },
     setup() {
-      const value = ref('bad')
+      const value = ref('john')
       return { value }
     },
     template: `
-      <Input
-        v-model="value"
-        label="Password"
-        type="password"
-        hint="Use at least 8 characters"
-        error="Must be at least 8 characters"
-        style="max-width:320px"
-      />
-    `,
-  }),
-}
-
-export const ClearableWithAffixes: Story = {
-  render: () => ({
-    components: { Input },
-    setup() {
-      const value = ref('pomikit')
-      return { value }
-    },
-    template: `
-      <Input
-        v-model="value"
-        label="Search"
-        type="search"
-        clearable
+      <Field
+        label="Email"
+        error="Please enter a valid email."
         required
-        placeholder="Search components"
-        style="max-width:320px"
-      />
+        style="max-width:360px"
+      >
+        <Input v-model="value" type="email" />
+      </Field>
     `,
   }),
 }
 
-export const Readonly: Story = {
-  render: () => ({
+export const Standalone: Story = {
+  render: (args) => ({
     components: { Input },
+    setup() {
+      const value = ref('')
+      return { args, value }
+    },
     template: `
       <Input
-        label="Account ID"
-        model-value="acc_1842"
-        readonly
-        style="max-width:320px"
+        v-bind="args"
+        v-model="value"
+        label="Email"
+        hint="We'll never share your email."
+        required
+        style="max-width:360px"
       />
     `,
   }),
 }
 
-export const Sizes: Story = {
+export const Search: Story = {
   render: () => ({
-    components: { Input },
+    components: { Field, Input },
+    setup() {
+      const value = ref('')
+      return { value }
+    },
     template: `
-      <div style="display:grid;gap:1rem;max-width:320px">
-        <Input size="sm" label="Small" placeholder="Small" />
-        <Input size="md" label="Medium" placeholder="Medium" />
-        <Input size="lg" label="Large" placeholder="Large" />
-      </div>
+      <Field label="Search" style="max-width:360px">
+        <Input v-model="value" type="search" placeholder="Find a component…" />
+      </Field>
+    `,
+  }),
+}
+
+export const Password: Story = {
+  render: () => ({
+    components: { Field, Input },
+    setup() {
+      const value = ref('')
+      return { value }
+    },
+    template: `
+      <Field label="Password" required style="max-width:360px">
+        <Input v-model="value" type="password" placeholder="••••••••" />
+      </Field>
     `,
   }),
 }
 
 export const Disabled: Story = {
   render: () => ({
-    components: { Input },
+    components: { Field, Input },
     template: `
-      <Input
-        label="Disabled"
-        model-value="Locked value"
-        disabled
-        style="max-width:320px"
-      />
+      <Field label="Account ID" style="max-width:360px">
+        <Input model-value="acc_1842" disabled />
+      </Field>
     `,
   }),
 }
@@ -146,19 +137,21 @@ export const Disabled: Story = {
 export const IntentRules: Story = {
   name: 'Intent — rules on blur',
   render: () => ({
-    components: { Input },
+    components: { Field, Input },
     setup() {
       const value = ref('')
-      return { value }
+      return { value, rules }
     },
     template: `
-      <form style="max-width:320px;display:grid;gap:0.75rem" @submit.prevent>
-        <Input
-          v-model="value"
-          label="Email"
-          required
-          placeholder="you@example.com"
-        />
+      <form style="max-width:360px;display:grid;gap:0.75rem" @submit.prevent>
+        <Field label="Email" required helper="Work email preferred">
+          <Input
+            v-model="value"
+            type="email"
+            placeholder="you@company.com"
+            :rules="[rules.email()]"
+          />
+        </Field>
         <button type="submit">Submit</button>
       </form>
     `,

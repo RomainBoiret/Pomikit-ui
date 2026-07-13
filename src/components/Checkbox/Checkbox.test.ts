@@ -3,9 +3,8 @@ import { mount } from '@vue/test-utils'
 import { nextTick, ref } from 'vue'
 import Checkbox from './Checkbox.vue'
 import Switch from '../Switch/Switch.vue'
-import { Radio, RadioGroup } from '../Radio'
 
-describe('Checkbox / Switch / Radio', () => {
+describe('Checkbox / Switch', () => {
   it('toggles checkbox model', async () => {
     const model = ref(false)
     const wrapper = mount(Checkbox, {
@@ -36,28 +35,5 @@ describe('Checkbox / Switch / Radio', () => {
     await wrapper.find('button').trigger('click')
     await nextTick()
     expect(model.value).toBe(true)
-  })
-
-  it('selects a radio value', async () => {
-    const model = ref('a')
-    const wrapper = mount(RadioGroup, {
-      props: {
-        modelValue: model.value,
-        'onUpdate:modelValue': (v: string | undefined) => {
-          if (v != null) model.value = v
-        },
-      },
-      slots: {
-        default: `
-          <Radio value="a" label="A" />
-          <Radio value="b" label="B" />
-        `,
-      },
-      global: { components: { Radio } },
-    })
-    const items = wrapper.findAll('.pomi-radio__control')
-    await items[1]?.trigger('click')
-    await nextTick()
-    expect(model.value).toBe('b')
   })
 })

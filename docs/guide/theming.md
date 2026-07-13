@@ -1,8 +1,28 @@
-# Thème (Design DNA)
+# Thème (Design Kits)
 
-Pomikit ne propose pas 200 tokens manuels : tu décris l’intention du thème, `createTheme` génère les variables CSS.
+**Design once. Nowhere else.**
 
-## Plugin
+Tu ne stylises pas chaque composant. Tu choisis **une identité** pour toute l’app — c’est la seule décision visuelle recommandée.
+
+```ts
+createTheme({ design: 'linear', accent: '#5B5FFF' })
+createTheme({ design: 'glass' })
+createTheme({ design: 'editorial' })
+```
+
+```ts
+createTheme({ design: 'linear', accent: '#5B5FFF' })
+createTheme({ design: 'glass' })
+createTheme({ design: 'editorial' })
+```
+
+Même `Button` / `Input` / `Card` — tokens différents.
+
+## Zero-config
+
+Sans `createTheme`, les tokens `:root` = kit **`linear`**.
+
+## Setup
 
 ```ts
 import { Pomikit, createTheme } from 'pomikit-ui'
@@ -10,62 +30,47 @@ import { Pomikit, createTheme } from 'pomikit-ui'
 app.use(Pomikit, {
   theme: createTheme({
     accent: '#5B5FFF',
-    radius: 'soft',
-    density: 'comfortable',
-    motion: 'expressive',
-    mode: 'light',
-    personality: 'glass',
+    design: 'linear',
   }),
 })
 ```
 
-Tu peux aussi passer un objet d’options directement (équivalent à `createTheme(options)`) :
-
-```ts
-app.use(Pomikit, { theme: { accent: '#FF5A7A', mode: 'dark' } })
-```
-
-## `createTheme` / `applyTheme`
+Ou à chaud :
 
 ```ts
 import { createTheme, applyTheme } from 'pomikit-ui'
 
-const theme = createTheme({ accent: '#5B5FFF', personality: 'playful' })
-applyTheme(theme) // document.documentElement par défaut
+applyTheme(createTheme({ design: 'glass' }))
 ```
 
-Utile pour changer de thème à chaud (comme le playground).
+## Design Kits
 
-## Options
-
-| Option | Type | Défaut | Effet |
-| --- | --- | --- | --- |
-| `accent` | `string` (hex) | `#5B5FFF` | Couleur de marque |
-| `radius` | `sharp` \| `soft` \| `round` | `soft` | Rayons |
-| `density` | `compact` \| `comfortable` \| `spacious` | `comfortable` | Hauteurs / paddings |
-| `motion` | `none` \| `subtle` \| `expressive` | `expressive` | Durées / easings |
-| `mode` | `light` \| `dark` | `light` | Surfaces / contraste |
-| `personality` | `minimal` \| `glass` \| `playful` | — | Preset qui compose les axes |
-
-### Personalities
-
-| Personality | Comportement typique |
+| Kit | Ambiance |
 | --- | --- |
-| `minimal` | Rayons plus nets, motion douce, densité compacte |
-| `glass` | Surfaces floutées, rayons plus ronds, motion expressive |
-| `playful` | Accent plus vif, densité spacious, rayons round |
+| **`linear`** | Ultra minimal — Linear, Vercel, GitHub |
+| **`glass`** | Translucide discret — Raycast, Arc |
+| **`editorial`** | Contenu, Newsreader — Notion, Medium |
+| **`soft`** | Accueillant — Figma, Framer |
+| **`playful`** | Plus vif — Discord, Pitch |
 
-## Variables générées
+Chaque kit règle : couleurs, radius, shadows, spacing, motion, typography, surfaces.
 
-Exemples de custom properties appliquées :
+Les composants n’ont **aucune** branche `if (design === …)`.
 
-- `--pomi-accent`, `--pomi-accent-hover`, `--pomi-accent-soft`
-- `--pomi-bg`, `--pomi-fg`, `--pomi-muted`, `--pomi-border`, `--pomi-surface`
-- `--pomi-radius`, `--pomi-control-h-md`, `--pomi-duration-mid`
-- `--pomi-focus-ring`, `--pomi-shadow`
+## Axes (overrides rares)
 
-Attributs data sur la racine : `data-pomi-radius`, `data-pomi-density`, `data-pomi-motion`, `data-pomi-mode`, `data-pomi-personality`.
+| Option | Rôle |
+| --- | --- |
+| `accent` | Couleur de marque |
+| `design` | Kit d’identité |
+| `radius` / `density` / `motion` / `elevation` | Escape hatches d’axes |
+| `mode` | `light` \| `dark` \| `system` |
 
-## Accessibilité
+> Migration : `personality: 'pomikit' | 'minimal'` → `linear`, `elegant` → `editorial`.
 
-`motion: 'none'` et `prefers-reduced-motion` désactivent / réduisent les animations (voir aussi le CSS de base Pomikit).
+## Règle produit
+
+Le développeur **ne choisit pas** un style par bouton.  
+Il choisit le kit une fois — Pomikit fait le reste.
+
+Voir [Philosophie](/guide/philosophy).

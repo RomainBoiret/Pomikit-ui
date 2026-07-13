@@ -5,7 +5,7 @@ import Field from './Field.vue'
 import Input from '../Input/Input.vue'
 
 describe('Field', () => {
-  it('wires label for/id and helper describedby to nested Input', () => {
+  it('wires external label and helper describedby to nested Input', async () => {
     const wrapper = mount(Field, {
       props: {
         label: 'Email',
@@ -20,13 +20,16 @@ describe('Field', () => {
       },
     })
 
+    await nextTick()
+
     const input = wrapper.find('input')
-    const label = wrapper.find('label')
+    const label = wrapper.find('.pomi-field__label')
     expect(label.text()).toContain('Email')
+    expect(label.find('.pomi-field__required').exists()).toBe(true)
     expect(label.attributes('for')).toBe(input.attributes('id'))
+    expect(wrapper.find('.pomi-field__helper').text()).toContain('never share')
     expect(input.attributes('aria-describedby')).toBeTruthy()
     expect(input.attributes('aria-required')).toBe('true')
-    expect(wrapper.find('.pomi-input__label').exists()).toBe(false)
   })
 
   it('shows intent validation error from nested Input without layout chrome on Input', async () => {

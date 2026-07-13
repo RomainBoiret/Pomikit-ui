@@ -8,7 +8,13 @@ export type CardVariant = 'elevated' | 'outline' | 'ghost'
 export type CardTitleAs = 'h2' | 'h3' | 'h4' | 'div'
 
 export type CardProps = {
+  /**
+   * @advanced Escape hatch — default elevated surface comes from the Design Kit.
+   */
   variant?: CardVariant
+  /**
+   * @advanced Escape hatch — prefer Design Kit density.
+   */
   size?: PomiSize
   titleAs?: CardTitleAs
   /** Intent: navigational card. */

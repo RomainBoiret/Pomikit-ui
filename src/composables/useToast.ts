@@ -1,18 +1,24 @@
 import { inject, provide, ref, type InjectionKey, type Ref } from 'vue'
-import type { PomiTone } from '../utils/types'
 
-export type ToastTone = Extract<PomiTone, 'neutral' | 'success' | 'danger'> | 'primary'
+/** Semantic toast accents — only tint icon, progress, and optional edge. */
+export type ToastTone = 'success' | 'danger' | 'warning' | 'info'
+
+/** @deprecated Prefer `info` */
+type ToastToneLegacy = 'neutral' | 'primary'
 
 export type ToastInput = {
   title: string
   description?: string
-  tone?: ToastTone
+  tone?: ToastTone | ToastToneLegacy
   /** ms — default from provider */
   duration?: number
 }
 
-export type ToastRecord = ToastInput & {
+export type ToastRecord = {
   id: number
+  title: string
+  description?: string
+  tone: ToastTone
   open: boolean
   duration: number
 }
@@ -21,14 +27,24 @@ export type ToastApi = {
   show: (input: ToastInput | string) => number
   success: (title: string, description?: string) => number
   error: (title: string, description?: string) => number
+  warning: (title: string, description?: string) => number
+  info: (title: string, description?: string) => number
   dismiss: (id: number) => void
   clear: () => void
   toasts: Ref<ToastRecord[]>
 }
 
-const ToastApiKey: InjectionKey<ToastApi> = Symbol('pomikit-toast-api')
+export const provideToastApiKey: InjectionKey<ToastApi> = Symbol('pomikit-toast-api')
 
 let toastId = 0
+let sharedToast: ToastApi | null = null
+
+function normalizeTone(tone?: ToastInput['tone']): ToastTone {
+  if (tone === 'success' || tone === 'danger' || tone === 'warning' || tone === 'info') {
+    return tone
+  }
+  return 'info'
+}
 
 export function createToastStore(defaultDuration = 4200) {
   const toasts = ref<ToastRecord[]>([])
@@ -42,7 +58,7 @@ export function createToastStore(defaultDuration = 4200) {
         id,
         title: payload.title,
         description: payload.description,
-        tone: payload.tone ?? 'neutral',
+        tone: normalizeTone(payload.tone),
         open: true,
         duration: payload.duration ?? defaultDuration,
       },
@@ -59,7 +75,8 @@ export function createToastStore(defaultDuration = 4200) {
       remove()
       return
     }
-    window.setTimeout(remove, 280)
+    // Match exit animation (200ms)
+    window.setTimeout(remove, 200)
   }
 
   function clear() {
@@ -71,6 +88,8 @@ export function createToastStore(defaultDuration = 4200) {
     show,
     success: (title, description) => show({ title, description, tone: 'success' }),
     error: (title, description) => show({ title, description, tone: 'danger' }),
+    warning: (title, description) => show({ title, description, tone: 'warning' }),
+    info: (title, description) => show({ title, description, tone: 'info' }),
     dismiss,
     clear,
   }
@@ -78,16 +97,19 @@ export function createToastStore(defaultDuration = 4200) {
   return api
 }
 
+export function getSharedToastStore(defaultDuration = 4200) {
+  if (!sharedToast) sharedToast = createToastStore(defaultDuration)
+  return sharedToast
+}
+
+export function resetSharedToastStore() {
+  sharedToast = null
+}
+
 export function provideToastApi(api: ToastApi) {
-  provide(ToastApiKey, api)
+  provide(provideToastApiKey, api)
 }
 
 export function useToast(): ToastApi {
-  const api = inject(ToastApiKey, null)
-  if (!api) {
-    throw new Error(
-      '[Pomikit] useToast() requires a parent <ToastProvider>. Wrap your app with ToastProvider.',
-    )
-  }
-  return api
+  return inject(provideToastApiKey, null) ?? getSharedToastStore()
 }

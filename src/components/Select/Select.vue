@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, useAttrs, useId, useSlots } from 'vue'
+import { computed, ref, useAttrs, useId, useSlots, watch } from 'vue'
 import {
   SelectContent,
   SelectItem,
@@ -26,6 +26,9 @@ export type SelectProps = {
   /** Intent: loading options / async fetch in progress */
   pending?: boolean
   placeholder?: string
+  /**
+   * @advanced Escape hatch — prefer Design Kit density.
+   */
   size?: PomiSize
   disabled?: boolean
   required?: boolean
@@ -74,9 +77,36 @@ const fallthrough = computed(() => {
 
 const showEmpty = computed(() => !props.pending && props.options.length === 0 && !slots.default)
 
+/** Resolve label from options — avoids Reka SelectValue placeholder flash on close. */
+const selectedLabel = computed(() => {
+  if (model.value == null || model.value === '') return undefined
+  const match = props.options.find((opt) => opt.value === model.value)
+  return match?.label
+})
+
+const hasValue = computed(() => model.value != null && model.value !== '')
+
+/** Keep last known label so a one-frame options/DOM gap never shows the placeholder. */
+const stickyLabel = ref<string | undefined>()
+
+watch(
+  selectedLabel,
+  (label) => {
+    if (label) stickyLabel.value = label
+    else if (!hasValue.value) stickyLabel.value = undefined
+  },
+  { immediate: true },
+)
+
 function onValueChange(value: unknown) {
-  if (typeof value === 'string') model.value = value
-  else if (value == null) model.value = undefined
+  if (typeof value === 'string') {
+    const match = props.options.find((opt) => opt.value === value)
+    if (match) stickyLabel.value = match.label
+    model.value = value
+  } else if (value == null) {
+    stickyLabel.value = undefined
+    model.value = undefined
+  }
 }
 </script>
 
@@ -98,8 +128,17 @@ function onValueChange(value: unknown) {
     >
       <SelectValue
         class="pomi-select__value"
+        :class="{ 'pomi-select__value--placeholder': !hasValue }"
         :placeholder="pending ? 'Loading…' : placeholder"
-      />
+        v-slot="{ selectedLabel: rekaLabels }"
+      >
+        {{
+          selectedLabel
+            ?? stickyLabel
+            ?? (rekaLabels?.length ? rekaLabels.join(', ') : undefined)
+            ?? (hasValue ? '' : pending ? 'Loading…' : placeholder)
+        }}
+      </SelectValue>
       <span class="pomi-select__chevron" aria-hidden="true">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
           <path
@@ -114,35 +153,42 @@ function onValueChange(value: unknown) {
     </SelectTrigger>
 
     <SelectPortal>
-      <SelectContent class="pomi-select__content" position="popper" :side-offset="6">
-        <SelectViewport class="pomi-select__viewport">
-          <div v-if="pending" class="pomi-select__status">Loading…</div>
-          <div v-else-if="showEmpty" class="pomi-select__status">{{ emptyText }}</div>
-          <template v-else>
-            <slot>
-              <SelectItem
-                v-for="opt in options"
-                :key="opt.value"
-                class="pomi-select__item"
-                :value="opt.value"
-                :disabled="opt.disabled"
-              >
-                <SelectItemText>{{ opt.label }}</SelectItemText>
-                <SelectItemIndicator class="pomi-select__check" as-child>
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                    <path
-                      d="M3.5 8.2l3 3 6-7"
-                      stroke="currentColor"
-                      stroke-width="1.75"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
-                </SelectItemIndicator>
-              </SelectItem>
-            </slot>
-          </template>
-        </SelectViewport>
+      <SelectContent
+        class="pomi-select__content"
+        position="popper"
+        :side-offset="8"
+        :collision-padding="8"
+      >
+        <div class="pomi-select__surface">
+          <SelectViewport class="pomi-select__viewport">
+            <div v-if="pending" class="pomi-select__status">Loading…</div>
+            <div v-else-if="showEmpty" class="pomi-select__status">{{ emptyText }}</div>
+            <template v-else>
+              <slot>
+                <SelectItem
+                  v-for="opt in options"
+                  :key="opt.value"
+                  class="pomi-select__item"
+                  :value="opt.value"
+                  :disabled="opt.disabled"
+                >
+                  <SelectItemText>{{ opt.label }}</SelectItemText>
+                  <SelectItemIndicator class="pomi-select__check" as-child>
+                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                      <path
+                        d="M3.5 8.2l3 3 6-7"
+                        stroke="currentColor"
+                        stroke-width="1.75"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </SelectItemIndicator>
+                </SelectItem>
+              </slot>
+            </template>
+          </SelectViewport>
+        </div>
       </SelectContent>
     </SelectPortal>
   </SelectRoot>

@@ -23,13 +23,13 @@
   background: linear-gradient(
     105deg,
     transparent 0%,
-    transparent 40%,
+    transparent 38%,
     var(--pomi-skeleton-shine) 50%,
-    transparent 60%,
+    transparent 62%,
     transparent 100%
   );
-  transform: translateX(-120%);
-  animation: pomi-skeleton-shimmer 1.7s var(--pomi-ease) infinite;
+  transform: translateX(-130%);
+  animation: pomi-skeleton-shimmer 1.65s var(--pomi-ease) infinite;
   animation-delay: var(--pomi-skeleton-delay);
   pointer-events: none;
 }
@@ -58,8 +58,13 @@
 
 @keyframes pomi-skeleton-shimmer {
   100% {
-    transform: translateX(120%);
+    transform: translateX(130%);
   }
+}
+
+[data-pomi-motion='none'] .pomi-skeleton::after {
+  animation: none;
+  opacity: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {

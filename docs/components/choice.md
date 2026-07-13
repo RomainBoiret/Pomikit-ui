@@ -1,80 +1,40 @@
-# Checkbox · Switch · Radio
-
-Famille de choix — même langage visuel, Field-aware.
-
-## Import
+# Checkbox · Switch
 
 ```ts
-import { Checkbox, Switch, Radio, RadioGroup } from 'pomikit-ui'
+import { Checkbox, Switch } from 'pomikit-ui'
 ```
+
+## Exemples
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue'
+import { Checkbox, Switch } from 'pomikit-ui'
+
+const accept = ref(false)
+const dark = ref(true)
+</script>
+
+<template>
+  <Checkbox v-model="accept" label="Accept terms" />
+  <Switch v-model="dark" label="Dark mode" />
+</template>
+```
+
+Field-aware : place-les dans un `Field` pour partager label / erreur / IDs.
 
 ## Checkbox
 
-```vue
-<Checkbox v-model="accept" label="Accept terms" />
-```
-
 | Prop | Type | Défaut |
 | --- | --- | --- |
+| `modelValue` | `boolean \| 'indeterminate'` | — |
 | `label` | `string` | — |
-| `size` | `PomiSize` | `'md'` |
 | `disabled` | `boolean` | `false` |
-| `required` | `boolean` | `false` |
-| `id` | `string` | — |
-| `name` | `string` | — |
-| `value` | `string` | `'on'` |
-
-`v-model`: `boolean | 'indeterminate'`
 
 ## Switch
 
-```vue
-<Switch v-model="compact" label="Compact density" />
-```
-
 | Prop | Type | Défaut |
 | --- | --- | --- |
-| `label` | `string` | — |
-| `size` | `PomiSize` | `'md'` |
-| `disabled` | `boolean` | `false` |
-| `required` | `boolean` | `false` |
-| `id` | `string` | — |
-| `name` | `string` | — |
-
-`v-model`: `boolean`
-
-## RadioGroup + Radio
-
-```vue
-<Field label="Plan">
-  <RadioGroup v-model="plan">
-    <Radio value="starter" label="Starter" />
-    <Radio value="pro" label="Pro" />
-  </RadioGroup>
-</Field>
-```
-
-### RadioGroup
-
-| Prop | Type | Défaut |
-| --- | --- | --- |
-| `size` | `PomiSize` | `'md'` |
-| `disabled` | `boolean` | `false` |
-| `required` | `boolean` | `false` |
-| `name` | `string` | — |
-| `orientation` | `'horizontal' \| 'vertical'` | `'vertical'` |
-
-`v-model`: `string`
-
-### Radio
-
-| Prop | Type | Défaut |
-| --- | --- | --- |
-| `value` | `string` | **requis** |
+| `modelValue` | `boolean` | — |
 | `label` | `string` | — |
 | `disabled` | `boolean` | `false` |
-| `id` | `string` | — |
-
-## Field
-
-Dans un `Field`, ces contrôles héritent de `controlId`, `required`, `describedBy` et `aria-invalid`.

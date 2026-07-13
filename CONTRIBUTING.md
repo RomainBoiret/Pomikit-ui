@@ -2,11 +2,27 @@
 
 ## Principles
 
-1. Prefer inference over props.
-2. If it does not remove app boilerplate, it probably should not ship.
-3. Beautiful defaults + Theme DNA — never gadget motion.
-4. Respect `prefers-reduced-motion` and accessibility.
-5. Keep the repo understandable in minutes.
+1. **Less decisions.** Prefer inference over props.
+2. **Beautiful by default. Smart by design.** Design Kits + tokens own aesthetics.
+3. If it does not remove app boilerplate, it probably should not ship.
+4. Docs / examples / Getting Started show the **minimal** API only.
+5. Style props (`variant`, `tone`, `size`, …) are escape hatches — never the product.
+6. Respect `prefers-reduced-motion` and accessibility.
+7. Keep the repo understandable in minutes.
+
+## Decision filter (required)
+
+Before adding a feature or prop, ask:
+
+> Does this require an extra decision from the developer?
+
+If **yes**, first try:
+
+1. A Design Kit / token default
+2. Intent inference (`Promise` → busy, `toast.success`, Field `required`)
+3. A conventional behavior with no opt-in
+
+Only expose a prop when none of the above is enough — and only if it expresses **business intent**, not pure aesthetics.
 
 ## Setup
 
@@ -22,26 +38,22 @@ pnpm build
 ```
 src/components   components
 src/composables  useDialog, useToast, useField
-src/theme        createTheme + plugin
+src/theme        createTheme + Design Kits + plugin
 src/tokens       DNA CSS defaults
 src/styles       base + aggregate CSS
 src/utils        thenable, rules, cn
 docs/            VitePress documentation
-stories/         Storybook stories
+stories/         Storybook (intent-first)
 playground/      local demo app
 ```
 
 ## Documentation
 
 ```bash
-pnpm docs          # http://localhost:5173 (VitePress)
+pnpm docs:dev      # http://localhost:5173 (VitePress)
 pnpm docs:build
 ```
 
-Update `docs/` when the public API or intent behavior changes.
+Official surface = VitePress (+ home playground). Storybook = internal isolation tool.
 
-## Pull requests
-
-- Keep changes focused
-- Add/adjust Vitest for intent behaviors
-- Update README / docs when the public API changes
+See [docs/guide/philosophy.md](./docs/guide/philosophy.md).

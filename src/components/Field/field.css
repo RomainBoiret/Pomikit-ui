@@ -1,21 +1,23 @@
 .pomi-field {
   display: flex;
   flex-direction: column;
-  gap: var(--pomi-space-2);
-  font-family: var(--pomi-font);
+  gap: 0.5rem;
   width: 100%;
+  font-family: var(--pomi-font);
 }
 
 .pomi-field__label {
   font-size: 0.875rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  color: var(--pomi-fg);
+  font-weight: 500;
+  letter-spacing: -0.011em;
+  line-height: 1.3;
+  color: var(--pomi-fg, #111827);
 }
 
 .pomi-field__required {
-  margin-left: 0.15em;
-  color: var(--pomi-danger);
+  margin-left: 0.2em;
+  color: var(--pomi-accent);
+  font-weight: 500;
 }
 
 .pomi-field__control {
@@ -23,11 +25,12 @@
   min-width: 0;
 }
 
+/* Reserved row — helper and error swap without layout shift */
 .pomi-field__message {
   margin: 0;
-  min-height: var(--pomi-message-min-height);
-  font-size: var(--pomi-message-fs);
-  line-height: var(--pomi-message-lh);
+  min-height: 1.25rem;
+  font-size: 0.8125rem;
+  line-height: 1.35;
 }
 
 .pomi-field__helper,
@@ -38,9 +41,18 @@
 }
 
 .pomi-field__helper {
-  color: var(--pomi-muted);
+  color: var(--pomi-muted, #6b7280);
 }
 
 .pomi-field__error {
   color: var(--pomi-danger);
+  animation: pomi-fade-in 180ms var(--pomi-ease);
+}
+
+.pomi-field--invalid .pomi-field__label {
+  color: var(--pomi-fg, #111827);
+}
+
+[data-pomi-motion='none'] .pomi-field__error {
+  animation: none;
 }

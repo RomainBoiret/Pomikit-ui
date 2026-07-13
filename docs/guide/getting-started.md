@@ -23,71 +23,93 @@ yarn add pomikit-ui
 
 :::
 
-## Bootstrap
+## Zero-config
+
+Les composants sont **beaux par défaut**. Aucune prop de style. Aucune décision de design.
+
+```vue
+<script setup lang="ts">
+import { Button } from 'pomikit-ui'
+import 'pomikit-ui/styles.css'
+</script>
+
+<template>
+  <Button>Save</Button>
+</template>
+```
+
+> L’import nommé depuis `pomikit-ui` charge aussi les styles (side-effect). `pomikit-ui/styles.css` reste recommandé pour être explicite.
+
+## Identité de l’app (optionnel)
+
+Une seule décision visuelle — pas une par composant :
 
 ```ts
 // main.ts
 import { createApp } from 'vue'
-import {
-  Pomikit,
-  createTheme,
-  DialogProvider,
-  ToastProvider,
-} from 'pomikit-ui'
+import { Pomikit, createTheme } from 'pomikit-ui'
 import 'pomikit-ui/styles.css'
 import App from './App.vue'
 
 createApp(App)
   .use(Pomikit, {
     theme: createTheme({
+      design: 'linear',
       accent: '#5B5FFF',
-      personality: 'minimal', // optionnel
+      mode: 'system',
     }),
   })
   .mount('#app')
 ```
 
-Enveloppe le root pour activer Dialog et Toast :
+Le plugin :
+1. applique le Design Kit
+2. enregistre Dialog + Toast (plus besoin de providers visibles)
 
-```vue
-<!-- App.vue -->
-<script setup lang="ts">
-import { DialogProvider, ToastProvider } from 'pomikit-ui'
-</script>
-
-<template>
-  <ToastProvider>
-    <DialogProvider>
-      <RouterView />
-    </DialogProvider>
-  </ToastProvider>
-</template>
-```
-
-## Utiliser un composant
+## Premiers composants
 
 ```vue
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Button, Field, Input } from 'pomikit-ui'
+import { Button, Field, Input, useToast } from 'pomikit-ui'
 
-const name = ref('')
+const email = ref('')
+const toast = useToast()
+
+async function save() {
+  await fetch('/api/profile', { method: 'POST' })
+  toast.success('Saved')
+}
 </script>
 
 <template>
-  <Field label="Nom" required>
-    <Input v-model="name" />
+  <Field label="Email" required>
+    <Input v-model="email" type="email" placeholder="you@company.com" />
   </Field>
-  <Button @click="() => Promise.resolve()">Enregistrer</Button>
+  <Button @click="save">Save</Button>
 </template>
 ```
 
-## Ce qu’il faut retenir
+Intent : Promise → busy → success. Toast sémantique. Aucun `variant` / `tone` / `size`.
 
-| Étape | Pourquoi |
-| --- | --- |
-| `import 'pomikit-ui/styles.css'` | Tokens + styles des composants |
-| `.use(Pomikit, { theme })` | Applique le Design DNA sur `:root` |
-| `ToastProvider` + `DialogProvider` | Active `useToast` / `useDialog` |
+## Alternative sans plugin : `<PomikitRoot>`
 
-Sans providers, les composants UI “statiques” (Button, Input, Card…) fonctionnent déjà. Dialog confirm et toasts nécessitent les providers.
+```vue
+<script setup lang="ts">
+import { PomikitRoot, applyTheme, createTheme } from 'pomikit-ui'
+
+applyTheme(createTheme({ design: 'editorial' }))
+</script>
+
+<template>
+  <PomikitRoot>
+    <RouterView />
+  </PomikitRoot>
+</template>
+```
+
+## Suite
+
+- [Philosophie](/guide/philosophy) — pourquoi moins de props
+- [Intent](/guide/intent) — comportements déduits
+- [Thème](/guide/theming) — Design Kits

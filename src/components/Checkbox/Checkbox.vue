@@ -68,11 +68,19 @@ const fallthrough = computed(() => {
       <CheckboxIndicator class="pomi-check__indicator" as-child>
         <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
           <path
-            d="M3.5 8.2l3 3 6-7"
+            class="pomi-check__tick"
+            d="M4 8.25 6.85 11 12 4.75"
             stroke="currentColor"
-            stroke-width="1.75"
+            stroke-width="2"
             stroke-linecap="round"
             stroke-linejoin="round"
+          />
+          <path
+            class="pomi-check__dash"
+            d="M4 8h8"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
           />
         </svg>
       </CheckboxIndicator>

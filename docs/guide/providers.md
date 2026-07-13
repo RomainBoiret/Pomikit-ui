@@ -1,39 +1,38 @@
-# Providers
+# Racine & services
 
-Deux providers à monter près de la racine de l’app.
+Dans Pomikit v1, tu n’as **plus** besoin de monter `ToastProvider` + `DialogProvider`.
 
-## Ordre recommandé
+## Recommandé : plugin
 
-```vue
-<ToastProvider>
-  <DialogProvider>
-    <App />
-  </DialogProvider>
-</ToastProvider>
+```ts
+app.use(Pomikit, {
+  theme: createTheme({ design: 'linear' }),
+})
 ```
 
-L’ordre Toast → Dialog évite que les overlays dialog passent “sous” les toasts de façon surprenante ; tu peux inverser si ton produit préfère l’inverse.
+Le plugin enregistre Dialog + Toast et monte les overlays automatiquement.
 
-## ToastProvider
+## Alternative : `<PomikitRoot>`
+
+```vue
+<template>
+  <PomikitRoot>
+    <App />
+  </PomikitRoot>
+</template>
+```
+
+Un seul wrapper pour `useDialog` / `useToast`.
+
+### Props
 
 | Prop | Type | Défaut |
 | --- | --- | --- |
-| `duration` | `number` | `4200` |
-| `label` | `string` | `'Notifications'` |
+| `toastDuration` | `number` | `4200` |
+| `toastLabel` | `string` | `'Notifications'` |
 
-Active [`useToast`](/composables/use-toast).
+## Legacy (déprécié)
 
-## DialogProvider
+`ToastProvider` et `DialogProvider` restent exportés pour migration, mais préfère le plugin ou `PomikitRoot`.
 
-Pas de props. Active [`useDialog`](/composables/use-dialog) et rend la file de confirms.
-
-## Sans provider
-
-Ces appels lèvent une erreur claire :
-
-```ts
-useToast()  // Error: must be used within ToastProvider
-useDialog() // Error: must be used within DialogProvider
-```
-
-Les composants `Dialog` déclaratifs (avec trigger) n’ont **pas** besoin de `DialogProvider`. Le provider sert surtout à `useDialog().confirm()`.
+Les `Dialog` déclaratifs (avec trigger) n’ont besoin d’aucun service.

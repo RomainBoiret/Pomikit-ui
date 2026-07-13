@@ -71,10 +71,10 @@ export const Playground: Story = {
     template: `
       <div style="display:grid;gap:1rem">
         <div style="display:flex;gap:0.5rem;flex-wrap:wrap">
-          <Button size="sm" @click="load(false)">Reload</Button>
-          <Button size="sm" variant="outline" @click="refresh">Refresh (keep items)</Button>
-          <Button size="sm" tone="danger" variant="outline" @click="load(true)">Fail</Button>
-          <Button size="sm" tone="neutral" variant="ghost" @click="clear">Clear</Button>
+          <Button @click="load(false)">Reload</Button>
+          <Button @click="refresh">Refresh</Button>
+          <Button @click="load(true)">Fail</Button>
+          <Button @click="clear">Clear</Button>
         </div>
         <Collection
           :items="items"
@@ -93,7 +93,7 @@ export const Playground: Story = {
             </Card>
           </template>
           <template #empty-action>
-            <Button size="sm" @click="load(false)">Load people</Button>
+            <Button @click="load(false)">Load people</Button>
           </template>
         </Collection>
       </div>

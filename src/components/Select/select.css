@@ -9,7 +9,7 @@
   border: 1px solid var(--pomi-border);
   border-radius: var(--pomi-radius);
   background: var(--pomi-surface);
-  box-shadow: 0 1px 0 rgb(255 255 255 / 40%);
+  box-shadow: none;
   color: var(--pomi-fg);
   font-family: var(--pomi-font);
   font-weight: 400;
@@ -19,9 +19,9 @@
   appearance: none;
   -webkit-appearance: none;
   transition:
-    border-color var(--pomi-duration-fast) var(--pomi-ease),
+    border-color var(--pomi-duration-mid) var(--pomi-ease),
     box-shadow var(--pomi-duration-mid) var(--pomi-ease),
-    background-color var(--pomi-duration-fast) var(--pomi-ease),
+    background-color var(--pomi-duration-mid) var(--pomi-ease),
     transform var(--pomi-duration-fast) var(--pomi-ease);
 }
 
@@ -34,47 +34,48 @@
 
 .pomi-select__trigger--md {
   min-height: var(--pomi-control-h-md);
-  padding: 0 var(--pomi-space-3);
-  font-size: 0.9375rem;
+  padding: 0 var(--pomi-control-px-md);
+  font-size: 0.875rem;
 }
 
 .pomi-select__trigger--lg {
   min-height: var(--pomi-control-h-lg);
-  padding: 0 var(--pomi-control-px-md);
-  font-size: 1rem;
+  padding: 0 var(--pomi-control-px-lg);
+  font-size: 0.9375rem;
   border-radius: var(--pomi-radius-lg);
 }
 
 .pomi-select__trigger:hover:not([data-disabled]) {
-  border-color: color-mix(in srgb, var(--pomi-fg) 18%, var(--pomi-border));
+  background: var(--pomi-surface-hover);
 }
 
 .pomi-select__trigger:active:not([data-disabled]) {
-  transform: scale(0.995);
+  transform: scale(var(--pomi-motion-press));
 }
 
 .pomi-select__trigger:focus-visible,
 .pomi-select__trigger[data-state='open'] {
   outline: none;
-  border-color: color-mix(in srgb, var(--pomi-accent) 55%, var(--pomi-border));
-  box-shadow:
-    var(--pomi-focus-ring),
-    0 1px 0 rgb(255 255 255 / 40%);
+  border-color: var(--pomi-accent);
+  box-shadow: var(--pomi-focus-ring);
 }
 
 .pomi-select__trigger--invalid {
-  border-color: color-mix(in srgb, var(--pomi-danger) 70%, var(--pomi-border));
+  border-color: color-mix(in srgb, var(--pomi-danger) 55%, var(--pomi-border));
 }
 
 .pomi-select__trigger--invalid:focus-visible,
 .pomi-select__trigger--invalid[data-state='open'] {
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--pomi-danger) 28%, transparent);
+  border-color: var(--pomi-danger);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--pomi-danger) 18%, transparent);
 }
 
 .pomi-select__trigger[data-disabled] {
-  opacity: 0.55;
+  opacity: 0.5;
   cursor: not-allowed;
-  background: color-mix(in srgb, var(--pomi-border) 25%, var(--pomi-surface));
+  background: color-mix(in srgb, var(--pomi-border) 16%, var(--pomi-surface));
+  transform: none;
+  box-shadow: none;
 }
 
 .pomi-select__value {
@@ -85,7 +86,8 @@
   white-space: nowrap;
 }
 
-.pomi-select__trigger [data-placeholder] {
+.pomi-select__trigger [data-placeholder],
+.pomi-select__value--placeholder {
   color: color-mix(in srgb, var(--pomi-muted) 80%, transparent);
   font-weight: 400;
 }
@@ -95,12 +97,12 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: 1.125rem;
-  height: 1.125rem;
+  width: 1rem;
+  height: 1rem;
   color: var(--pomi-muted);
-  opacity: 0.75;
+  opacity: 0.7;
   transition:
-    transform var(--pomi-duration-mid) var(--pomi-ease-out),
+    transform var(--pomi-duration-mid) var(--pomi-ease),
     color var(--pomi-duration-fast) var(--pomi-ease),
     opacity var(--pomi-duration-fast) var(--pomi-ease);
 }
@@ -115,17 +117,27 @@
   transform: rotate(180deg);
 }
 
+/* Positioned layer — Floating UI owns transform here */
 .pomi-select__content {
-  z-index: 60;
+  z-index: 70;
   min-width: var(--reka-select-trigger-width, 12rem);
+  outline: none;
+  transform-origin: var(--reka-select-content-transform-origin, top center);
+}
+
+.pomi-select__surface {
   overflow: hidden;
   border: 1px solid var(--pomi-border);
   border-radius: var(--pomi-radius);
   background: var(--pomi-surface-elevated);
-  box-shadow: var(--pomi-shadow);
+  box-shadow: var(--pomi-shadow-lg, var(--pomi-shadow)), var(--pomi-border-highlight, none);
   font-family: var(--pomi-font);
-  transform-origin: var(--reka-select-content-transform-origin, top center);
-  animation: pomi-select-in var(--pomi-duration-mid) var(--pomi-ease-out);
+  transform-origin: inherit;
+  animation: pomi-dropdown-in var(--pomi-duration-mid) var(--pomi-ease) both;
+}
+
+.pomi-select__content[data-state='closed'] .pomi-select__surface {
+  animation: pomi-dropdown-out var(--pomi-duration-fast) var(--pomi-ease) both;
 }
 
 .pomi-select__viewport {
@@ -138,44 +150,42 @@
   display: flex;
   align-items: center;
   gap: var(--pomi-space-2);
-  padding: 0.5rem 2rem 0.5rem 0.625rem;
-  border-radius: calc(var(--pomi-radius-sm) - 2px);
-  font-size: 0.9375rem;
-  font-weight: 500;
+  min-height: 2rem;
+  padding: 0.35rem 1.75rem 0.35rem 0.55rem;
+  border-radius: var(--pomi-radius-sm);
+  font-size: 0.8125rem;
+  font-weight: 450;
   letter-spacing: -0.01em;
   line-height: 1.3;
   cursor: pointer;
   outline: none;
   user-select: none;
   color: var(--pomi-fg);
-  transition:
-    background-color var(--pomi-duration-fast) var(--pomi-ease),
-    color var(--pomi-duration-fast) var(--pomi-ease),
-    transform var(--pomi-duration-fast) var(--pomi-ease);
+  transition: background-color var(--pomi-duration-fast) var(--pomi-ease);
 }
 
 .pomi-select__item[data-highlighted] {
-  background: color-mix(in srgb, var(--pomi-fg) 6%, transparent);
+  background: var(--pomi-surface-hover);
   color: var(--pomi-fg);
 }
 
 .pomi-select__item[data-state='checked'] {
   color: var(--pomi-fg);
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .pomi-select__item[data-state='checked'][data-highlighted] {
-  background: color-mix(in srgb, var(--pomi-fg) 6%, transparent);
+  background: var(--pomi-surface-hover);
 }
 
 .pomi-select__item[data-disabled] {
-  opacity: 0.45;
+  opacity: 0.4;
   pointer-events: none;
 }
 
 .pomi-select__check {
   position: absolute;
-  right: 0.5rem;
+  right: 0.45rem;
   top: 50%;
   display: inline-flex;
   align-items: center;
@@ -184,35 +194,25 @@
   height: 0.875rem;
   color: var(--pomi-accent);
   transform: translateY(-50%);
-  animation: pomi-select-check-in var(--pomi-duration-fast) var(--pomi-ease-out);
+  animation: pomi-spring-in var(--pomi-duration-fast) var(--pomi-ease);
 }
 
 .pomi-select__status {
-  padding: 0.875rem 0.75rem;
-  font-size: 0.85rem;
-  font-weight: 500;
+  padding: 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 450;
   color: var(--pomi-muted);
   text-align: center;
 }
 
-@keyframes pomi-select-in {
-  from {
-    opacity: 0;
-    transform: translateY(-4px) scale(0.98);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+[data-pomi-motion='none'] .pomi-select__surface {
+  animation: none;
 }
 
-@keyframes pomi-select-check-in {
-  from {
-    opacity: 0;
-    transform: translateY(-50%) scale(0.6);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(-50%) scale(1);
-  }
+[data-pomi-motion='none'] .pomi-select__trigger {
+  transition: none;
+}
+
+[data-pomi-motion='none'] .pomi-select__trigger:active:not([data-disabled]) {
+  transform: none;
 }

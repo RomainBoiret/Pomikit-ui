@@ -1,25 +1,13 @@
-import { createApp, defineComponent, h } from 'vue'
+import { createApp } from 'vue'
 import App from './App.vue'
-import { DialogProvider, Pomikit, ToastProvider, createTheme } from 'pomikit-ui'
+import { Pomikit, createTheme } from 'pomikit-ui'
 import 'pomikit-ui'
 
-const Root = defineComponent({
-  name: 'PlaygroundRoot',
-  setup() {
-    return () =>
-      h(ToastProvider, null, {
-        default: () => h(DialogProvider, null, { default: () => h(App) }),
-      })
-  },
-})
-
-createApp(Root)
+createApp(App)
   .use(Pomikit, {
     theme: createTheme({
-      accent: '#5B5FFF',
-      radius: 'soft',
-      density: 'comfortable',
-      motion: 'expressive',
+      accent: '#34C759',
+      design: 'linear',
     }),
   })
   .mount('#app')

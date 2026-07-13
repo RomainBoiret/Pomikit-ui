@@ -18,8 +18,17 @@ export type ButtonPhase = 'idle' | 'busy' | 'success' | 'error'
 
 export type ButtonProps = {
   type?: 'button' | 'submit' | 'reset'
+  /**
+   * @advanced Escape hatch — prefer the Design Kit density over per-button sizing.
+   */
   size?: ButtonSize
+  /**
+   * @advanced Escape hatch — prefer Design Kit defaults; use only for rare exceptions.
+   */
   variant?: PomiVariant
+  /**
+   * @advanced Escape hatch — prefer intent (`confirm`, async click). Kit owns brand color.
+   */
   tone?: PomiTone
   disabled?: boolean
   /** Controlled busy escape hatch. Merges with intent-driven busy from async clicks. */

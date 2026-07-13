@@ -1,55 +1,33 @@
 # useToast
 
-API imperative pour les notifications.
-
-## Prérequis
-
-[`ToastProvider`](/guide/providers) monté dans l’arbre.
-
-## API
-
 ```ts
 import { useToast } from 'pomikit-ui'
 
 const toast = useToast()
 
-toast.show('Hello') // id
-toast.show({ title: 'Hello', description: '…', tone: 'primary', duration: 3000 })
+toast.success('Profile saved')
+toast.error('Something went wrong')
+toast.warning('Heads up')
+toast.info('Tip')
 
-toast.success(title, description?)
-toast.error(title, description?)
+toast.show('Hello')
+toast.show({ title: 'Hello', description: '…', duration: 3000 })
 
 toast.dismiss(id)
 toast.clear()
-toast.toasts // Ref<ToastRecord[]>
 ```
 
-### Types
+Pas de `variant` : la sémantique est dans la méthode (`success` / `error` / …).
 
-```ts
-type ToastTone = 'neutral' | 'success' | 'danger' | 'primary'
-
-type ToastInput = {
-  title: string
-  description?: string
-  tone?: ToastTone
-  duration?: number
-}
-```
-
-## Exemple
+Nécessite le plugin `Pomikit` ou `<PomikitRoot>` (voir [Providers](/guide/providers)).
 
 ```vue
 <script setup lang="ts">
 import { useToast, Button } from 'pomikit-ui'
-
 const toast = useToast()
 </script>
 
 <template>
-  <Button variant="soft" @click="toast.show('Hello Pomikit')">Toast</Button>
-  <Button @click="toast.success('Saved', 'Profile updated')">Saved</Button>
+  <Button @click="toast.success('Saved')">Notify</Button>
 </template>
 ```
-
-La durée par défaut vient de `ToastProvider` (`4200` ms), surchargeable par toast.

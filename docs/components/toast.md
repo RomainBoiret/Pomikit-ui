@@ -1,29 +1,14 @@
 # Toast
 
-Notifications éphémères via provider + composable.
+Notifications — sémantique via le composable, pas via des variants.
 
 ## Import
 
 ```ts
-import { ToastProvider, useToast, Button } from 'pomikit-ui'
+import { useToast, Button } from 'pomikit-ui'
 ```
 
-## Setup
-
-Voir [Providers](/guide/providers).
-
-```vue
-<ToastProvider :duration="4200">
-  <App />
-</ToastProvider>
-```
-
-| Prop | Type | Défaut |
-| --- | --- | --- |
-| `duration` | `number` | `4200` |
-| `label` | `string` | `'Notifications'` |
-
-## Usage
+## Chemin recommandé
 
 ```vue
 <script setup lang="ts">
@@ -33,10 +18,22 @@ const toast = useToast()
 </script>
 
 <template>
-  <Button @click="toast.show('Hello Pomikit')">Show</Button>
-  <Button @click="toast.success('Saved', 'Profile updated')">Success</Button>
-  <Button tone="danger" @click="toast.error('Failed', 'Try again')">Error</Button>
+  <Button @click="toast.success('Profile saved')">Success</Button>
+  <Button @click="toast.error('Something went wrong')">Error</Button>
+  <Button @click="toast.warning('Heads up')">Warning</Button>
+  <Button @click="toast.info('Tip')">Info</Button>
 </template>
 ```
 
-API complète : [`useToast`](/composables/use-toast).
+Surface neutre. Accents uniquement sur l’icône. Stack FLIP, bas à droite, swipe mobile.
+
+## Setup
+
+Via plugin `Pomikit` ou `<PomikitRoot>` — voir [Providers](/guide/providers).
+
+| Prop provider | Défaut |
+| --- | --- |
+| `duration` | `4200` |
+| `swipeDirection` | `'right'` |
+
+API : [`useToast`](/composables/use-toast).

@@ -1,6 +1,6 @@
 # Input
 
-Saisie textuelle — validation intent, search icon, clearable stable.
+Champ prêt à l’emploi. L’apparence vient du Design Kit.
 
 ## Import
 
@@ -8,59 +8,48 @@ Saisie textuelle — validation intent, search icon, clearable stable.
 import { Input, Field, rules } from 'pomikit-ui'
 ```
 
-## Exemples
+## Chemin recommandé
 
 ```vue
-<Field label="Name" required>
-  <Input v-model="name" />
+<Input />
+
+<Input v-model="email" type="email" placeholder="Email" required />
+
+<Field label="Email" helper="We'll never share your email." required>
+  <Input v-model="email" type="email" placeholder="john@company.com" />
 </Field>
-
-<Input
-  v-model="q"
-  type="search"
-  clearable
-  placeholder="Search…"
-  @update:committed="onSearch"
-/>
-
-<Input
-  v-model="email"
-  label="Email"
-  :rules="[rules.required(), rules.email()]"
-/>
 ```
 
-Préférer `Field` pour le chrome ; `label` / `hint` / `error` restent supportés en standalone.
+Préférer `Field` pour label / helper / error.
 
-## Props
+## Intent
+
+| Option | Comportement |
+| --- | --- |
+| `type="search"` | Icône loupe + clear |
+| `type="password"` | Toggle afficher / masquer |
+| `clearable` | Bouton clear |
+| `rules` | Validation blur + submit |
+| `required` | Marqué + a11y |
+
+## Props d’intention
 
 | Prop | Type | Défaut |
 | --- | --- | --- |
 | `modelValue` | `string` | `''` |
-| `label` | `string` | — |
-| `hint` | `string` | — |
-| `error` | `string` | — |
 | `placeholder` | `string` | — |
 | `type` | `InputType` | `'text'` |
-| `size` | `PomiSize` | `'md'` |
-| `disabled` | `boolean` | `false` |
-| `readonly` | `boolean` | `false` |
-| `required` | `boolean` | `false` |
+| `required` / `disabled` / `readonly` | `boolean` | `false` |
 | `clearable` | `boolean` | `false` |
 | `rules` | `InputRule[]` | `[]` |
-| `commitDelay` | `number` | `300` si search, sinon `0` |
-| `id` | `string` | — |
-| `name` | `string` | — |
-| `autocomplete` | `string` | — |
+| `commitDelay` | `number` | search: `300`, sinon `0` |
+| `label` / `hint` / `error` | `string` | standalone (préférer Field) |
 
-`InputType`: `'text' | 'email' | 'password' | 'search' | 'tel' | 'url' | 'number'`
+## Escape hatches
 
-## Emits
-
-- `update:modelValue`
-- `update:committed` — debounced (search-friendly)
-- `clear`
-- `valid` — `(valid: boolean)`
+| Prop | Notes |
+| --- | --- |
+| `size` | `sm` \| `md` \| `lg` — rare ; le kit porte déjà la densité |
 
 ## Slots
 
@@ -70,10 +59,3 @@ Préférer `Field` pour le chrome ; `label` / `hint` / `error` restent supporté
 
 - `validate()`
 - `focusField()`
-
-## Intent
-
-- `type="search"` → icône loupe intégrée (sauf slot `leading`)
-- `clearable` réserve l’espace du clear (pas de stretch à la saisie)
-- Validation blur + submit formulaire parent ; focus premier invalide
-- Voir aussi [Rules](/reference/rules)

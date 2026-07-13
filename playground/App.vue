@@ -6,26 +6,27 @@ import {
   Checkbox,
   Collection,
   Dropdown,
+  DropdownTrigger,
+  DropdownContent,
   DropdownItem,
   DropdownSeparator,
   Field,
   Input,
-  Radio,
-  RadioGroup,
   Select,
   Skeleton,
   Switch,
   applyTheme,
   createTheme,
+  DESIGNS,
   useDialog,
   useToast,
+  type ThemeDesign,
 } from 'pomikit-ui'
 
 const name = ref('Romain')
 const query = ref('')
 const accept = ref(false)
 const dark = ref(true)
-const plan = ref('pro')
 const engineer = ref('grace')
 const peoplePending = ref(false)
 const peopleError = ref<unknown>(null)
@@ -41,15 +42,12 @@ const options = [
   { label: 'Lin', value: 'lin' },
 ]
 
-function setDna(kind: 'default' | 'minimal' | 'glass' | 'playful') {
-  if (kind === 'default') {
-    applyTheme(createTheme({ accent: '#5B5FFF', motion: 'expressive' }))
-    return
-  }
+function setDesign(design: ThemeDesign) {
+  const pack = DESIGNS[design]
   applyTheme(
     createTheme({
-      accent: kind === 'playful' ? '#FF5A7A' : '#5B5FFF',
-      personality: kind,
+      accent: pack.accent,
+      design,
     }),
   )
 }
@@ -81,12 +79,13 @@ async function askDelete() {
     <header class="playground__header">
       <p class="playground__eyebrow">Pomikit</p>
       <h1>Catalog focus</h1>
-      <p>Button, Field, Input, Collection, Dialog, Select, Toast, Dropdown, Checkbox family, Card, Skeleton.</p>
+      <p>Less decisions. Better interfaces.</p>
       <div class="playground__row">
-        <Button size="sm" variant="soft" @click="setDna('default')">Default</Button>
-        <Button size="sm" variant="outline" @click="setDna('minimal')">Minimal</Button>
-        <Button size="sm" variant="outline" @click="setDna('glass')">Glass</Button>
-        <Button size="sm" variant="outline" @click="setDna('playful')">Playful</Button>
+        <Button @click="setDesign('linear')">Linear</Button>
+        <Button @click="setDesign('glass')">Glass</Button>
+        <Button @click="setDesign('editorial')">Editorial</Button>
+        <Button @click="setDesign('soft')">Soft</Button>
+        <Button @click="setDesign('playful')">Playful</Button>
       </div>
     </header>
 
@@ -94,16 +93,20 @@ async function askDelete() {
       <h2>Actions</h2>
       <div class="playground__row">
         <Button @click="save">Save</Button>
-        <Button tone="danger" variant="outline" @click="askDelete">Dialog confirm</Button>
-        <Button variant="soft" @click="toast.show('Hello Pomikit')">Toast</Button>
+        <Button @click="askDelete">Dialog confirm</Button>
+        <Button @click="toast.info('Hello Pomikit')">Toast</Button>
         <Dropdown>
-          <template #trigger>
-            <Button variant="outline">Menu</Button>
-          </template>
-          <DropdownItem @select="toast.success('Edit')">Edit</DropdownItem>
-          <DropdownItem @select="toast.success('Duplicated')">Duplicate</DropdownItem>
-          <DropdownSeparator />
-          <DropdownItem tone="danger" @select="askDelete">Delete</DropdownItem>
+          <DropdownTrigger>
+            <Button>Menu</Button>
+          </DropdownTrigger>
+          <DropdownContent>
+            <DropdownItem icon="pencil" @select="toast.success('Edit')">Edit</DropdownItem>
+            <DropdownItem icon="copy" shortcut="⌘D" @select="toast.success('Duplicated')">
+              Duplicate
+            </DropdownItem>
+            <DropdownSeparator />
+            <DropdownItem icon="trash" tone="danger" @select="askDelete">Delete</DropdownItem>
+          </DropdownContent>
         </Dropdown>
       </div>
     </section>
@@ -123,12 +126,6 @@ async function askDelete() {
           </Field>
           <Checkbox v-model="accept" label="Accept terms" />
           <Switch v-model="dark" label="Compact density preference" />
-          <Field label="Plan">
-            <RadioGroup v-model="plan">
-              <Radio value="starter" label="Starter" />
-              <Radio value="pro" label="Pro" />
-            </RadioGroup>
-          </Field>
           <Button type="submit">Submit</Button>
         </form>
       </Card>
@@ -136,11 +133,7 @@ async function askDelete() {
       <Card>
         <template #title>Collection</template>
         <div class="playground__row" style="margin-bottom: 0.75rem">
-          <Button
-            size="sm"
-            :variant="peoplePending ? 'solid' : 'outline'"
-            @click="peoplePending = !peoplePending"
-          >
+          <Button @click="peoplePending = !peoplePending">
             {{ peoplePending ? 'Stop loading' : 'Show skeleton' }}
           </Button>
         </div>

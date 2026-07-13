@@ -18,13 +18,16 @@ export type InputType = 'text' | 'email' | 'password' | 'search' | 'tel' | 'url'
 
 export type InputProps = {
   modelValue?: string
-  /** Prefer wrapping with Field for label/helper/error context. Still supported standalone. */
+  /** Prefer wrapping with Field for label/helper/error. Still supported standalone. */
   label?: string
   hint?: string
   /** Controlled error escape hatch — wins over intent rules. */
   error?: string
   placeholder?: string
   type?: InputType
+  /**
+   * @advanced Escape hatch — prefer Design Kit density over per-input sizing.
+   */
   size?: PomiSize
   disabled?: boolean
   readonly?: boolean
@@ -72,6 +75,7 @@ const slots = useSlots()
 const field = useFieldContext()
 const rootEl = ref<HTMLElement | null>(null)
 const generatedId = useId()
+const focused = ref(false)
 
 const inputId = computed(() => {
   if (props.id) return props.id
@@ -85,8 +89,22 @@ const errorId = computed(() => `${inputId.value}-error`)
 const touched = ref(false)
 const intentError = ref<string | undefined>()
 const commitTimer = ref<ReturnType<typeof setTimeout> | null>(null)
+const passwordRevealed = ref(false)
+const showSuccess = ref(false)
+let successTimer: ReturnType<typeof setTimeout> | null = null
 
 const isRequired = computed(() => props.required || !!field?.required.value)
+const isPassword = computed(() => props.type === 'password')
+const isSearch = computed(() => props.type === 'search')
+
+const resolvedClearable = computed(
+  () => (props.clearable || isSearch.value) && !props.disabled && !props.readonly,
+)
+
+const nativeType = computed(() => {
+  if (isPassword.value && passwordRevealed.value) return 'text'
+  return props.type
+})
 
 const localError = computed(() => props.error ?? (touched.value ? intentError.value : undefined))
 
@@ -115,6 +133,7 @@ const rootClass = computed(() =>
     'pomi-input',
     `pomi-input--${props.size}`,
     field && 'pomi-input--embedded',
+    focused.value && 'pomi-input--focused',
     resolvedError.value && 'pomi-input--invalid',
     props.disabled && 'pomi-input--disabled',
     attrs.class as string | undefined,
@@ -129,18 +148,33 @@ const inputAttrs = computed(() => {
 })
 
 const showClear = computed(
-  () => props.clearable && !!props.modelValue && !props.disabled && !props.readonly,
+  () => resolvedClearable.value && !!props.modelValue && !props.disabled && !props.readonly,
 )
 
-const showSearchIcon = computed(() => props.type === 'search' && !slots.leading)
+const showSearchIcon = computed(() => isSearch.value && !slots.leading)
+const showReveal = computed(() => isPassword.value && !props.disabled && !props.readonly)
 const hasLeading = computed(() => !!slots.leading || showSearchIcon.value)
-/** Reserve trailing chrome so clearable does not resize the control on first keystroke. */
-const hasTrailing = computed(() => !!slots.trailing || props.clearable)
+const hasTrailing = computed(
+  () =>
+    !!slots.trailing ||
+    resolvedClearable.value ||
+    showReveal.value ||
+    showSuccess.value,
+)
 
 const defaultCommitDelay = computed(() => {
   if (props.commitDelay != null) return props.commitDelay
-  return props.type === 'search' ? 300 : 0
+  return isSearch.value ? 300 : 0
 })
+
+function flashSuccess() {
+  if (successTimer) clearTimeout(successTimer)
+  showSuccess.value = true
+  successTimer = setTimeout(() => {
+    showSuccess.value = false
+    successTimer = null
+  }, 1200)
+}
 
 function validate(value = props.modelValue): string | undefined {
   const rulesList = [...props.rules]
@@ -148,9 +182,15 @@ function validate(value = props.modelValue): string | undefined {
     rulesList.unshift((v) => (v.trim().length > 0 ? true : 'This field is required'))
   }
   const message = runRules(value, rulesList)
+  const prevIntent = intentError.value
   intentError.value = message
   field?.setIntentError(message)
   emit('valid', !message)
+
+  if (!message && prevIntent && touched.value) {
+    flashSuccess()
+  }
+
   return message
 }
 
@@ -170,12 +210,18 @@ function onInput(event: Event) {
   const value = (event.target as HTMLInputElement).value
   emit('update:modelValue', value)
   scheduleCommit(value)
+  if (showSuccess.value) showSuccess.value = false
   if (touched.value && (props.rules.length || isRequired.value)) {
     validate(value)
   }
 }
 
+function onFocus() {
+  focused.value = true
+}
+
 function onBlur() {
+  focused.value = false
   touched.value = true
   if (props.rules.length || isRequired.value) validate()
 }
@@ -185,6 +231,11 @@ function clear() {
   emit('update:committed', '')
   emit('clear')
   if (touched.value) validate('')
+  focusField()
+}
+
+function toggleReveal() {
+  passwordRevealed.value = !passwordRevealed.value
 }
 
 function focusField() {
@@ -217,6 +268,7 @@ onBeforeUnmount(() => {
   const form = rootEl.value?.closest('form')
   form?.removeEventListener('submit', onFormSubmitCapture, true)
   if (commitTimer.value) clearTimeout(commitTimer.value)
+  if (successTimer) clearTimeout(successTimer)
   field?.setIntentError(undefined)
 })
 
@@ -227,6 +279,13 @@ watch(
       touched.value = true
       field?.setIntentError(value)
     }
+  },
+)
+
+watch(
+  () => props.type,
+  () => {
+    passwordRevealed.value = false
   },
 )
 
@@ -258,13 +317,7 @@ defineExpose({ validate, focusField })
         <slot name="leading">
           <span v-if="showSearchIcon" class="pomi-input__search-icon" aria-hidden="true">
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-              <circle
-                cx="8"
-                cy="8"
-                r="5"
-                stroke="currentColor"
-                stroke-width="1.5"
-              />
+              <circle cx="8" cy="8" r="5" stroke="currentColor" stroke-width="1.5" />
               <path
                 d="M11.75 11.75L15.25 15.25"
                 stroke="currentColor"
@@ -280,7 +333,7 @@ defineExpose({ validate, focusField })
         :id="inputId"
         class="pomi-input__field"
         v-bind="inputAttrs"
-        :type="type"
+        :type="nativeType"
         :name="name"
         :value="modelValue"
         :placeholder="placeholder"
@@ -292,16 +345,70 @@ defineExpose({ validate, focusField })
         :aria-describedby="describedBy"
         :aria-required="isRequired || undefined"
         @input="onInput"
+        @focus="onFocus"
         @blur="onBlur"
       />
 
-      <span
-        v-if="hasTrailing"
-        class="pomi-input__affix pomi-input__affix--trailing"
-      >
+      <span v-if="hasTrailing" class="pomi-input__affix pomi-input__affix--trailing">
         <slot name="trailing" />
+
+        <span v-if="showSuccess" class="pomi-input__success" aria-hidden="true">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path
+              d="M2.75 7.25l2.75 2.75 5.75-6"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </span>
+
         <button
-          v-if="clearable"
+          v-if="showReveal"
+          type="button"
+          class="pomi-input__reveal"
+          :aria-label="passwordRevealed ? 'Hide password' : 'Show password'"
+          :aria-pressed="passwordRevealed"
+          @click="toggleReveal"
+        >
+          <span class="pomi-input__reveal-icon" aria-hidden="true">
+            <svg
+              v-if="passwordRevealed"
+              key="open"
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+            >
+              <path
+                d="M1.75 8s2.25-4.25 6.25-4.25S14.25 8 14.25 8s-2.25 4.25-6.25 4.25S1.75 8 1.75 8Z"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linejoin="round"
+              />
+              <circle cx="8" cy="8" r="1.75" stroke="currentColor" stroke-width="1.5" />
+            </svg>
+            <svg v-else key="closed" width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path
+                d="M1.75 8s2.25-4.25 6.25-4.25S14.25 8 14.25 8s-2.25 4.25-6.25 4.25S1.75 8 1.75 8Z"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linejoin="round"
+              />
+              <circle cx="8" cy="8" r="1.75" stroke="currentColor" stroke-width="1.5" />
+              <path
+                d="M3 13.25 13 2.75"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+              />
+            </svg>
+          </span>
+        </button>
+
+        <button
+          v-if="resolvedClearable"
           type="button"
           class="pomi-input__clear"
           :class="{ 'pomi-input__clear--visible': showClear }"

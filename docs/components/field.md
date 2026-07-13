@@ -15,8 +15,8 @@ import { Field, Input } from 'pomikit-ui'
   <Input v-model="email" type="email" :rules="[rules.email()]" />
 </Field>
 
-<Field label="Plan" :error="planError">
-  <RadioGroup v-model="plan">…</RadioGroup>
+<Field label="Notifications" :error="notifyError">
+  <Switch v-model="notify" label="Email me" />
 </Field>
 ```
 

@@ -5,17 +5,29 @@ export { cn, isThenable, invokeClickHandlers } from './utils'
 export { rules, runRules } from './utils/rules'
 export type { InputRule } from './utils/rules'
 
-export { applyTheme, createTheme, Pomikit } from './theme'
+export {
+  applyTheme,
+  applyThemeOptions,
+  createTheme,
+  Pomikit,
+  resolveColorScheme,
+} from './theme'
 export type {
   CreateThemeOptions,
+  DesignKit,
   PomikitPluginOptions,
   PomikitTheme,
   ThemeDensity,
+  ThemeDesign,
+  ThemeElevation,
   ThemeMode,
   ThemeMotion,
   ThemePersonality,
   ThemeRadius,
 } from './theme'
+export { DESIGNS } from './theme'
+export { PomikitRoot } from './root'
+export type { PomikitRootProps } from './root'
 
 export { Button } from './components/Button'
 export type { ButtonProps, ButtonSize, ButtonPhase } from './components/Button'
@@ -32,10 +44,28 @@ export type { CollectionProps, CollectionLayout } from './components/Collection'
 export { Dialog } from './components/Dialog'
 export type { DialogProps } from './components/Dialog'
 
+/** @deprecated Prefer `<PomikitRoot>` or the Pomikit plugin */
 export { DialogProvider } from './components/DialogProvider'
 
-export { Dropdown, DropdownItem, DropdownSeparator } from './components/Dropdown'
-export type { DropdownProps, DropdownItemProps } from './components/Dropdown'
+export {
+  Dropdown,
+  DropdownTrigger,
+  DropdownContent,
+  DropdownItem,
+  DropdownSeparator,
+  DropdownSub,
+  DropdownSubTrigger,
+  DropdownSubContent,
+} from './components/Dropdown'
+export type {
+  DropdownProps,
+  DropdownItemProps,
+  DropdownTriggerProps,
+  DropdownContentProps,
+  DropdownIconName,
+  DropdownSide,
+  DropdownAlign,
+} from './components/Dropdown'
 
 export { EmptyState } from './components/EmptyState'
 export type { EmptyStateProps } from './components/EmptyState'
@@ -49,9 +79,6 @@ export type { FieldProps } from './components/Field'
 export { Input } from './components/Input'
 export type { InputProps, InputType } from './components/Input'
 
-export { Radio, RadioGroup } from './components/Radio'
-export type { RadioProps, RadioGroupProps } from './components/Radio'
-
 export { Select } from './components/Select'
 export type { SelectProps, SelectOption } from './components/Select'
 
@@ -61,6 +88,7 @@ export type { SkeletonProps, SkeletonVariant } from './components/Skeleton'
 export { Switch } from './components/Switch'
 export type { SwitchProps } from './components/Switch'
 
+/** @deprecated Prefer `<PomikitRoot>` or the Pomikit plugin */
 export { ToastProvider } from './components/Toast'
 export type { ToastProviderProps } from './components/Toast'
 

@@ -1,14 +1,14 @@
 # Card
 
-Surface de contenu — navigable ou sélectionnable.
+Surface de contenu — belle par défaut. Intent : lien ou sélection.
 
 ## Import
 
 ```ts
-import { Card } from 'pomikit-ui'
+import { Card, Button } from 'pomikit-ui'
 ```
 
-## Exemples
+## Chemin recommandé
 
 ```vue
 <Card>
@@ -16,32 +16,35 @@ import { Card } from 'pomikit-ui'
   <template #description>Short summary</template>
   Body content
   <template #footer>
-    <Button variant="ghost" tone="neutral">Cancel</Button>
     <Button>Open</Button>
   </template>
 </Card>
 
-<Card href="https://example.com" target="_blank">
-  <template #title>Docs</template>
+<Card href="/pricing">
+  <template #title>Pro plan</template>
 </Card>
 
 <Card selectable :selected="active" @update:selected="active = $event">
-  <template #title>Pro plan</template>
+  <template #title>Choose me</template>
 </Card>
 ```
 
-## Props
+Pas de `elevated` / `bordered` / `rounded` à configurer — le kit s’en charge.
+
+## Props d’intention
+
+| Prop | Rôle |
+| --- | --- |
+| `href` / `target` / `rel` | Card lien |
+| `selectable` / `selected` | Card sélectionnable |
+| `titleAs` | Niveau de titre (`h2`…`div`) |
+
+## Escape hatches
 
 | Prop | Type | Défaut |
 | --- | --- | --- |
-| `variant` | `'elevated' \| 'outline' \| 'ghost'` | `'elevated'` |
-| `size` | `PomiSize` | `'md'` |
-| `titleAs` | `'h2' \| 'h3' \| 'h4' \| 'div'` | `'h3'` |
-| `href` | `string` | — |
-| `target` | `string` | — |
-| `rel` | `string` | — |
-| `selectable` | `boolean` | `false` |
-| `selected` | `boolean` | `false` |
+| `variant` | `elevated` \| `outline` \| `ghost` | `elevated` |
+| `size` | `PomiSize` | `md` |
 
 ## Emits
 
@@ -50,9 +53,3 @@ import { Card } from 'pomikit-ui'
 ## Slots
 
 `media`, `header`, `title`, `description`, `actions`, `default`, `footer`
-
-## Intent
-
-- `href` → rend un `<a>`
-- `selectable` → surface interactive (clic / Enter / Space)
-- sinon → `<article>`

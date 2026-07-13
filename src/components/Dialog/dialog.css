@@ -2,8 +2,9 @@
   position: fixed;
   inset: 0;
   background: var(--pomi-overlay);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(max(6px, var(--pomi-surface-blur))) saturate(var(--pomi-surface-saturate, 1.02));
+  -webkit-backdrop-filter: blur(max(6px, var(--pomi-surface-blur)))
+    saturate(var(--pomi-surface-saturate, 1.02));
 }
 
 .pomi-dialog__overlay[data-state='open'] {
@@ -28,7 +29,7 @@
   color: var(--pomi-fg);
   border: 1px solid var(--pomi-border);
   border-radius: var(--pomi-radius-lg);
-  box-shadow: var(--pomi-shadow);
+  box-shadow: var(--pomi-shadow-lg, var(--pomi-shadow)), var(--pomi-border-highlight, none);
   font-family: var(--pomi-font);
   transform: translate(-50%, -50%);
 }
@@ -46,11 +47,11 @@
 }
 
 .pomi-dialog__content[data-state='open'] {
-  animation: pomi-dialog-in var(--pomi-duration-mid) var(--pomi-ease);
+  animation: pomi-dialog-spring-in var(--pomi-duration-mid) var(--pomi-ease);
 }
 
 .pomi-dialog__content[data-state='closed'] {
-  animation: pomi-dialog-out var(--pomi-duration-fast) var(--pomi-ease);
+  animation: pomi-dialog-spring-out var(--pomi-duration-fast) var(--pomi-ease);
 }
 
 .pomi-dialog__header {
@@ -65,9 +66,9 @@
 .pomi-dialog__title {
   margin: 0;
   font-family: var(--pomi-font-display);
-  font-size: 1.25rem;
+  font-size: 1.125rem;
   font-weight: 600;
-  letter-spacing: -0.02em;
+  letter-spacing: var(--pomi-title-tracking, -0.02em);
   line-height: 1.3;
 }
 
@@ -75,7 +76,7 @@
   flex-shrink: 0;
   margin: 0 0 var(--pomi-space-4);
   color: var(--pomi-muted);
-  font-size: 0.925rem;
+  font-size: 0.875rem;
   line-height: 1.5;
 }
 
@@ -83,7 +84,7 @@
   flex: 1 1 auto;
   min-height: 0;
   overflow: auto;
-  font-size: 0.95rem;
+  font-size: 0.875rem;
   line-height: 1.5;
 }
 
@@ -100,19 +101,27 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2rem;
-  height: 2rem;
+  width: 1.75rem;
+  height: 1.75rem;
   margin-left: auto;
   border: none;
-  border-radius: calc(var(--pomi-radius) - 2px);
+  border-radius: var(--pomi-radius-sm);
   background: transparent;
   color: var(--pomi-muted);
   cursor: pointer;
+  transition:
+    background-color var(--pomi-duration-fast) var(--pomi-ease),
+    color var(--pomi-duration-fast) var(--pomi-ease),
+    transform var(--pomi-duration-fast) var(--pomi-ease);
 }
 
 .pomi-dialog__close:hover {
-  background: color-mix(in srgb, var(--pomi-color-neutral) 12%, transparent);
+  background: var(--pomi-surface-hover);
   color: var(--pomi-fg);
+}
+
+.pomi-dialog__close:active {
+  transform: scale(var(--pomi-motion-press));
 }
 
 .pomi-dialog__close:focus-visible {
@@ -120,42 +129,15 @@
   box-shadow: var(--pomi-focus-ring);
 }
 
-@keyframes pomi-fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+[data-pomi-motion='none'] .pomi-dialog__overlay,
+[data-pomi-motion='none'] .pomi-dialog__content {
+  animation: none;
 }
 
-@keyframes pomi-fade-out {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
+[data-pomi-motion='none'] .pomi-dialog__close {
+  transition: none;
 }
 
-@keyframes pomi-dialog-in {
-  from {
-    opacity: 0;
-    transform: translate(-50%, calc(-50% + 6px)) scale(0.98);
-  }
-  to {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
-  }
-}
-
-@keyframes pomi-dialog-out {
-  from {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
-  }
-  to {
-    opacity: 0;
-    transform: translate(-50%, calc(-50% + 4px)) scale(0.98);
-  }
+[data-pomi-motion='none'] .pomi-dialog__close:active {
+  transform: none;
 }

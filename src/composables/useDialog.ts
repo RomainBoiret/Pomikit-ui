@@ -20,9 +20,10 @@ export type DialogApi = {
   confirm: (options: DialogConfirmOptions) => Promise<boolean>
 }
 
-const DialogApiKey: InjectionKey<DialogApi> = Symbol('pomikit-dialog-api')
+export const provideDialogApiKey: InjectionKey<DialogApi> = Symbol('pomikit-dialog-api')
 
 let requestId = 0
+let sharedStore: ReturnType<typeof createDialogStore> | null = null
 
 export function createDialogStore() {
   const queue = ref<DialogRequest[]>([])
@@ -53,16 +54,20 @@ export function createDialogStore() {
   return { queue, current, confirm, closeCurrent, api }
 }
 
+/** Shared store used by Pomikit plugin overlays / PomikitRoot */
+export function getSharedDialogStore() {
+  if (!sharedStore) sharedStore = createDialogStore()
+  return sharedStore
+}
+
+export function resetSharedDialogStore() {
+  sharedStore = null
+}
+
 export function provideDialogApi(api: DialogApi) {
-  provide(DialogApiKey, api)
+  provide(provideDialogApiKey, api)
 }
 
 export function useDialog(): DialogApi {
-  const api = inject(DialogApiKey, null)
-  if (!api) {
-    throw new Error(
-      '[Pomikit] useDialog() requires a parent <DialogProvider>. Wrap your app (or page) with DialogProvider.',
-    )
-  }
-  return api
+  return inject(provideDialogApiKey, null) ?? getSharedDialogStore().api
 }

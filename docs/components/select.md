@@ -1,6 +1,6 @@
 # Select
 
-Liste d’options — API courte : `options` + `pending`.
+Liste d’options — API courte.
 
 ## Import
 
@@ -8,51 +8,48 @@ Liste d’options — API courte : `options` + `pending`.
 import { Select, Field } from 'pomikit-ui'
 ```
 
-## Exemple
+## Chemin recommandé
 
 ```vue
 <script setup lang="ts">
 import { ref } from 'vue'
 import { Field, Select } from 'pomikit-ui'
 
-const value = ref('grace')
-const options = [
-  { label: 'Ada', value: 'ada' },
-  { label: 'Grace', value: 'grace' },
-  { label: 'Lin', value: 'lin', disabled: true },
+const country = ref('fr')
+const countries = [
+  { label: 'France', value: 'fr' },
+  { label: 'Canada', value: 'ca' },
 ]
 </script>
 
 <template>
-  <Field label="Engineer">
-    <Select v-model="value" :options="options" placeholder="Choose…" />
+  <Select v-model="country" :options="countries" />
+
+  <Field label="Country">
+    <Select v-model="country" :options="countries" placeholder="Choose…" />
   </Field>
 
   <Select pending placeholder="Loading…" />
 </template>
 ```
 
-## Props
+Pas de variantes visuelles — le Design Kit porte le look.
+
+## Props d’intention
 
 | Prop | Type | Défaut |
 | --- | --- | --- |
 | `options` | `SelectOption[]` | `[]` |
 | `pending` | `boolean` | `false` |
 | `placeholder` | `string` | `'Select…'` |
-| `size` | `PomiSize` | `'md'` |
-| `disabled` | `boolean` | `false` |
-| `required` | `boolean` | `false` |
-| `id` | `string` | — |
-| `name` | `string` | — |
+| `disabled` / `required` | `boolean` | `false` |
 | `emptyText` | `string` | `'No options'` |
 
-```ts
-type SelectOption = {
-  label: string
-  value: string
-  disabled?: boolean
-}
-```
+## Escape hatches
+
+| Prop | Notes |
+| --- | --- |
+| `size` | Densité rare — préférer le kit |
 
 ## Model
 
@@ -61,8 +58,3 @@ type SelectOption = {
 ## Slots
 
 `default` — items custom (remplace `options`)
-
-## Intent
-
-- `pending` désactive le trigger, placeholder « Loading… », status dans le menu
-- Field-aware (`id`, `required`, `aria-invalid`, `describedBy`)

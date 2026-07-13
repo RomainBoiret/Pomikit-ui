@@ -2,28 +2,27 @@
 
 Pomikit privilégie **l’inférence** plutôt qu’une API à 70 props.
 
+Le design vient du [Design Kit](/guide/theming). Les props parlent uniquement du **métier**.
+
 ## Principes
 
-1. **Prefer inference over props** — si le comportement peut être déduit, ne demande pas de le configurer.
+1. **Prefer inference over props** — si le comportement peut être déduit, ne le configure pas.
 2. **Si ça n’enlève pas de boilerplate app, ça ne devrait probablement pas ship.**
-3. **Beautiful defaults** — le Design DNA porte le look ; le motion est intentionnel, pas gadget.
-4. **A11y & reduced motion** — focus visibles, labels, `aria-*`, respect de `prefers-reduced-motion`.
+3. **Beautiful defaults** — le kit porte le look ; le motion est intentionnel.
+4. **Filtre de décision** — toute nouvelle prop doit passer le test *« décision supplémentaire ? »* → [Philosophie](/guide/philosophy).
+5. **A11y & reduced motion** — focus visibles, labels, `aria-*`, `prefers-reduced-motion`.
 
-## Exemples d’intent
+## Exemples
 
 ### Button
 
 ```vue
-<Button @click="() => fetch('/api/save')">Save</Button>
+<Button @click="save">Save</Button>
+<Button confirm="Delete project?" @click="remove">Delete</Button>
+<Button href="/docs">Documentation</Button>
 ```
 
-Si le handler retourne une Promise (thenable) :
-
-1. phase `busy` (spinner / `busyText`)
-2. puis flash `success` ou `error` (sauf `feedback={false}`)
-3. largeur verrouillée pour éviter le layout shift
-
-`confirm` demande un second clic avant d’exécuter l’action.
+Promise → busy → success / error. `confirm` = second clic. Aucun `loading` manuel.
 
 ### Field + Input
 
@@ -33,31 +32,23 @@ Si le handler retourne une Promise (thenable) :
 </Field>
 ```
 
-- Field possède le chrome (label, helper, error)
-- Input se concentre sur la saisie
-- IDs / `aria-describedby` / required sont partagés via contexte
-- Validation au blur et au submit du formulaire parent
-
-### Collection
+### Select · Collection · Toast · Dialog
 
 ```vue
-<Collection :items="rows" :pending="loading" :error="err" @retry="reload">
-  <template #item="{ item }">…</template>
-</Collection>
+<Select v-model="country" :options="countries" />
+<Collection :items="users" :pending="loading" :error="error" />
 ```
 
-- Premier chargement (`pending` + vide) → Skeleton
-- Refresh (`pending` + items) → liste conservée + indicateur
-- Erreur / empty gérés sans props de rendu manuelles
+```ts
+toast.success('Profile saved')
+await dialog.confirm({ title: 'Delete?', confirmLabel: 'Delete' })
+```
 
-### Select
+## Ce que Pomikit refuse d’exposer en premier
 
 ```vue
-<Select v-model="id" :options="options" :pending="fetching" />
+<!-- Pas le produit — escape hatch seulement -->
+<Button variant="outline" tone="neutral" size="sm">…</Button>
 ```
 
-`options` + `pending` suffisent — pas d’API “async search 12 props” pour le cas standard.
-
-## Quand ajouter une prop ?
-
-Seulement si l’escape hatch est nécessaire (ex. `loading` contrôlé sur Button, `error` contrôlé sur Field/Input). Le chemin heureux reste sans friction.
+Le kit (`linear`, `glass`, …) remplace ces décisions au niveau app.

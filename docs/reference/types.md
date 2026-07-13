@@ -21,7 +21,9 @@ import type {
   ThemeRadius,
   ThemeDensity,
   ThemeMotion,
+  ThemeElevation,
   ThemeMode,
+  ThemeDesign,
   ThemePersonality,
   PomikitPluginOptions,
 } from 'pomikit-ui'

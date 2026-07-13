@@ -1,0 +1,186 @@
+/* Shared motion — opacity + transform only. No bounce. */
+
+@keyframes pomi-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes pomi-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes pomi-fade-scale-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--pomi-motion-enter-y, 6px))
+      scale(var(--pomi-motion-enter-scale, 0.98));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes pomi-slide-up-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--pomi-motion-enter-y, 6px));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pomi-slide-right-in {
+  from {
+    opacity: 0;
+    transform: translateX(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pomi-pop {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes pomi-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-1.5px);
+  }
+  75% {
+    transform: translateX(1.5px);
+  }
+}
+
+@keyframes pomi-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pomi-spring-in {
+  from {
+    opacity: 0;
+    transform: scale(var(--pomi-motion-enter-scale, 0.96));
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pomi-dialog-spring-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, calc(-50% + var(--pomi-motion-enter-y, 6px)))
+      scale(var(--pomi-motion-enter-scale, 0.98));
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes pomi-dialog-spring-out {
+  from {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, calc(-50% + 4px)) scale(0.98);
+  }
+}
+
+@keyframes pomi-dropdown-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--pomi-motion-enter-y, 6px))
+      scale(var(--pomi-motion-enter-scale, 0.98));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes pomi-dropdown-out {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(var(--pomi-motion-enter-scale, 0.98));
+  }
+}
+
+@keyframes pomi-input-nudge {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  30% {
+    transform: translateX(-1px);
+  }
+  70% {
+    transform: translateX(1px);
+  }
+}
+
+@keyframes pomi-input-success-in {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pomi-input-icon-swap {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+[data-pomi-motion='none'] {
+  --pomi-duration-fast: 0ms;
+  --pomi-duration-mid: 0ms;
+  --pomi-duration-slow: 0ms;
+  --pomi-motion-lift: 0px;
+  --pomi-motion-press: 1;
+}
+
+[data-pomi-motion='none'] .pomi-button:active:not(:disabled),
+[data-pomi-motion='none'] .pomi-card--interactive:hover {
+  transform: none;
+}

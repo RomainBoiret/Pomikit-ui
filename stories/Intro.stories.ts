@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
 import { ref } from 'vue'
-import { applyTheme, createTheme } from '../src/theme'
+import { applyTheme, createTheme, DESIGNS, type ThemeDesign } from '../src/theme'
 import Button from '../src/components/Button/Button.vue'
 import Field from '../src/components/Field/Field.vue'
 import Input from '../src/components/Input/Input.vue'
@@ -20,12 +20,12 @@ export const Wow: Story = {
   render: () => ({
     components: { Button, Field, Input, Card },
     setup() {
-      function setPersonality(personality: 'minimal' | 'glass' | 'playful' | undefined) {
+      function setDesign(design: ThemeDesign) {
+        const pack = DESIGNS[design]
         applyTheme(
           createTheme({
-            accent: personality === 'playful' ? '#FF5A7A' : '#5B5FFF',
-            personality,
-            motion: 'expressive',
+            accent: pack.accent,
+            design,
           }),
         )
       }
@@ -35,7 +35,7 @@ export const Wow: Story = {
       async function fail() {
         await new Promise((_, rej) => setTimeout(() => rej(new Error('nope')), 800))
       }
-      return { setPersonality, save, fail, email: ref('') }
+      return { setDesign, save, fail, email: ref('') }
     },
     template: `
       <div style="min-height:100vh;padding:3rem 1.5rem 4rem;background:
@@ -46,18 +46,19 @@ export const Wow: Story = {
           <header>
             <p style="margin:0;font-size:0.75rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--pomi-accent)">Pomikit</p>
             <h1 style="margin:0.4rem 0 0.6rem;font-family:var(--pomi-font-display);font-size:clamp(2.4rem,6vw,3.4rem);letter-spacing:-0.04em;line-height:1.05">
-              Beautiful by default.<br/>Components that understand your intent.
+              Less decisions.<br/>Better interfaces.
             </h1>
             <p style="margin:0;max-width:36rem;color:var(--pomi-muted);font-size:1.05rem;line-height:1.55">
-              Change the DNA. Keep the intelligence. No loading props. No empty-state trees.
+              Import a component — already premium. Design Kits decide the look once for the whole app.
             </p>
           </header>
 
           <div style="display:flex;flex-wrap:wrap;gap:0.5rem">
-            <Button size="sm" variant="soft" @click="setPersonality(undefined)">Default</Button>
-            <Button size="sm" variant="outline" @click="setPersonality('minimal')">Minimal</Button>
-            <Button size="sm" variant="outline" @click="setPersonality('glass')">Glass</Button>
-            <Button size="sm" variant="outline" @click="setPersonality('playful')">Playful</Button>
+            <Button @click="setDesign('linear')">Linear</Button>
+            <Button @click="setDesign('glass')">Glass</Button>
+            <Button @click="setDesign('editorial')">Editorial</Button>
+            <Button @click="setDesign('soft')">Soft</Button>
+            <Button @click="setDesign('playful')">Playful</Button>
           </div>
 
           <Card>
@@ -66,8 +67,8 @@ export const Wow: Story = {
             <div style="display:flex;flex-wrap:wrap;gap:0.75rem;margin-top:0.5rem">
               <Button @click="save">Save</Button>
               <Button busy-text="Saving…" success-text="Saved" @click="save">Save with text</Button>
-              <Button tone="danger" variant="outline" @click="fail">Will fail</Button>
-              <Button tone="danger" confirm="Delete forever?" @click="save">Confirm delete</Button>
+              <Button @click="fail">Will fail</Button>
+              <Button confirm="Delete forever?" @click="save">Confirm delete</Button>
             </div>
           </Card>
 

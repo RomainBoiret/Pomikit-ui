@@ -1,6 +1,6 @@
 # Button
 
-Action primaire Pomikit — avec intent async et confirm.
+Action Pomikit — déjà premium. Props = intention, pas décoration.
 
 ## Import
 
@@ -8,18 +8,19 @@ Action primaire Pomikit — avec intent async et confirm.
 import { Button } from 'pomikit-ui'
 ```
 
-## Exemples
-
-### Basique
+## Chemin recommandé
 
 ```vue
-<Button>Save</Button>
-<Button variant="outline" tone="neutral">Cancel</Button>
-<Button variant="soft">Toast</Button>
-<Button variant="ghost" tone="danger">Delete</Button>
+<Button @click="save">Save</Button>
+<Button confirm="Delete project?" @click="remove">Delete</Button>
+<Button href="/docs">Documentation</Button>
 ```
 
-### Async intent
+Le Design Kit décide couleurs, radius, motion. Tu n’as pas à choisir `variant` / `tone` / `size`.
+
+## Intent
+
+### Async
 
 ```vue
 <script setup lang="ts">
@@ -30,22 +31,22 @@ async function save() {
 
 <template>
   <Button @click="save">Save</Button>
-  <Button :busy-text="'Saving…'" success-text="Saved" @click="save">
+  <Button busy-text="Saving…" success-text="Saved" @click="save">
     Save with labels
   </Button>
 </template>
 ```
 
-Si `onClick` retourne un thenable → phase busy, puis flash success/error (`feedback` défaut `true`).
+Si `@click` retourne une Promise → busy → success / error (`feedback` défaut `true`).
 
 ### Confirm
 
 ```vue
-<Button tone="danger" confirm @click="remove">Delete</Button>
+<Button confirm @click="remove">Delete</Button>
 <Button confirm="Really?" @click="remove">Delete</Button>
 ```
 
-Premier clic arme (label Confirm? / string, tone danger). Second clic exécute. Escape / blur désarme.
+Premier clic arme. Second clic exécute. Escape / blur désarme.
 
 ### Lien
 
@@ -53,25 +54,29 @@ Premier clic arme (label Confirm? / string, tone danger). Second clic exécute. 
 <Button href="/docs" target="_blank">Documentation</Button>
 ```
 
-## Props
+## Props d’intention
+
+| Prop | Rôle |
+| --- | --- |
+| `confirm` | Second clic requis |
+| `href` / `target` / `rel` | Rend un lien |
+| `busyText` / `successText` / `errorText` | Labels pendant les phases |
+| `feedback` | Flash success/error après Promise (`true` par défaut) |
+| `type` | `button` \| `submit` \| `reset` |
+| `disabled` / `loading` | États contrôlés |
+| `block` | Pleine largeur |
+
+## Escape hatches (avancé)
+
+Réservé aux cas rares — **pas** le chemin Getting Started :
 
 | Prop | Type | Défaut |
 | --- | --- | --- |
-| `type` | `'button' \| 'submit' \| 'reset'` | `'button'` |
-| `size` | `PomiSize \| 'icon'` | `'md'` |
-| `variant` | `PomiVariant` | `'solid'` |
-| `tone` | `PomiTone` | `'primary'` |
-| `disabled` | `boolean` | `false` |
-| `loading` | `boolean` | `false` |
-| `block` | `boolean` | `false` |
-| `href` | `string` | — |
-| `target` | `string` | — |
-| `rel` | `string` | — |
-| `confirm` | `boolean \| string` | — |
-| `feedback` | `boolean` | `true` |
-| `busyText` | `string` | — |
-| `successText` | `string` | — |
-| `errorText` | `string` | — |
+| `variant` | `solid` \| `outline` \| `ghost` \| `soft` | `solid` |
+| `tone` | `primary` \| `neutral` \| `danger` \| `success` | `primary` |
+| `size` | `sm` \| `md` \| `lg` \| `icon` | `md` |
+
+Préférer changer le [Design Kit](/guide/theming) plutôt que styliser bouton par bouton.
 
 ## Slots
 
@@ -79,5 +84,5 @@ Premier clic arme (label Confirm? / string, tone danger). Second clic exécute. 
 
 ## Notes
 
-- `size="icon"` : fournir un `aria-label` si le contenu n’a pas de texte.
-- `loading` est un escape hatch contrôlé ; l’intent async couvre le cas courant.
+- Largeur verrouillée pendant busy / feedback (pas de layout shift)
+- `size="icon"` : fournir un `aria-label` si le contenu n’a pas de texte

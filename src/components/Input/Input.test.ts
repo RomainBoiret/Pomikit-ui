@@ -5,7 +5,7 @@ import Input from './Input.vue'
 import { rules } from '../../utils/rules'
 
 describe('Input', () => {
-  it('renders label and emits update:modelValue', async () => {
+  it('renders external label and emits update:modelValue', async () => {
     const wrapper = mount(Input, {
       props: {
         label: 'Name',
@@ -13,7 +13,7 @@ describe('Input', () => {
       },
     })
 
-    expect(wrapper.find('label').text()).toContain('Name')
+    expect(wrapper.find('.pomi-input__label').text()).toContain('Name')
     await wrapper.find('input').setValue('Romain')
     expect(wrapper.emitted('update:modelValue')?.[0]).toEqual(['Romain'])
   })
@@ -110,6 +110,29 @@ describe('Input', () => {
 
     expect(wrapper.find('.pomi-input__search-icon').exists()).toBe(true)
     expect(wrapper.find('.pomi-input__control--leading').exists()).toBe(true)
+  })
+
+  it('auto-enables clearable for type=search', async () => {
+    const wrapper = mount(Input, {
+      props: { type: 'search', modelValue: 'q', label: 'Search' },
+    })
+
+    expect(wrapper.find('.pomi-input__clear').classes()).toContain('pomi-input__clear--visible')
+    await wrapper.find('.pomi-input__clear').trigger('click')
+    expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual([''])
+  })
+
+  it('toggles password visibility', async () => {
+    const wrapper = mount(Input, {
+      props: { type: 'password', modelValue: 'secret', label: 'Password' },
+    })
+
+    const input = wrapper.find('input')
+    expect(input.attributes('type')).toBe('password')
+    await wrapper.find('.pomi-input__reveal').trigger('click')
+    expect(wrapper.find('input').attributes('type')).toBe('text')
+    await wrapper.find('.pomi-input__reveal').trigger('click')
+    expect(wrapper.find('input').attributes('type')).toBe('password')
   })
 
   it('lets leading slot replace the search icon', () => {

@@ -5,9 +5,15 @@ export type FieldContext = {
   labelId: ComputedRef<string>
   describedBy: ComputedRef<string | undefined>
   required: ComputedRef<boolean>
+  /** Field label text — Input may float it instead of Field rendering above. */
+  label: ComputedRef<string | undefined>
   /** Controlled Field error wins; intent errors flow through setIntentError. */
   resolvedError: ComputedRef<string | undefined>
   setIntentError: (message: string | undefined) => void
+  /** Input claims the label as a floating label — Field hides its external label. */
+  claimFloatingLabel: () => void
+  releaseFloatingLabel: () => void
+  floatingLabelClaimed: Ref<boolean>
 }
 
 export const FieldContextKey: InjectionKey<FieldContext> = Symbol('pomikit-field')

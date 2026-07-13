@@ -1,63 +1,79 @@
-/* Pomikit Design DNA — defaults (overridden by createTheme / applyTheme) */
+/* Pomikit Design DNA — zero-config defaults = Design Kit `linear` */
 :root {
   color-scheme: light;
 
-  --pomi-accent: #5b5fff;
-  --pomi-accent-hover: #4a4ff0;
-  --pomi-accent-soft: #eef0ff;
+  --pomi-accent: #34c759;
+  --pomi-accent-hover: #2db84e;
+  --pomi-accent-soft: #eaf8ef;
   --pomi-accent-fg: #ffffff;
   --pomi-danger: #e5484d;
   --pomi-danger-fg: #ffffff;
   --pomi-success: #30a46c;
   --pomi-success-fg: #ffffff;
-  --pomi-neutral: #6b7280;
-  --pomi-neutral-solid: #18181b;
+  --pomi-warning: #d9971a;
+  --pomi-warning-fg: #ffffff;
+  --pomi-info: #3b82f6;
+  --pomi-info-fg: #ffffff;
+  --pomi-neutral: #64748b;
+  --pomi-neutral-solid: #0f172a;
   --pomi-neutral-fg: #ffffff;
 
-  --pomi-bg: #f6f5f2;
-  --pomi-fg: #12141a;
-  --pomi-muted: #5c5f6a;
-  --pomi-border: #e6e4de;
-  --pomi-surface: #ffffff;
+  --pomi-bg: #ffffff;
+  --pomi-fg: #0f172a;
+  --pomi-muted: #64748b;
+  --pomi-border: #e2e8f0;
+  --pomi-surface: #f8fafc;
   --pomi-surface-elevated: #ffffff;
+  --pomi-surface-hover: #f1f5f9;
+  --pomi-surface-alpha: 1;
+  --pomi-border-strength: 1;
+  --pomi-border-highlight: none;
 
   --pomi-radius-sm: 8px;
-  --pomi-radius-md: 12px;
-  --pomi-radius-lg: 16px;
+  --pomi-radius-md: 10px;
+  --pomi-radius-lg: 12px;
   --pomi-radius: var(--pomi-radius-md);
   --pomi-radius-pill: 999px;
 
-  --pomi-control-h-sm: 2rem;
-  --pomi-control-h-md: 2.5rem;
-  --pomi-control-h-lg: 3rem;
-  --pomi-control-px-sm: 0.75rem;
-  --pomi-control-px-md: 1rem;
+  --pomi-control-h-sm: 2.25rem;
+  --pomi-control-h-md: 2.75rem;
+  --pomi-control-h-lg: 3.25rem;
+  --pomi-control-px-sm: 0.875rem;
+  --pomi-control-px-md: 1.125rem;
   --pomi-control-px-lg: 1.5rem;
-  --pomi-gap: 0.75rem;
+  --pomi-gap: 1rem;
 
-  --pomi-space-1: 0.25rem;
-  --pomi-space-2: 0.5rem;
-  --pomi-space-3: 0.75rem;
-  --pomi-space-4: 1rem;
-  --pomi-space-6: 1.5rem;
+  --pomi-space-1: 0.3rem;
+  --pomi-space-2: 0.6rem;
+  --pomi-space-3: 0.9rem;
+  --pomi-space-4: 1.2rem;
+  --pomi-space-6: 1.75rem;
 
-  --pomi-duration-fast: 160ms;
-  --pomi-duration-mid: 280ms;
-  --pomi-duration-slow: 480ms;
-  --pomi-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --pomi-duration-fast: 120ms;
+  --pomi-duration-mid: 160ms;
+  --pomi-duration-slow: 220ms;
+  --pomi-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
   --pomi-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --pomi-motion-lift: 0px;
+  --pomi-motion-press: 0.985;
+  --pomi-motion-enter-y: 6px;
+  --pomi-motion-enter-scale: 0.98;
 
-  --pomi-font: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
-  --pomi-font-display: 'Newsreader', ui-serif, Georgia, serif;
-  --pomi-font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+  --pomi-font: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --pomi-font-display: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --pomi-font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --pomi-tracking: -0.011em;
+  --pomi-title-tracking: -0.022em;
 
-  --pomi-shadow-strength: 1;
-  --pomi-shadow:
-    0 1px 0 rgb(255 255 255 / 70%), 0 1px 2px rgb(18 20 26 / 4%), 0 12px 32px rgb(18 20 26 / 8%);
-  --pomi-overlay: rgb(18 20 26 / 40%);
-  --pomi-focus-ring: 0 0 0 3px color-mix(in srgb, var(--pomi-accent) 35%, transparent);
+  --pomi-shadow-strength: 0.35;
+  --pomi-shadow: 0 1px 0 rgb(0 0 0 / 0.04);
+  --pomi-shadow-lg: 0 1px 0 rgb(0 0 0 / 0.05);
+  --pomi-card-lift: 0px;
+  --pomi-glow-strength: 0;
+  --pomi-overlay: rgb(17 24 39 / 28%);
+  --pomi-focus-ring: 0 0 0 3px color-mix(in srgb, var(--pomi-accent) 22%, transparent);
 
-  --pomi-skeleton: #e8e6e0;
+  --pomi-skeleton: #e8e8ec;
   --pomi-skeleton-shine: rgb(255 255 255 / 55%);
   --pomi-feedback-max-width: 22rem;
   --pomi-message-lh: 1.4;
@@ -66,28 +82,24 @@
 
   --pomi-surface-blur: 0px;
   --pomi-surface-saturate: 1;
-
-  /* legacy aliases used by older class hooks */
-  --pomi-color-primary: var(--pomi-accent);
-  --pomi-color-primary-fg: var(--pomi-accent-fg);
-  --pomi-color-danger: var(--pomi-danger);
-  --pomi-color-danger-fg: var(--pomi-danger-fg);
-  --pomi-color-success: var(--pomi-success);
-  --pomi-color-success-fg: var(--pomi-success-fg);
-  --pomi-color-neutral: var(--pomi-neutral);
-  --pomi-color-neutral-fg: var(--pomi-neutral-fg);
-  --pomi-color-neutral-solid: var(--pomi-neutral-solid);
 }
 
 [data-pomi-mode='dark'] {
   color-scheme: dark;
 }
 
-[data-pomi-personality='glass'] .pomi-card,
-[data-pomi-personality='glass'] .pomi-dialog__content,
-[data-pomi-personality='glass'] .pomi-input__control,
-[data-pomi-personality='glass'] .pomi-select__trigger {
-  background: color-mix(in srgb, var(--pomi-surface) 72%, transparent);
+/*
+ * Elevated surfaces — material comes from tokens only.
+ * When --pomi-surface-blur is 0px, blur is a no-op.
+ */
+.pomi-card,
+.pomi-dialog__content,
+.pomi-select__surface,
+.pomi-dropdown__surface {
   backdrop-filter: blur(var(--pomi-surface-blur)) saturate(var(--pomi-surface-saturate));
   -webkit-backdrop-filter: blur(var(--pomi-surface-blur)) saturate(var(--pomi-surface-saturate));
+}
+
+[data-pomi-elevation='flat'] .pomi-card {
+  box-shadow: var(--pomi-shadow);
 }

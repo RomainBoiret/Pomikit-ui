@@ -31,6 +31,7 @@ const helperId = computed(() => `${controlId.value}-helper`)
 const errorId = computed(() => `${controlId.value}-error`)
 
 const intentError = ref<string | undefined>()
+const floatingLabelClaimed = ref(false)
 
 const resolvedError = computed(() => props.error ?? intentError.value)
 
@@ -40,6 +41,7 @@ const describedBy = computed(() => {
   return undefined
 })
 
+/** Always reserve when helper/required/error/rules path exists — no jump on error. */
 const reserveMessage = computed(
   () => !!props.helper || !!props.error || props.required || !!intentError.value,
 )
@@ -58,6 +60,14 @@ function setIntentError(message: string | undefined) {
   intentError.value = message
 }
 
+function claimFloatingLabel() {
+  floatingLabelClaimed.value = true
+}
+
+function releaseFloatingLabel() {
+  floatingLabelClaimed.value = false
+}
+
 watch(
   () => props.error,
   (value) => {
@@ -70,8 +80,12 @@ const ctx: FieldContext = {
   labelId,
   describedBy,
   required: computed(() => props.required),
+  label: computed(() => props.label),
   resolvedError,
   setIntentError,
+  claimFloatingLabel,
+  releaseFloatingLabel,
+  floatingLabelClaimed,
 }
 
 provide(FieldContextKey, ctx)
@@ -79,12 +93,7 @@ provide(FieldContextKey, ctx)
 
 <template>
   <div :class="rootClass" :style="rootStyle" :data-pomi-invalid="resolvedError ? '' : undefined">
-    <label
-      v-if="label || $slots.label"
-      :id="labelId"
-      class="pomi-field__label"
-      :for="controlId"
-    >
+    <label v-if="label || $slots.label" :id="labelId" class="pomi-field__label" :for="controlId">
       <slot name="label">
         {{ label }}
         <span v-if="required" class="pomi-field__required" aria-hidden="true">*</span>

@@ -1,16 +1,24 @@
 # Exports publics
 
-Point d’entrée : `pomikit-ui`  
-Styles : `pomikit-ui/styles.css`
+## Thème
 
-## Plugin & thème
+`Pomikit`, `createTheme`, `applyTheme`, `applyThemeOptions`, `resolveColorScheme`
 
-`Pomikit`, `createTheme`, `applyTheme`  
-Types : `CreateThemeOptions`, `PomikitTheme`, `PomikitPluginOptions`, `ThemeRadius`, `ThemeDensity`, `ThemeMotion`, `ThemeMode`, `ThemePersonality`
+Types : `CreateThemeOptions`, `PomikitTheme`, `PomikitPluginOptions`, `ThemeDesign`, `ThemeRadius`, `ThemeDensity`, `ThemeMotion`, `ThemeElevation`, `ThemeMode`, `ThemePersonality` (deprecated)
 
-## Composants
+Valeurs : `createTheme`, `applyTheme`, `applyThemeOptions`, `resolveColorScheme`, `Pomikit`, `DESIGNS`
 
-`Button`, `Card`, `Checkbox`, `Switch`, `Radio`, `RadioGroup`, `Field`, `Input`, `Select`, `Dropdown`, `DropdownItem`, `DropdownSeparator`, `Dialog`, `DialogProvider`, `ToastProvider`, `Collection`, `Skeleton`, `EmptyState`, `ErrorState`
+## Racine
+
+`PomikitRoot`
+
+## Composants v1
+
+`Button`, `Card`, `Checkbox`, `Switch`, `Field`, `Input`, `Select`, `Dropdown`, `DropdownTrigger`, `DropdownContent`, `DropdownItem`, `DropdownSeparator`, `DropdownSub`, `DropdownSubTrigger`, `DropdownSubContent`, `Dialog`, `Collection`, `Skeleton`, `EmptyState`, `ErrorState`
+
+## Legacy (déprécié)
+
+`DialogProvider`, `ToastProvider`
 
 ## Composables
 
@@ -19,10 +27,3 @@ Types : `CreateThemeOptions`, `PomikitTheme`, `PomikitPluginOptions`, `ThemeRadi
 ## Utils
 
 `cn`, `isThenable`, `invokeClickHandlers`, `rules`, `runRules`
-
-## Types utiles
-
-`PomiSize`, `PomiTone`, `PomiVariant`, `InputRule`, `SelectOption`, `ButtonProps`, `CardProps`, … (voir les pages composants)
-
-Peer dependency : `vue ^3.4`  
-Dependency runtime : `reka-ui`

@@ -1,7 +1,7 @@
 {
   "name": "pomikit-ui",
   "version": "0.2.0",
-  "description": "Beautiful by default. Components that understand your intent. — Intelligent Design System for Vue 3",
+  "description": "Less decisions. Better interfaces. Premium Vue 3 components that infer intent — design decided once via Design Kits.",
   "type": "module",
   "author": "",
   "license": "MIT",
@@ -10,6 +10,7 @@
     "vue3",
     "ui",
     "components",
+    "design-system",
     "pomikit"
   ],
   "sideEffects": [
@@ -39,7 +40,7 @@
     "format:check": "prettier --check .",
     "test": "vitest run",
     "test:watch": "vitest",
-    "docs": "vitepress dev docs",
+    "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs",
     "storybook": "storybook dev -p 6006",

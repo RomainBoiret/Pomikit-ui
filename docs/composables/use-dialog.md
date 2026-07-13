@@ -4,9 +4,9 @@ Confirmations en Promise — file FIFO.
 
 ## Prérequis
 
-[`DialogProvider`](/guide/providers) monté dans l’arbre.
+Plugin `Pomikit`, `<PomikitRoot>`, ou (legacy) `DialogProvider`.
 
-## API
+## Chemin recommandé
 
 ```ts
 import { useDialog } from 'pomikit-ui'
@@ -14,14 +14,13 @@ import { useDialog } from 'pomikit-ui'
 const dialog = useDialog()
 
 const ok = await dialog.confirm({
-  title: string
-  description?: string
-  confirmLabel?: string  // défaut "Confirm"
-  cancelLabel?: string   // défaut "Cancel"
-  tone?: PomiTone        // défaut "primary"
-  onConfirm?: () => unknown // peut être async
+  title: 'Delete workspace?',
+  description: 'This cannot be undone.',
+  confirmLabel: 'Delete',
+  onConfirm: async () => {
+    await api.deleteWorkspace()
+  },
 })
-// ok === true si confirmé, false si annulé / fermé
 ```
 
 ## Exemple
@@ -38,7 +37,6 @@ async function askDelete() {
     title: 'Delete workspace?',
     description: 'This cannot be undone.',
     confirmLabel: 'Delete',
-    tone: 'danger',
     onConfirm: async () => {
       await api.deleteWorkspace()
     },
@@ -48,14 +46,14 @@ async function askDelete() {
 </script>
 
 <template>
-  <Button tone="danger" variant="outline" @click="askDelete">
-    Delete
-  </Button>
+  <Button @click="askDelete">Delete</Button>
 </template>
 ```
 
+`tone` sur `confirm(...)` reste un escape hatch (ex. accent danger sur le bouton Confirm).
+
 ## Intent
 
-- Les requêtes sont mises en file (FIFO)
-- Si `onConfirm` retourne une Promise, le bouton Confirm reste busy
+- Requêtes en file (FIFO)
+- Si `onConfirm` est async, le bouton Confirm reste busy
 - Hors provider → erreur explicite

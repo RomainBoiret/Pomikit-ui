@@ -5,10 +5,8 @@ import '../src/styles/index.css'
 
 applyTheme(
   createTheme({
-    accent: '#5B5FFF',
-    radius: 'soft',
-    density: 'comfortable',
-    motion: 'expressive',
+    accent: '#34C759',
+    design: 'linear',
   }),
 )
 
@@ -27,11 +25,7 @@ const preview: Preview = {
     layout: 'centered',
     backgrounds: {
       default: 'pomikit',
-      values: [
-        { name: 'pomikit', value: '#F6F5F2' },
-        { name: 'dark', value: '#0B0D12' },
-        { name: 'white', value: '#FFFFFF' },
-      ],
+      values: [{ name: 'pomikit', value: 'var(--pomi-bg)' }],
     },
   },
 }

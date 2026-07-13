@@ -9,36 +9,17 @@ const meta = {
     docs: {
       description: {
         component: `
-Intent-driven Button: if \`@click\` returns a Promise, Pomikit runs the full action pipeline:
-
-idle → busy → success|error → idle
-
-Width stays locked. No loading ref required. Use \`feedback={false}\` to skip the flash.
-Optional \`busyText\` / \`successText\` / \`errorText\` for progressive disclosure (no auto i18n).
+Less decisions. Better interfaces.
 
 \`\`\`vue
 <Button @click="save">Save</Button>
 \`\`\`
+
+Promise click → busy → success|error. \`confirm\` for second-click commit.
+Never lead with variant / tone / size — those are internal escape hatches only.
         `.trim(),
       },
     },
-  },
-  argTypes: {
-    size: { control: 'select', options: ['sm', 'md', 'lg', 'icon'] },
-    variant: { control: 'select', options: ['solid', 'outline', 'ghost', 'soft'] },
-    tone: { control: 'select', options: ['primary', 'neutral', 'danger', 'success'] },
-    type: { control: 'select', options: ['button', 'submit', 'reset'] },
-    disabled: { control: 'boolean' },
-    loading: { control: 'boolean' },
-    block: { control: 'boolean' },
-  },
-  args: {
-    size: 'md',
-    variant: 'solid',
-    tone: 'primary',
-    disabled: false,
-    loading: false,
-    block: false,
   },
 } satisfies Meta<typeof Button>
 
@@ -46,87 +27,14 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
-  render: (args) => ({
-    components: { Button },
-    setup: () => ({ args }),
-    template: '<Button v-bind="args">Continue</Button>',
-  }),
-}
-
-export const Variants: Story = {
   render: () => ({
     components: { Button },
-    template: `
-      <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
-        <Button variant="solid">Solid</Button>
-        <Button variant="outline">Outline</Button>
-        <Button variant="soft">Soft</Button>
-        <Button variant="ghost">Ghost</Button>
-      </div>
-    `,
-  }),
-}
-
-export const Tones: Story = {
-  render: () => ({
-    components: { Button },
-    template: `
-      <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
-        <Button tone="primary">Primary</Button>
-        <Button tone="neutral">Neutral</Button>
-        <Button tone="success">Success</Button>
-        <Button tone="danger">Danger</Button>
-      </div>
-    `,
-  }),
-}
-
-export const Sizes: Story = {
-  render: () => ({
-    components: { Button },
-    template: `
-      <div style="display:flex;gap:0.75rem;flex-wrap:wrap;align-items:center">
-        <Button size="sm">Small</Button>
-        <Button size="md">Medium</Button>
-        <Button size="lg">Large</Button>
-        <Button size="icon" aria-label="Favorite">★</Button>
-      </div>
-    `,
-  }),
-}
-
-export const Block: Story = {
-  render: () => ({
-    components: { Button },
-    template: '<div style="width:280px"><Button block>Continue</Button></div>',
-  }),
-}
-
-export const AsLink: Story = {
-  render: () => ({
-    components: { Button },
-    template: '<Button href="https://example.com" target="_blank">Open docs</Button>',
-  }),
-}
-
-export const Loading: Story = {
-  name: 'Loading (controlled)',
-  render: () => ({
-    components: { Button },
-    template: '<Button loading>Saving</Button>',
+    template: '<Button>Continue</Button>',
   }),
 }
 
 export const IntentAsync: Story = {
   name: 'Intent — async click',
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Promise click → busy → success/error flash → idle. Sync handlers stay unchanged. Rejected promises show a discrete error state.',
-      },
-    },
-  },
   render: () => ({
     components: { Button },
     setup() {
@@ -142,15 +50,14 @@ export const IntentAsync: Story = {
       <div style="display:flex;gap:0.75rem;flex-wrap:wrap;align-items:center">
         <Button @click="save">Save</Button>
         <Button busy-text="Saving…" success-text="Saved" @click="save">Save with text</Button>
-        <Button tone="danger" variant="outline" @click="fail">Will fail</Button>
-        <Button variant="outline" tone="neutral" @click="() => undefined">Sync (no busy)</Button>
+        <Button @click="fail">Will fail</Button>
       </div>
     `,
   }),
 }
 
 export const IntentConfirm: Story = {
-  name: 'Intent — confirm in place',
+  name: 'Intent — confirm',
   render: () => ({
     components: { Button },
     setup() {
@@ -160,17 +67,15 @@ export const IntentConfirm: Story = {
       return { remove }
     },
     template: `
-      <Button tone="danger" confirm="Delete forever?" @click="remove">
-        Delete
-      </Button>
+      <Button confirm="Delete forever?" @click="remove">Delete</Button>
     `,
   }),
 }
 
-export const Disabled: Story = {
+export const AsLink: Story = {
   render: () => ({
     components: { Button },
-    template: '<Button disabled>Disabled</Button>',
+    template: '<Button href="https://example.com" target="_blank">Open docs</Button>',
   }),
 }
 
@@ -182,6 +87,42 @@ export const WithSlots: Story = {
         <template #leading>★</template>
         Favorite
       </Button>
+    `,
+  }),
+}
+
+export const EscapeHatches: Story = {
+  name: 'Advanced — escape hatches',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'variant / tone / size exist for rare exceptions. Prefer changing the Design Kit instead.',
+      },
+    },
+  },
+  render: () => ({
+    components: { Button },
+    template: `
+      <div style="display:flex;flex-direction:column;gap:1rem">
+        <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
+          <Button variant="solid">Solid</Button>
+          <Button variant="outline">Outline</Button>
+          <Button variant="soft">Soft</Button>
+          <Button variant="ghost">Ghost</Button>
+        </div>
+        <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
+          <Button tone="primary">Primary</Button>
+          <Button tone="neutral">Neutral</Button>
+          <Button tone="success">Success</Button>
+          <Button tone="danger">Danger</Button>
+        </div>
+        <div style="display:flex;gap:0.75rem;flex-wrap:wrap;align-items:center">
+          <Button size="sm">Small</Button>
+          <Button size="md">Medium</Button>
+          <Button size="lg">Large</Button>
+        </div>
+      </div>
     `,
   }),
 }

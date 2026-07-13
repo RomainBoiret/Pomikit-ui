@@ -16,6 +16,9 @@ import type { PomiSize } from '../../utils/types'
 export type DialogProps = {
   title?: string
   description?: string
+  /**
+   * @advanced Escape hatch — prefer Design Kit defaults.
+   */
   size?: PomiSize
   closeLabel?: string
   closeOnInteractOutside?: boolean

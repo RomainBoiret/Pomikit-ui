@@ -1,89 +1,74 @@
-export type ThemeRadius = 'sharp' | 'soft' | 'round'
-export type ThemeDensity = 'compact' | 'comfortable' | 'spacious'
-export type ThemeMotion = 'none' | 'subtle' | 'expressive'
-export type ThemeMode = 'light' | 'dark'
-export type ThemePersonality = 'minimal' | 'glass' | 'playful'
+import {
+  DENSITY,
+  ELEVATION,
+  MOTION,
+  RADIUS,
+  normalizeMotion,
+  type ThemeDensity,
+  type ThemeElevation,
+  type ThemeMode,
+  type ThemeMotion,
+  type ThemeMotionLegacy,
+  type ThemeRadius,
+} from './axes'
+import {
+  DESIGNS,
+  resolveDesign,
+  type DesignKit,
+  type ThemeDesign,
+  type ThemePersonality,
+} from './designs'
+
+export type {
+  ThemeDensity,
+  ThemeElevation,
+  ThemeMode,
+  ThemeMotion,
+  ThemeRadius,
+} from './axes'
+export type { ThemeDesign, ThemePersonality } from './designs'
 
 export type CreateThemeOptions = {
   /** Brand accent hex, e.g. `#5B5FFF` */
   accent?: string
+  /**
+   * Official Design Kit — changes colors, radius, shadows, spacing, motion, typography, surfaces.
+   * @default 'linear'
+   */
+  design?: ThemeDesign
+  /**
+   * @deprecated Use `design`. Mapped: pomikit/minimal→linear, elegant→editorial, glass→glass, playful→playful.
+   */
+  personality?: ThemePersonality
   radius?: ThemeRadius
   density?: ThemeDensity
-  motion?: ThemeMotion
+  motion?: ThemeMotion | ThemeMotionLegacy
+  elevation?: ThemeElevation
   mode?: ThemeMode
-  /** Preset that composes the axes above + surface effects */
-  personality?: ThemePersonality
 }
 
 export type PomikitTheme = {
   vars: Record<string, string>
   attrs: {
-    'data-pomi-radius': ThemeRadius
-    'data-pomi-density': ThemeDensity
+    'data-pomi-design': ThemeDesign
+    /** @deprecated Mirror of `data-pomi-design` for migration */
+    'data-pomi-personality': ThemeDesign
+    'data-pomi-mode': 'light' | 'dark'
+    'data-pomi-elevation': ThemeElevation
     'data-pomi-motion': ThemeMotion
-    'data-pomi-mode': ThemeMode
-    'data-pomi-personality'?: ThemePersonality
   }
-}
-
-const RADIUS: Record<ThemeRadius, { sm: string; md: string; lg: string; pill: string }> = {
-  sharp: { sm: '4px', md: '6px', lg: '8px', pill: '999px' },
-  soft: { sm: '8px', md: '12px', lg: '16px', pill: '999px' },
-  round: { sm: '12px', md: '18px', lg: '24px', pill: '999px' },
-}
-
-const DENSITY: Record<
-  ThemeDensity,
-  { hSm: string; hMd: string; hLg: string; pxSm: string; pxMd: string; pxLg: string; gap: string }
-> = {
-  compact: {
-    hSm: '1.75rem',
-    hMd: '2.125rem',
-    hLg: '2.5rem',
-    pxSm: '0.625rem',
-    pxMd: '0.875rem',
-    pxLg: '1.125rem',
-    gap: '0.5rem',
-  },
-  comfortable: {
-    hSm: '2rem',
-    hMd: '2.5rem',
-    hLg: '3rem',
-    pxSm: '0.75rem',
-    pxMd: '1rem',
-    pxLg: '1.5rem',
-    gap: '0.75rem',
-  },
-  spacious: {
-    hSm: '2.25rem',
-    hMd: '2.75rem',
-    hLg: '3.25rem',
-    pxSm: '0.875rem',
-    pxMd: '1.25rem',
-    pxLg: '1.75rem',
-    gap: '1rem',
-  },
-}
-
-const MOTION: Record<ThemeMotion, { fast: string; mid: string; slow: string; spring: string }> = {
-  none: {
-    fast: '0ms',
-    mid: '0ms',
-    slow: '0ms',
-    spring: 'linear',
-  },
-  subtle: {
-    fast: '120ms',
-    mid: '200ms',
-    slow: '320ms',
-    spring: 'cubic-bezier(0.22, 1, 0.36, 1)',
-  },
-  expressive: {
-    fast: '160ms',
-    mid: '280ms',
-    slow: '480ms',
-    spring: 'linear(0, 0.068, 0.232 7.1%, 0.892 26.5%, 1.054 34.5%, 1.09, 1.046 46.4%, 1.004 59.9%, 0.995, 1)',
-  },
+  resolved: {
+    accent: string
+    design: ThemeDesign
+    /** @deprecated Same as `design` */
+    personality: ThemeDesign
+    radius: ThemeRadius
+    density: ThemeDensity
+    motion: ThemeMotion
+    elevation: ThemeElevation
+    mode: ThemeMode
+    colorScheme: 'light' | 'dark'
+  }
 }
 
 function clampChannel(n: number) {
@@ -117,74 +102,116 @@ function mix(hex: string, toward: 'white' | 'black', amount: number): string {
   return `#${[r, g, b].map((n) => n.toString(16).padStart(2, '0')).join('')}`
 }
 
-function resolvePersonality(
-  options: CreateThemeOptions,
-): Required<Pick<CreateThemeOptions, 'radius' | 'density' | 'motion' | 'mode'>> & {
-  accent: string
-  personality?: ThemePersonality
-  blur: string
-  saturate: string
-  shadowStrength: string
-} {
-  const personality = options.personality
-  const base = {
-    accent: options.accent ?? '#5B5FFF',
-    radius: options.radius ?? 'soft',
-    density: options.density ?? 'comfortable',
-    motion: options.motion ?? 'expressive',
-    mode: options.mode ?? 'light',
-    personality,
-    blur: '0px',
-    saturate: '1',
-    shadowStrength: '1',
-  }
+export function resolveColorScheme(mode: ThemeMode): 'light' | 'dark' {
+  if (mode !== 'system') return mode
+  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return 'light'
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+}
 
-  if (personality === 'minimal') {
+function buildShadow(
+  isDark: boolean,
+  strength: number,
+  elevation: ThemeElevation,
+): { shadow: string; shadowLg: string } {
+  const s = strength * ELEVATION[elevation].strength
+  if (elevation === 'flat' || s < 0.3) {
     return {
-      ...base,
-      radius: options.radius ?? 'sharp',
-      motion: options.motion ?? 'subtle',
-      density: options.density ?? 'compact',
-      shadowStrength: '0.55',
+      shadow: isDark ? '0 1px 0 rgb(255 255 255 / 4%)' : '0 1px 0 rgb(0 0 0 / 0.04)',
+      shadowLg: isDark ? '0 1px 0 rgb(255 255 255 / 5%)' : '0 1px 0 rgb(0 0 0 / 0.05)',
     }
   }
-  if (personality === 'glass') {
+  if (elevation === 'floating') {
     return {
-      ...base,
-      radius: options.radius ?? 'round',
-      motion: options.motion ?? 'expressive',
-      blur: '18px',
-      saturate: '1.15',
-      shadowStrength: '0.75',
+      shadow: isDark
+        ? `0 1px 2px rgb(0 0 0 / calc(0.35 * ${s})), 0 8px 28px rgb(0 0 0 / calc(0.38 * ${s}))`
+        : `0 1px 2px rgb(0 0 0 / calc(0.04 * ${s})), 0 10px 28px rgb(0 0 0 / calc(0.07 * ${s}))`,
+      shadowLg: isDark
+        ? `0 1px 2px rgb(0 0 0 / calc(0.4 * ${s})), 0 16px 40px rgb(0 0 0 / calc(0.48 * ${s}))`
+        : `0 1px 2px rgb(0 0 0 / calc(0.04 * ${s})), 0 16px 40px rgb(0 0 0 / calc(0.1 * ${s}))`,
     }
   }
-  if (personality === 'playful') {
+  return {
+    shadow: isDark
+      ? `0 1px 2px rgb(0 0 0 / calc(0.28 * ${s}))`
+      : `0 1px 2px rgb(0 0 0 / calc(0.045 * ${s}))`,
+    shadowLg: isDark
+      ? `0 1px 2px rgb(0 0 0 / calc(0.32 * ${s})), 0 8px 24px rgb(0 0 0 / calc(0.38 * ${s}))`
+      : `0 1px 2px rgb(0 0 0 / calc(0.04 * ${s})), 0 8px 24px rgb(0 0 0 / calc(0.07 * ${s}))`,
+  }
+}
+
+function resolveMotionTokens(
+  pack: DesignKit,
+  motionOption: ThemeMotion | ThemeMotionLegacy | undefined,
+): DesignKit['motionProfile'] & { key: ThemeMotion } {
+  const key = normalizeMotion(motionOption) ?? pack.motion
+  if (key === 'none') {
     return {
-      ...base,
-      accent: options.accent ?? '#FF5A7A',
-      radius: options.radius ?? 'round',
-      motion: options.motion ?? 'expressive',
-      density: options.density ?? 'spacious',
-      shadowStrength: '1.15',
+      key,
+      fast: '0ms',
+      mid: '0ms',
+      slow: '0ms',
+      ease: 'linear',
+      easeOut: 'linear',
+      lift: '0px',
+      press: '1',
+      enterY: '0px',
+      enterScale: '1',
     }
   }
-  return base
+  // Explicit axis override: durations from MOTION table, identity from kit
+  if (motionOption !== undefined) {
+    const axis = MOTION[key]
+    return {
+      key,
+      fast: axis.fast,
+      mid: axis.mid,
+      slow: axis.slow,
+      ease: pack.motionProfile.ease,
+      easeOut: pack.motionProfile.easeOut,
+      lift: axis.lift,
+      press: axis.press,
+      enterY: pack.motionProfile.enterY,
+      enterScale: pack.motionProfile.enterScale,
+    }
+  }
+  return { key, ...pack.motionProfile }
+}
+
+function withAlpha(color: string, alpha: number): string {
+  if (alpha >= 1) return color
+  if (color.startsWith('rgb')) return color
+  return `color-mix(in srgb, ${color} ${Math.round(alpha * 100)}%, transparent)`
 }
 
 export function createTheme(options: CreateThemeOptions = {}): PomikitTheme {
-  const resolved = resolvePersonality(options)
-  const radius = RADIUS[resolved.radius]
-  const density = DENSITY[resolved.density]
-  const motion = MOTION[resolved.motion]
-  const accent = resolved.accent
-  const isDark = resolved.mode === 'dark'
+  const design = resolveDesign(options.design, options.personality)
+  const pack = DESIGNS[design]
+  const motionTokens = resolveMotionTokens(pack, options.motion)
+  const radius = options.radius ?? pack.radius
+  const density = options.density ?? pack.density
+  const elevation = options.elevation ?? pack.elevation
+  const mode = options.mode ?? 'light'
+  const accent = options.accent ?? pack.accent
+  const colorScheme = resolveColorScheme(mode)
+  const isDark = colorScheme === 'dark'
+  const surfaces = isDark ? pack.dark : pack.light
 
-  const bg = isDark ? '#0B0D12' : '#F6F5F2'
-  const fg = isDark ? '#F4F4F5' : '#12141A'
-  const muted = isDark ? '#9A9AA3' : '#5C5F6A'
-  const border = isDark ? '#23262F' : '#E6E4DE'
-  const surface = isDark ? '#14171F' : '#FFFFFF'
-  const surfaceElevated = isDark ? '#1A1E28' : '#FFFFFF'
+  const radiusBase = RADIUS[radius]
+  const useKitRadii = Boolean(pack.radiusTokens) && radius === pack.radius
+  const radiusTokens = {
+    sm: useKitRadii ? pack.radiusTokens!.sm : radiusBase.sm,
+    md: useKitRadii ? pack.radiusTokens!.md : radiusBase.md,
+    lg: useKitRadii ? pack.radiusTokens!.lg : radiusBase.lg,
+    pill: radiusBase.pill,
+  }
+
+  const densityTokens = DENSITY[density]
+  const elevationTokens = ELEVATION[elevation]
+  const shadows = buildShadow(isDark, pack.shadowStrength, elevation)
+
+  const surface = withAlpha(surfaces.surface, pack.surfaceAlpha)
+  const surfaceElevated = withAlpha(surfaces.surfaceElevated, pack.surfaceAlpha)
 
   const vars: Record<string, string> = {
     '--pomi-accent': accent,
@@ -195,91 +222,148 @@ export function createTheme(options: CreateThemeOptions = {}): PomikitTheme {
     '--pomi-danger-fg': '#FFFFFF',
     '--pomi-success': '#30A46C',
     '--pomi-success-fg': '#FFFFFF',
+    '--pomi-warning': isDark ? '#E5B04A' : '#D9971A',
+    '--pomi-warning-fg': '#FFFFFF',
+    '--pomi-info': isDark ? '#60A5FA' : '#3B82F6',
+    '--pomi-info-fg': '#FFFFFF',
     '--pomi-neutral': isDark ? '#8B8F9A' : '#6B7280',
     '--pomi-neutral-solid': isDark ? '#2A2F3A' : '#18181B',
     '--pomi-neutral-fg': '#FFFFFF',
 
-    '--pomi-bg': bg,
-    '--pomi-fg': fg,
-    '--pomi-muted': muted,
-    '--pomi-border': border,
+    '--pomi-bg': surfaces.bg,
+    '--pomi-fg': surfaces.fg,
+    '--pomi-muted': surfaces.muted,
+    '--pomi-border': surfaces.border,
     '--pomi-surface': surface,
     '--pomi-surface-elevated': surfaceElevated,
+    '--pomi-surface-hover': surfaces.surfaceHover,
+    '--pomi-surface-alpha': String(pack.surfaceAlpha),
+    '--pomi-border-strength': String(pack.borderStrength),
+    '--pomi-border-highlight': isDark ? pack.borderHighlightDark : pack.borderHighlightLight,
 
-    '--pomi-radius-sm': radius.sm,
-    '--pomi-radius-md': radius.md,
-    '--pomi-radius-lg': radius.lg,
-    '--pomi-radius': radius.md,
-    '--pomi-radius-pill': radius.pill,
+    '--pomi-radius-sm': radiusTokens.sm,
+    '--pomi-radius-md': radiusTokens.md,
+    '--pomi-radius-lg': radiusTokens.lg,
+    '--pomi-radius': radiusTokens.md,
+    '--pomi-radius-pill': radiusTokens.pill,
 
-    '--pomi-control-h-sm': density.hSm,
-    '--pomi-control-h-md': density.hMd,
-    '--pomi-control-h-lg': density.hLg,
-    '--pomi-control-px-sm': density.pxSm,
-    '--pomi-control-px-md': density.pxMd,
-    '--pomi-control-px-lg': density.pxLg,
-    '--pomi-gap': density.gap,
+    '--pomi-control-h-sm': densityTokens.hSm,
+    '--pomi-control-h-md': densityTokens.hMd,
+    '--pomi-control-h-lg': densityTokens.hLg,
+    '--pomi-control-px-sm': densityTokens.pxSm,
+    '--pomi-control-px-md': densityTokens.pxMd,
+    '--pomi-control-px-lg': densityTokens.pxLg,
+    '--pomi-gap': densityTokens.gap,
+    '--pomi-space-1': densityTokens.space1,
+    '--pomi-space-2': densityTokens.space2,
+    '--pomi-space-3': densityTokens.space3,
+    '--pomi-space-4': densityTokens.space4,
+    '--pomi-space-6': densityTokens.space6,
 
-    '--pomi-duration-fast': motion.fast,
-    '--pomi-duration-mid': motion.mid,
-    '--pomi-duration-slow': motion.slow,
-    '--pomi-ease': motion.spring,
-    '--pomi-ease-out': 'cubic-bezier(0.16, 1, 0.3, 1)',
+    '--pomi-duration-fast': motionTokens.fast,
+    '--pomi-duration-mid': motionTokens.mid,
+    '--pomi-duration-slow': motionTokens.slow,
+    '--pomi-ease': motionTokens.ease,
+    '--pomi-ease-out': motionTokens.easeOut,
+    '--pomi-motion-lift': motionTokens.lift,
+    '--pomi-motion-press': motionTokens.press,
+    '--pomi-motion-enter-y': motionTokens.enterY,
+    '--pomi-motion-enter-scale': motionTokens.enterScale,
 
-    '--pomi-font': '"DM Sans", ui-sans-serif, system-ui, sans-serif',
-    '--pomi-font-display': '"Newsreader", ui-serif, Georgia, serif',
-    '--pomi-font-mono': 'ui-monospace, SFMono-Regular, Menlo, monospace',
+    '--pomi-font': pack.font,
+    '--pomi-font-display': pack.fontDisplay,
+    '--pomi-font-mono': 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+    '--pomi-tracking': pack.tracking,
+    '--pomi-title-tracking': pack.titleTracking,
 
-    '--pomi-shadow-strength': resolved.shadowStrength,
-    '--pomi-shadow': isDark
-      ? `0 1px 0 rgb(255 255 255 / 4%), 0 8px 24px rgb(0 0 0 / calc(0.45 * ${resolved.shadowStrength}))`
-      : `0 1px 0 rgb(255 255 255 / 70%), 0 1px 2px rgb(18 20 26 / calc(0.04 * ${resolved.shadowStrength})), 0 12px 32px rgb(18 20 26 / calc(0.08 * ${resolved.shadowStrength}))`,
-    '--pomi-overlay': isDark ? 'rgb(0 0 0 / 55%)' : 'rgb(18 20 26 / 40%)',
-    '--pomi-focus-ring': `0 0 0 3px color-mix(in srgb, ${accent} 35%, transparent)`,
+    '--pomi-shadow-strength': String(pack.shadowStrength * elevationTokens.strength),
+    '--pomi-shadow': shadows.shadow,
+    '--pomi-shadow-lg': shadows.shadowLg,
+    '--pomi-card-lift': elevationTokens.cardLift,
+    '--pomi-glow-strength': elevationTokens.glow,
+    '--pomi-overlay': isDark ? 'rgb(0 0 0 / 50%)' : 'rgb(17 24 39 / 28%)',
+    '--pomi-focus-ring': `0 0 0 3px color-mix(in srgb, ${accent} 22%, transparent)`,
 
-    '--pomi-skeleton': isDark ? '#23262F' : '#E8E6E0',
+    '--pomi-skeleton': isDark ? '#23262F' : '#E8E8EC',
     '--pomi-skeleton-shine': isDark ? 'rgb(255 255 255 / 8%)' : 'rgb(255 255 255 / 55%)',
     '--pomi-feedback-max-width': '22rem',
     '--pomi-message-lh': '1.4',
     '--pomi-message-fs': '0.8rem',
     '--pomi-message-min-height': 'calc(0.8rem * 1.4)',
 
-    '--pomi-surface-blur': resolved.blur,
-    '--pomi-surface-saturate': resolved.saturate,
+    '--pomi-surface-blur': pack.blur,
+    '--pomi-surface-saturate': pack.saturate,
   }
 
-  const attrs: PomikitTheme['attrs'] = {
-    'data-pomi-radius': resolved.radius,
-    'data-pomi-density': resolved.density,
-    'data-pomi-motion': resolved.motion,
-    'data-pomi-mode': resolved.mode,
+  return {
+    vars,
+    attrs: {
+      'data-pomi-design': design,
+      'data-pomi-personality': design,
+      'data-pomi-mode': colorScheme,
+      'data-pomi-elevation': elevation,
+      'data-pomi-motion': motionTokens.key,
+    },
+    resolved: {
+      accent,
+      design,
+      personality: design,
+      radius,
+      density,
+      motion: motionTokens.key,
+      elevation,
+      mode,
+      colorScheme,
+    },
   }
-  if (resolved.personality) attrs['data-pomi-personality'] = resolved.personality
-
-  return { vars, attrs }
 }
+
+let systemModeCleanup: (() => void) | null = null
+let lastThemeOptions: CreateThemeOptions | null = null
 
 export function applyTheme(theme: PomikitTheme, el: HTMLElement = document.documentElement) {
   for (const [key, value] of Object.entries(theme.vars)) {
     el.style.setProperty(key, value)
   }
-  for (const [key, value] of Object.entries(theme.attrs)) {
-    if (value == null) el.removeAttribute(key)
-    else el.setAttribute(key, value)
+
+  const attrs = [
+    'data-pomi-design',
+    'data-pomi-personality',
+    'data-pomi-mode',
+    'data-pomi-elevation',
+    'data-pomi-motion',
+  ] as const
+  for (const key of attrs) {
+    el.setAttribute(key, theme.attrs[key])
   }
+
+  el.removeAttribute('data-pomi-radius')
+  el.removeAttribute('data-pomi-density')
 }
 
-export type PomikitPluginOptions = {
-  theme?: CreateThemeOptions | PomikitTheme
-}
+/**
+ * Apply theme from options and keep `mode: 'system'` in sync with OS preference.
+ */
+export function applyThemeOptions(
+  options: CreateThemeOptions = {},
+  el: HTMLElement = document.documentElement,
+): () => void {
+  lastThemeOptions = options
+  systemModeCleanup?.()
+  systemModeCleanup = null
 
-export const Pomikit = {
-  install(_app: unknown, options: PomikitPluginOptions = {}) {
-    if (typeof document === 'undefined') return
-    const theme =
-      options.theme && 'vars' in options.theme
-        ? options.theme
-        : createTheme((options.theme as CreateThemeOptions) ?? {})
-    applyTheme(theme)
-  },
+  applyTheme(createTheme(options), el)
+
+  if (options.mode !== 'system' || typeof window === 'undefined') {
+    return () => undefined
+  }
+
+  const mql = window.matchMedia('(prefers-color-scheme: dark)')
+  const onChange = () => {
+    if (!lastThemeOptions) return
+    applyTheme(createTheme(lastThemeOptions), el)
+  }
+  mql.addEventListener('change', onChange)
+  systemModeCleanup = () => mql.removeEventListener('change', onChange)
+  return systemModeCleanup
 }

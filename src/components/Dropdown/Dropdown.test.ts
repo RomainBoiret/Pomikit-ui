@@ -1,18 +1,30 @@
 import { describe, expect, it } from 'vitest'
 import { defineComponent, h, nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
-import { Dropdown, DropdownItem } from './index'
+import {
+  Dropdown,
+  DropdownContent,
+  DropdownItem,
+  DropdownTrigger,
+} from './index'
 import Button from '../Button/Button.vue'
 
 describe('Dropdown', () => {
   it('renders trigger and opens content', async () => {
     const Host = defineComponent({
-      components: { Dropdown, DropdownItem, Button },
+      components: { Dropdown, DropdownTrigger, DropdownContent, DropdownItem, Button },
       setup() {
         return () =>
           h(Dropdown, null, {
-            trigger: () => h(Button, null, { default: () => 'Menu' }),
-            default: () => h(DropdownItem, null, { default: () => 'Edit' }),
+            default: () => [
+              h(DropdownTrigger, null, {
+                default: () => h(Button, null, { default: () => 'Menu' }),
+              }),
+              h(DropdownContent, null, {
+                default: () =>
+                  h(DropdownItem, { icon: 'pencil' }, { default: () => 'Edit' }),
+              }),
+            ],
           })
       },
     })

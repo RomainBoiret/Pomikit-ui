@@ -1,48 +1,14 @@
 # Dialog
 
-Modale déclarative **ou** confirm programmatique via provider.
+Modale déclarative **ou** confirm programmatique.
 
 ## Import
 
 ```ts
-import { Dialog, DialogProvider, Button, useDialog } from 'pomikit-ui'
+import { Dialog, Button, useDialog } from 'pomikit-ui'
 ```
 
-## Dialog déclaratif
-
-```vue
-<Dialog title="Rename workspace" description="Choose a new name.">
-  <template #trigger>
-    <Button variant="outline">Open</Button>
-  </template>
-  <Input v-model="name" />
-  <template #footer>
-    <Button variant="ghost" tone="neutral">Cancel</Button>
-    <Button>Save</Button>
-  </template>
-</Dialog>
-```
-
-### Props
-
-| Prop | Type | Défaut |
-| --- | --- | --- |
-| `title` | `string` | — |
-| `description` | `string` | — |
-| `size` | `PomiSize` | `'md'` |
-| `closeLabel` | `string` | `'Close'` |
-| `closeOnInteractOutside` | `boolean` | `true` |
-| `closeOnEscape` | `boolean` | `true` |
-
-`v-model:open` — `boolean`
-
-Slots : `trigger`, `title`, `description`, `default`, `footer`, `close`
-
-Un titre accessible est toujours exposé (fallback sr-only « Dialog »).
-
-## Confirm programmatique
-
-Nécessite [`DialogProvider`](/guide/providers) + [`useDialog`](/composables/use-dialog).
+## Chemin recommandé — confirm
 
 ```vue
 <script setup lang="ts">
@@ -55,7 +21,6 @@ async function remove() {
     title: 'Delete workspace?',
     description: 'This cannot be undone.',
     confirmLabel: 'Delete',
-    tone: 'danger',
     onConfirm: async () => {
       await api.delete()
     },
@@ -65,8 +30,44 @@ async function remove() {
 </script>
 
 <template>
-  <Button tone="danger" @click="remove">Delete</Button>
+  <Button confirm="Delete workspace?" @click="remove">Delete</Button>
 </template>
 ```
 
-`DialogProvider` n’est **pas** requis pour le `Dialog` déclaratif avec trigger.
+Ou uniquement via `dialog.confirm` sans Button confirm.
+
+## Dialog déclaratif
+
+```vue
+<Dialog title="Rename workspace" description="Choose a new name.">
+  <template #trigger>
+    <Button>Open</Button>
+  </template>
+  <Input v-model="name" />
+  <template #footer>
+    <Button @click="close">Cancel</Button>
+    <Button @click="save">Save</Button>
+  </template>
+</Dialog>
+```
+
+## Props d’intention
+
+| Prop | Type | Défaut |
+| --- | --- | --- |
+| `title` / `description` | `string` | — |
+| `closeLabel` | `string` | `'Close'` |
+| `closeOnInteractOutside` | `boolean` | `true` |
+| `closeOnEscape` | `boolean` | `true` |
+
+`v-model:open` — `boolean`
+
+## Escape hatches
+
+| Prop | Notes |
+| --- | --- |
+| `size` | `sm` \| `md` \| `lg` |
+
+Slots : `trigger`, `title`, `description`, `default`, `footer`, `close`
+
+Voir aussi [`useDialog`](/composables/use-dialog).

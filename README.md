@@ -1,81 +1,85 @@
 # Pomikit
 
-**Beautiful by default. Components that understand your intent.**
+**Less decisions. Better interfaces.**
+
+Importer un composant → interface premium.  
+Tu ne stylises pas bouton par bouton : tu choisis un **Design Kit** une fois.
 
 ```bash
 pnpm add pomikit-ui
 ```
 
-## Documentation
+## Zero-config
 
-```bash
-pnpm docs
+```vue
+<script setup>
+import { Button } from 'pomikit-ui'
+import 'pomikit-ui/styles.css'
+</script>
+
+<template>
+  <Button>Save</Button>
+</template>
 ```
 
-Site VitePress dans [`docs/`](./docs) — installation, thème, intent, API de chaque composant.
+Aucune prop de style. Déjà beau.
 
-| Ressource | Commande |
-| --- | --- |
-| Docs | `pnpm docs` |
-| Playground | `pnpm dev` |
-| Storybook | `pnpm storybook` |
-
-## Quick start
+## Identité de l’app (une fois)
 
 ```ts
 import { createApp } from 'vue'
-import {
-  Pomikit,
-  createTheme,
-  DialogProvider,
-  ToastProvider,
-} from 'pomikit-ui'
+import { Pomikit, createTheme } from 'pomikit-ui'
 import 'pomikit-ui/styles.css'
 
 createApp(App)
-  .use(Pomikit, { theme: createTheme({ accent: '#5B5FFF' }) })
+  .use(Pomikit, {
+    theme: createTheme({
+      design: 'linear', // glass | editorial | soft | playful
+      accent: '#5B5FFF',
+      mode: 'system',
+    }),
+  })
   .mount('#app')
-
-// Root template:
-// <ToastProvider><DialogProvider><App /></DialogProvider></ToastProvider>
 ```
 
-## Catalog (focused)
+## Intent, pas décoration
 
-| Component | Intent highlights |
-| --- | --- |
-| **Button** | Promise → busy → success/error; `confirm` |
-| **Field** + **Input** | Chrome vs typing; rules on blur/submit |
-| **Select** | `options` + `pending` (no 70-prop API) |
-| **Checkbox** / **Switch** / **Radio** | Same family; Field-aware |
-| **Dropdown** | Trigger slot + items |
-| **Dialog** + `useDialog().confirm()` | Promise confirm |
-| **Toast** + `useToast` | `success` / `error` / `show` |
-| **Collection** | `pending` first-load vs refresh |
-| **Card** | `href` / `selectable` |
-| **Skeleton** | Shimmer placeholders |
-
-Supporting primitives: `EmptyState`, `ErrorState`.
-
-## Theme DNA
+```vue
+<Button @click="save">Save</Button>
+<Button confirm="Delete project?" @click="remove">Delete</Button>
+<Input v-model="email" placeholder="Email" required />
+<Select v-model="country" :options="countries" />
+```
 
 ```ts
-createTheme({
-  accent: '#5B5FFF',
-  radius: 'soft',
-  density: 'comfortable',
-  motion: 'expressive',
-  personality: 'glass', // minimal | glass | playful
-})
+toast.success('Profile saved')
+await dialog.confirm({ title: 'Delete?', confirmLabel: 'Delete' })
 ```
+
+Avant chaque nouvelle prop : *est-ce une décision de plus pour le développeur ?*  
+Si oui → Design Kit, tokens, ou intent — pas une prop esthétique.
+
+## Documentation
+
+```bash
+pnpm docs:dev
+```
+
+| Ressource | Commande |
+| --- | --- |
+| Docs + playground | `pnpm docs:dev` |
+| Playground app | `pnpm dev` |
+| Storybook | `pnpm storybook` |
+
+## Catalog (v1)
+
+Button · Field · Input · Select · Checkbox · Switch · Dropdown · Dialog · Toast · Collection · Card · Skeleton
 
 ## Develop
 
 ```bash
 pnpm install
-pnpm docs
-pnpm storybook
-pnpm dev
+pnpm docs:dev
 pnpm test
 pnpm build
 ```

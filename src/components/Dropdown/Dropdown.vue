@@ -1,54 +1,25 @@
 <script setup lang="ts">
-import { computed, useAttrs } from 'vue'
-import {
-  DropdownMenuContent,
-  DropdownMenuPortal,
-  DropdownMenuRoot,
-  DropdownMenuTrigger,
-} from 'reka-ui'
-import { cn } from '../../utils/cn'
+import { DropdownMenuRoot } from 'reka-ui'
+
+export type DropdownSide = 'top' | 'right' | 'bottom' | 'left'
+export type DropdownAlign = 'start' | 'center' | 'end'
 
 export type DropdownProps = {
-  /** Accessible label when trigger has no visible text context */
-  label?: string
+  /** When true, interacts like a modal (focus trap + scroll lock). */
   modal?: boolean
 }
 
 const props = withDefaults(defineProps<DropdownProps>(), {
-  label: undefined,
   modal: true,
 })
 
 const open = defineModel<boolean>('open', { default: false })
 
-defineOptions({ name: 'PomiDropdown', inheritAttrs: false })
-
-const attrs = useAttrs()
-
-const contentClass = computed(() =>
-  cn('pomi-dropdown__content', attrs.class as string | undefined),
-)
-
-const fallthrough = computed(() => {
-  const { class: _c, ...rest } = attrs
-  return rest
-})
+defineOptions({ name: 'PomiDropdown' })
 </script>
 
 <template>
   <DropdownMenuRoot v-model:open="open" :modal="props.modal">
-    <DropdownMenuTrigger as-child :aria-label="props.label">
-      <slot name="trigger" />
-    </DropdownMenuTrigger>
-    <DropdownMenuPortal>
-      <DropdownMenuContent
-        :class="contentClass"
-        v-bind="fallthrough"
-        :side-offset="6"
-        align="start"
-      >
-        <slot />
-      </DropdownMenuContent>
-    </DropdownMenuPortal>
+    <slot />
   </DropdownMenuRoot>
 </template>
