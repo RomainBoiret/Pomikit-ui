@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
-import { defineComponent, h } from 'vue'
+import { defineComponent } from 'vue'
 import ToastProvider from '../src/components/Toast/ToastProvider.vue'
 import Button from '../src/components/Button/Button.vue'
 import { useToast } from '../src/composables/useToast'

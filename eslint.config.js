@@ -7,7 +7,15 @@ import vueParser from 'vue-eslint-parser'
 
 export default tseslint.config(
   {
-    ignores: ['dist/**', 'storybook-static/**', 'node_modules/**', 'coverage/**'],
+    ignores: [
+      'dist/**',
+      'storybook-static/**',
+      'node_modules/**',
+      'coverage/**',
+      'docs/.vitepress/cache/**',
+      'docs/.vitepress/dist/**',
+      '**/*.min.js',
+    ],
   },
   js.configs.recommended,
   ...tseslint.configs.recommended,
@@ -28,11 +36,19 @@ export default tseslint.config(
       },
     },
     rules: {
+      // Design-system components intentionally use Button, Input, Card, …
       'vue/multi-word-component-names': 'off',
+      'vue/no-reserved-component-names': 'off',
       '@typescript-eslint/no-unused-vars': [
         'error',
         { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
       ],
+    },
+  },
+  {
+    files: ['**/*.{test,spec}.{ts,tsx}', 'stories/**/*.{ts,tsx}'],
+    rules: {
+      'vue/one-component-per-file': 'off',
     },
   },
   eslintConfigPrettier,

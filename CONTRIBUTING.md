@@ -56,4 +56,20 @@ pnpm docs:build
 
 Official surface = VitePress (+ home playground). Storybook = internal isolation tool.
 
-See [docs/guide/philosophy.md](./docs/guide/philosophy.md).
+## CI
+
+GitHub Actions (`.github/workflows/ci.yml`) runs three parallel gates:
+
+| Job | Checks |
+| --- | --- |
+| **Quality** | `typecheck` · `lint` · `test` · `build` (library) |
+| **Docs** | `docs:build` (VitePress) |
+| **Storybook** | `build-storybook` (internal tool — still must compile) |
+
+Local parity:
+
+```bash
+pnpm typecheck && pnpm lint && pnpm test && pnpm build
+pnpm docs:build
+pnpm build-storybook
+```

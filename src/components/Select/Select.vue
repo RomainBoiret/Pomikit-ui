@@ -127,10 +127,10 @@ function onValueChange(value: unknown) {
       :aria-describedby="field?.describedBy.value"
     >
       <SelectValue
+        v-slot="{ selectedLabel: rekaLabels }"
         class="pomi-select__value"
         :class="{ 'pomi-select__value--placeholder': !hasValue }"
         :placeholder="pending ? 'Loading…' : placeholder"
-        v-slot="{ selectedLabel: rekaLabels }"
       >
         {{
           selectedLabel
