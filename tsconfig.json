@@ -3,7 +3,11 @@
     "target": "ES2022",
     "useDefineForClassFields": true,
     "module": "ESNext",
-    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "lib": [
+      "ES2022",
+      "DOM",
+      "DOM.Iterable"
+    ],
     "skipLibCheck": true,
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
@@ -20,10 +24,17 @@
     "declarationMap": true,
     "baseUrl": ".",
     "paths": {
-      "pomikit-ui": ["./src/index.ts"],
-      "pomikit-ui/*": ["./src/*"]
+      "pomikit-ui": [
+        "./src/index.ts"
+      ],
+      "pomikit-ui/*": [
+        "./src/*"
+      ]
     },
-    "types": ["vite/client", "node"]
+    "types": [
+      "vite/client",
+      "node"
+    ]
   },
   "include": [
     "src/**/*.ts",
@@ -35,5 +46,9 @@
     "vite.config.ts",
     "vitest.config.ts"
   ],
-  "exclude": ["dist", "node_modules", "storybook-static"]
+  "exclude": [
+    "dist",
+    "node_modules",
+    "storybook-static"
+  ]
 }

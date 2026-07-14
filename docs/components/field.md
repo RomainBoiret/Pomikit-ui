@@ -1,41 +1,42 @@
 # Field
 
-Chrome de formulaire — label, helper, erreur — sans polluer le contrôle.
+Layout wrapper for form controls: label, helper, and a reserved error row (no layout jump when validation appears). Provides context to [Input](/components/input), [Select](/components/select), Checkbox, and Switch.
 
-## Import
-
-```ts
-import { Field, Input } from 'pomikit-ui'
-```
-
-## Exemple
+## Basic
 
 ```vue
-<Field label="Email" required helper="Work email only">
-  <Input v-model="email" type="email" :rules="[rules.email()]" />
-</Field>
+<script setup lang="ts">
+import { ref } from 'vue'
+import { Field, Input } from 'pomikit-ui'
 
-<Field label="Notifications" :error="notifyError">
-  <Switch v-model="notify" label="Email me" />
+const name = ref('')
+</script>
+
+<template>
+  <Field label="Name" helper="As shown on invoices" required>
+    <Input v-model="name" />
+  </Field>
+</template>
+```
+
+## Controlled error
+
+A Field `error` wins over child intent validation:
+
+```vue
+<Field label="Username" :error="serverError">
+  <Input v-model="username" />
 </Field>
 ```
 
 ## Props
 
-| Prop | Type | Défaut |
-| --- | --- | --- |
-| `label` | `string` | — |
-| `helper` | `string` | — |
-| `error` | `string` | — |
-| `required` | `boolean` | `false` |
-| `id` | `string` | — |
+| Prop | Notes |
+| --- | --- |
+| `label` | Visible label (Input may float it) |
+| `helper` | Hint when there is no error |
+| `error` | Controlled message |
+| `required` | Marks the control as required |
+| `id` | Optional control id (otherwise generated) |
 
-## Slots
-
-`label`, `default` (contrôle), `helper`, `error`
-
-## Intent
-
-- Fournit un contexte aux enfants (`Input`, `Select`, `Checkbox`, `Switch`…)
-- `error` contrôlé gagne sur l’erreur d’intent enfant
-- Zone message réservée → pas de jump layout helper ↔ error
+See [useFieldContext](/composables/use-field) for custom controls that participate in Field.

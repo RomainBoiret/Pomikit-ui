@@ -1,73 +1,61 @@
 # Dialog
 
-Modale déclarative **ou** confirm programmatique.
+Modal surface for focused tasks. Use the declarative component, or `useDialog().confirm` for imperative confirms (requires plugin / PomikitRoot).
 
-## Import
-
-```ts
-import { Dialog, Button, useDialog } from 'pomikit-ui'
-```
-
-## Chemin recommandé — confirm
+## Declarative
 
 ```vue
 <script setup lang="ts">
-import { useDialog, Button } from 'pomikit-ui'
+import { ref } from 'vue'
+import { Dialog, Button } from 'pomikit-ui'
 
-const dialog = useDialog()
-
-async function remove() {
-  const ok = await dialog.confirm({
-    title: 'Delete workspace?',
-    description: 'This cannot be undone.',
-    confirmLabel: 'Delete',
-    onConfirm: async () => {
-      await api.delete()
-    },
-  })
-  if (ok) { /* … */ }
-}
+const open = ref(false)
 </script>
 
 <template>
-  <Button confirm="Delete workspace?" @click="remove">Delete</Button>
+  <Button @click="open = true">Edit profile</Button>
+
+  <Dialog v-model:open="open" title="Edit profile" description="Update your public details.">
+    <!-- form fields -->
+    <template #footer>
+      <Button @click="open = false">Cancel</Button>
+      <Button @click="save">Save</Button>
+    </template>
+  </Dialog>
 </template>
 ```
 
-Ou uniquement via `dialog.confirm` sans Button confirm.
+Slots: default body, optional `title`, `description`, `footer`. Props also accept `title` / `description` strings.
 
-## Dialog déclaratif
+## Imperative confirm
 
-```vue
-<Dialog title="Rename workspace" description="Choose a new name.">
-  <template #trigger>
-    <Button>Open</Button>
-  </template>
-  <Input v-model="name" />
-  <template #footer>
-    <Button @click="close">Cancel</Button>
-    <Button @click="save">Save</Button>
-  </template>
-</Dialog>
+```ts
+import { useDialog, useToast } from 'pomikit-ui'
+
+const dialog = useDialog()
+const toast = useToast()
+
+async function onDelete() {
+  const ok = await dialog.confirm({
+    title: 'Delete project?',
+    description: 'This cannot be undone.',
+    confirmLabel: 'Delete',
+    cancelLabel: 'Cancel',
+    tone: 'danger',
+    onConfirm: () => api.deleteProject(),
+  })
+  if (ok) toast.success('Deleted')
+}
 ```
 
-## Props d’intention
+If `onConfirm` returns a Promise, the confirm button stays busy until it settles.
 
-| Prop | Type | Défaut |
+## Behavior props
+
+| Prop | Default | Notes |
 | --- | --- | --- |
-| `title` / `description` | `string` | — |
-| `closeLabel` | `string` | `'Close'` |
-| `closeOnInteractOutside` | `boolean` | `true` |
-| `closeOnEscape` | `boolean` | `true` |
+| `closeOnInteractOutside` | `true` | Outside click |
+| `closeOnEscape` | `true` | Escape key |
+| `closeLabel` | `'Close'` | Accessible close label |
 
-`v-model:open` — `boolean`
-
-## Escape hatches
-
-| Prop | Notes |
-| --- | --- |
-| `size` | `sm` \| `md` \| `lg` |
-
-Slots : `trigger`, `title`, `description`, `default`, `footer`, `close`
-
-Voir aussi [`useDialog`](/composables/use-dialog).
+Ensure services are mounted via [Root & services](/guide/providers). Do not rely on deprecated `DialogProvider` in new apps.

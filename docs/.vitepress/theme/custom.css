@@ -15,25 +15,36 @@
   --vp-c-brand-2: #34c759;
   --vp-c-brand-3: #2db84e;
   --vp-c-brand-soft: rgba(74, 222, 128, 0.16);
+  --vp-button-brand-bg: #34c759;
+  --vp-button-brand-hover-bg: #4ade80;
+  --vp-button-brand-active-bg: #2db84e;
 }
 
-/* ——— Hide default VitePress home hero/features (we replace via slots) ——— */
+/* Hide default VitePress home hero/features (marketing home replaces them) */
 .VPHome .VPHero,
 .VPHome .VPFeatures {
   display: none !important;
 }
 
 .VPHome {
-  padding-bottom: 1rem;
   margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+  background: var(--pomi-bg, var(--vp-c-bg));
+  color: var(--pomi-fg, var(--vp-c-text-1));
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
-/* Nav logo */
+.VPHome .vp-doc {
+  display: none !important;
+}
+
 .VPNavBarTitle .VPImage.logo {
   height: 28px;
   width: 28px;
-  border-radius: 50%;
-  object-fit: cover;
+  border-radius: 0;
+  object-fit: contain;
 }
 
 .VPNavBarTitle .title {
@@ -41,30 +52,10 @@
   letter-spacing: -0.02em;
 }
 
-/* Playground room on home */
-.VPHome .vp-doc {
-  max-width: 1120px !important;
-  margin: 0 auto;
-  padding: 0 24px 64px;
-}
-
-.VPHome .vp-doc > h1 {
-  display: none;
-}
-
-/* Soft page atmosphere on home */
-.VPHome {
-  background:
-    radial-gradient(ellipse 70% 45% at 50% -10%, rgb(52 199 89 / 10%), transparent 55%),
-    var(--vp-c-bg);
-}
-
-/* Feature-card-ish sidebar active */
 .VPSidebarItem.is-active > .item .link {
   color: var(--vp-c-brand-1);
 }
 
-/* Friendlier content headings */
 .vp-doc h1 {
   letter-spacing: -0.03em;
 }
@@ -72,4 +63,55 @@
 .vp-doc h2 {
   letter-spacing: -0.02em;
   border-top-color: var(--vp-c-divider);
+}
+
+.VPHome .marketing-home {
+  width: 100%;
+}
+
+.VPHome .VPFooter {
+  margin-top: 0;
+}
+
+/* Dedicated playground page: wide canvas, no cramped doc column */
+.playground-page .VPDoc {
+  padding-top: 1.5rem;
+}
+
+.playground-page .VPDoc .container {
+  max-width: 1180px !important;
+}
+
+.playground-page .VPDoc .content-container {
+  max-width: 1180px !important;
+}
+
+.playground-page .VPDoc .content {
+  max-width: 1180px !important;
+}
+
+.playground-page .VPDocFooter {
+  display: none;
+}
+
+.playground-page h1 {
+  display: none;
+}
+
+/* Show site footer even on doc pages with a sidebar */
+.VPFooter.has-sidebar {
+  display: block !important;
+}
+
+.VPFooter {
+  padding: 2rem 1.5rem 2.5rem;
+}
+
+.VPFooter .message,
+.VPFooter .copyright {
+  color: var(--vp-c-text-2);
+}
+
+.VPFooter .copyright {
+  margin-top: 0.35rem;
 }

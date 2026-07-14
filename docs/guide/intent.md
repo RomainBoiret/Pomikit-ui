@@ -1,54 +1,89 @@
 # Intent design
 
-Pomikit privilégie **l’inférence** plutôt qu’une API à 70 props.
+Pomikit prefers props that describe **what the UI means**, not how it should look. Components infer loading, confirmation, emptiness, and validation from that intent.
 
-Le design vient du [Design Kit](/guide/theming). Les props parlent uniquement du **métier**.
+## Button
 
-## Principes
-
-1. **Prefer inference over props** — si le comportement peut être déduit, ne le configure pas.
-2. **Si ça n’enlève pas de boilerplate app, ça ne devrait probablement pas ship.**
-3. **Beautiful defaults** — le kit porte le look ; le motion est intentionnel.
-4. **Filtre de décision** — toute nouvelle prop doit passer le test *« décision supplémentaire ? »* → [Philosophie](/guide/philosophy).
-5. **A11y & reduced motion** — focus visibles, labels, `aria-*`, `prefers-reduced-motion`.
-
-## Exemples
-
-### Button
+Async clicks drive busy (and optional success/error) feedback automatically:
 
 ```vue
-<Button @click="save">Save</Button>
-<Button confirm="Delete project?" @click="remove">Delete</Button>
-<Button href="/docs">Documentation</Button>
+<script setup lang="ts">
+import { Button } from 'pomikit-ui'
+
+async function save() {
+  await api.save()
+}
+</script>
+
+<template>
+  <Button :confirm="true" @click="save">Delete</Button>
+  <Button href="/docs">Open docs</Button>
+</template>
 ```
 
-Promise → busy → success / error. `confirm` = second clic. Aucun `loading` manuel.
+- Returning a thenable on `@click` → busy phase
+- `confirm` → second-click commit
+- `href` → navigational button (renders as a link)
 
-### Field + Input
+## Field + Input
+
+`required` and `rules` express validation intent. Field owns label / helper / error layout:
 
 ```vue
-<Field label="Email" required helper="Pro only">
-  <Input v-model="email" :rules="[rules.email()]" />
-</Field>
+<script setup lang="ts">
+import { Field, Input, rules } from 'pomikit-ui'
+import { ref } from 'vue'
+
+const email = ref('')
+</script>
+
+<template>
+  <Field label="Email" required helper="Work address preferred">
+    <Input v-model="email" type="email" :rules="[rules.required(), rules.email()]" />
+  </Field>
+</template>
 ```
 
-### Select · Collection · Toast · Dialog
+## Select
+
+`options` and `pending` cover data state without separate spinner props:
 
 ```vue
-<Select v-model="country" :options="countries" />
-<Collection :items="users" :pending="loading" :error="error" />
+<Select
+  v-model="role"
+  :options="roles"
+  :pending="loadingRoles"
+  placeholder="Pick a role"
+/>
 ```
+
+## Collection
+
+`pending`, empty items, and `error` select skeleton / empty / error surfaces:
+
+```vue
+<Collection
+  :items="rows"
+  :pending="loading"
+  :error="loadError"
+  @retry="reload"
+>
+  <template #item="{ item }">
+    {{ item.name }}
+  </template>
+</Collection>
+```
+
+## Toast
+
+Outcome helpers encode tone from intent:
 
 ```ts
-toast.success('Profile saved')
-await dialog.confirm({ title: 'Delete?', confirmLabel: 'Delete' })
+const toast = useToast()
+toast.success('Saved')
+toast.error('Could not save', 'Check your connection')
 ```
 
-## Ce que Pomikit refuse d’exposer en premier
+## What not to lead with
 
-```vue
-<!-- Pas le produit — escape hatch seulement -->
-<Button variant="outline" tone="neutral" size="sm">…</Button>
-```
-
-Le kit (`linear`, `glass`, …) remplace ces décisions au niveau app.
+Avoid teaching `variant`, `tone`, `size`, or radius as the primary API. Those remain escape hatches for rare exceptions; the Design Kit owns aesthetics.

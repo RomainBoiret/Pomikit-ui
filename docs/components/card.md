@@ -1,55 +1,61 @@
 # Card
 
-Surface de contenu — belle par défaut. Intent : lien ou sélection.
+Surface for related content. Use slots for structure; use `href` or `selectable` when the card is interactive.
 
-## Import
-
-```ts
-import { Card, Button } from 'pomikit-ui'
-```
-
-## Chemin recommandé
+## Basic
 
 ```vue
-<Card>
-  <template #title>Project</template>
-  <template #description>Short summary</template>
-  Body content
-  <template #footer>
-    <Button>Open</Button>
-  </template>
-</Card>
+<script setup lang="ts">
+import { Card } from 'pomikit-ui'
+</script>
 
-<Card href="/pricing">
-  <template #title>Pro plan</template>
-</Card>
-
-<Card selectable :selected="active" @update:selected="active = $event">
-  <template #title>Choose me</template>
-</Card>
+<template>
+  <Card>
+    <template #title>Billing</template>
+    <template #description>Manage plan and invoices.</template>
+    Body content goes in the default slot.
+  </Card>
+</template>
 ```
 
-Pas de `elevated` / `bordered` / `rounded` à configurer — le kit s’en charge.
+`titleAs` controls the title element (`h2` | `h3` | `h4` | `div`, default `h3`).
 
-## Props d’intention
+## Navigational
 
-| Prop | Rôle |
-| --- | --- |
-| `href` / `target` / `rel` | Card lien |
-| `selectable` / `selected` | Card sélectionnable |
-| `titleAs` | Niveau de titre (`h2`…`div`) |
+```vue
+<template>
+  <Card href="/projects/42">
+    <template #title>Aurora</template>
+    <template #description>Last edited today</template>
+  </Card>
+</template>
+```
 
-## Escape hatches
+## Selectable
 
-| Prop | Type | Défaut |
-| --- | --- | --- |
-| `variant` | `elevated` \| `outline` \| `ghost` | `elevated` |
-| `size` | `PomiSize` | `md` |
+For picker grids. Bind `selected` and listen for updates.
 
-## Emits
+```vue
+<script setup lang="ts">
+import { ref } from 'vue'
+import { Card } from 'pomikit-ui'
 
-- `update:selected` / `select` — `(value: boolean)`
+const selected = ref(false)
+</script>
 
-## Slots
+<template>
+  <Card
+    selectable
+    v-model:selected="selected"
+    @select="selected = $event"
+  >
+    <template #title>Starter</template>
+    <template #description>$12 / month</template>
+  </Card>
+</template>
+```
 
-`media`, `header`, `title`, `description`, `actions`, `default`, `footer`
+## Tips
+
+- Prefer kit surfaces over per-card styling.
+- `variant` and `size` are advanced escape hatches, not Getting Started material.

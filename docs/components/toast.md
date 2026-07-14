@@ -1,39 +1,56 @@
 # Toast
 
-Notifications — sémantique via le composable, pas via des variants.
+Transient feedback. Call `useToast()` after registering the Pomikit plugin or wrapping with `<PomikitRoot>`.
 
-## Import
+## Usage
 
 ```ts
-import { useToast, Button } from 'pomikit-ui'
-```
-
-## Chemin recommandé
-
-```vue
-<script setup lang="ts">
-import { useToast, Button } from 'pomikit-ui'
+import { useToast } from 'pomikit-ui'
 
 const toast = useToast()
-</script>
 
-<template>
-  <Button @click="toast.success('Profile saved')">Success</Button>
-  <Button @click="toast.error('Something went wrong')">Error</Button>
-  <Button @click="toast.warning('Heads up')">Warning</Button>
-  <Button @click="toast.info('Tip')">Info</Button>
-</template>
+toast.show('Copied')
+toast.success('Saved', 'Your changes are live.')
+toast.error('Upload failed', 'Try again in a moment.')
+toast.warning('Quota high')
+toast.info('New version available')
 ```
 
-Surface neutre. Accents uniquement sur l’icône. Stack FLIP, bas à droite, swipe mobile.
+## API
+
+```ts
+type ToastInput = {
+  title: string
+  description?: string
+  tone?: 'success' | 'danger' | 'warning' | 'info'
+  duration?: number // ms
+}
+
+type ToastApi = {
+  show: (input: ToastInput | string) => number
+  success: (title: string, description?: string) => number
+  error: (title: string, description?: string) => number
+  warning: (title: string, description?: string) => number
+  info: (title: string, description?: string) => number
+  dismiss: (id: number) => void
+  clear: () => void
+}
+```
+
+Helpers map outcome to tone so you do not pick colors manually.
 
 ## Setup
 
-Via plugin `Pomikit` ou `<PomikitRoot>` — voir [Providers](/guide/providers).
+```ts
+app.use(Pomikit, { toastDuration: 4200 })
+```
 
-| Prop provider | Défaut |
-| --- | --- |
-| `duration` | `4200` |
-| `swipeDirection` | `'right'` |
+Or:
 
-API : [`useToast`](/composables/use-toast).
+```vue
+<PomikitRoot toast-label="Notifications">
+  <App />
+</PomikitRoot>
+```
+
+`ToastProvider` is deprecated. Prefer plugin / PomikitRoot. Full details: [useToast](/composables/use-toast).

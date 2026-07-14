@@ -1,29 +1,46 @@
-# Exports publics
+# Exports
 
-## Thème
+Public surface from `pomikit-ui` (see `src/index.ts`). Radio is **not** exported.
 
-`Pomikit`, `createTheme`, `applyTheme`, `applyThemeOptions`, `resolveColorScheme`
+## Theme & root
 
-Types : `CreateThemeOptions`, `PomikitTheme`, `PomikitPluginOptions`, `ThemeDesign`, `ThemeRadius`, `ThemeDensity`, `ThemeMotion`, `ThemeElevation`, `ThemeMode`, `ThemePersonality` (deprecated)
+- `Pomikit` plugin
+- `PomikitRoot`
+- `createTheme`, `applyTheme`, `applyThemeOptions`, `resolveColorScheme`
+- `DESIGNS`
+- Types: `CreateThemeOptions`, `DesignKit`, `PomikitPluginOptions`, `PomikitTheme`, `ThemeDesign`, `ThemeDensity`, `ThemeElevation`, `ThemeMode`, `ThemeMotion`, `ThemeRadius`, `PomikitRootProps`
+- Deprecated alias type: `ThemePersonality` (prefer `ThemeDesign`)
 
-Valeurs : `createTheme`, `applyTheme`, `applyThemeOptions`, `resolveColorScheme`, `Pomikit`, `DESIGNS`
+## Components
 
-## Racine
+- `Button`, `Card`, `Checkbox`, `Collection`, `Dialog`, `Dropdown` (+ compound parts), `EmptyState`, `ErrorState`, `Field`, `Input`, `Select`, `Skeleton`, `Switch`
 
-`PomikitRoot`
+### Dropdown parts
 
-## Composants v1
+`Dropdown`, `DropdownTrigger`, `DropdownContent`, `DropdownItem`, `DropdownSeparator`, `DropdownSub`, `DropdownSubTrigger`, `DropdownSubContent`
 
-`Button`, `Card`, `Checkbox`, `Switch`, `Field`, `Input`, `Select`, `Dropdown`, `DropdownTrigger`, `DropdownContent`, `DropdownItem`, `DropdownSeparator`, `DropdownSub`, `DropdownSubTrigger`, `DropdownSubContent`, `Dialog`, `Collection`, `Skeleton`, `EmptyState`, `ErrorState`
+### Deprecated
 
-## Legacy (déprécié)
+- `DialogProvider`
+- `ToastProvider`
 
-`DialogProvider`, `ToastProvider`
+Prefer plugin / `PomikitRoot`.
 
 ## Composables
 
-`useDialog`, `useToast`, `useFieldContext`
+- `useDialog`, `useToast`, `useFieldContext`
+- Types: `DialogApi`, `DialogConfirmOptions`, `FieldContext`, `ToastApi`, `ToastInput`, `ToastRecord`, `ToastTone`
 
-## Utils
+## Validation & utils
 
-`cn`, `isThenable`, `invokeClickHandlers`, `rules`, `runRules`
+- `rules`, `runRules`, type `InputRule`
+- `cn`, `isThenable`, `invokeClickHandlers`
+- Types: `PomiSize`, `PomiTone`, `PomiVariant`
+
+## Styles
+
+```ts
+import 'pomikit-ui/styles.css'
+```
+
+Entry also side-effects `./styles/index.css` when importing the package in source builds.

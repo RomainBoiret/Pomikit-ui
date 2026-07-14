@@ -1,12 +1,8 @@
 # useDialog
 
-Confirmations en Promise — file FIFO.
+Imperative dialog API. Requires the Pomikit plugin (default overlays) or `<PomikitRoot>`.
 
-## Prérequis
-
-Plugin `Pomikit`, `<PomikitRoot>`, ou (legacy) `DialogProvider`.
-
-## Chemin recommandé
+## confirm
 
 ```ts
 import { useDialog } from 'pomikit-ui'
@@ -14,46 +10,33 @@ import { useDialog } from 'pomikit-ui'
 const dialog = useDialog()
 
 const ok = await dialog.confirm({
-  title: 'Delete workspace?',
-  description: 'This cannot be undone.',
-  confirmLabel: 'Delete',
-  onConfirm: async () => {
-    await api.deleteWorkspace()
-  },
+  title: 'Remove member?',
+  description: 'They will lose access immediately.',
+  confirmLabel: 'Remove',
+  cancelLabel: 'Keep',
+  tone: 'danger',
+  onConfirm: () => api.removeMember(id),
 })
 ```
 
-## Exemple
+Returns `Promise<boolean>` (`true` if confirmed).
 
-```vue
-<script setup lang="ts">
-import { useDialog, useToast, Button } from 'pomikit-ui'
+## Options
 
-const dialog = useDialog()
-const toast = useToast()
-
-async function askDelete() {
-  const ok = await dialog.confirm({
-    title: 'Delete workspace?',
-    description: 'This cannot be undone.',
-    confirmLabel: 'Delete',
-    onConfirm: async () => {
-      await api.deleteWorkspace()
-    },
-  })
-  if (ok) toast.success('Deleted')
+```ts
+type DialogConfirmOptions = {
+  title: string
+  description?: string
+  confirmLabel?: string
+  cancelLabel?: string
+  tone?: PomiTone
+  /** Confirm button stays busy while the Promise settles. */
+  onConfirm?: () => unknown
 }
-</script>
-
-<template>
-  <Button @click="askDelete">Delete</Button>
-</template>
 ```
 
-`tone` sur `confirm(...)` reste un escape hatch (ex. accent danger sur le bouton Confirm).
+## Notes
 
-## Intent
-
-- Requêtes en file (FIFO)
-- Si `onConfirm` est async, le bouton Confirm reste busy
-- Hors provider → erreur explicite
+- Prefer declarative `<Dialog>` for multi-field forms.
+- Prefer `confirm` for destructive or one-shot decisions.
+- Do not introduce new apps on deprecated `DialogProvider`.

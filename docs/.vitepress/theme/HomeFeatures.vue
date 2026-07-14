@@ -16,13 +16,13 @@ const features = [
     icon: '🎨',
     title: 'Design once',
     details:
-      'createTheme({ design }) une fois — toute l’app change. Jamais composant par composant.',
+      'createTheme({ design }) une fois: toute l’app change. Jamais composant par composant.',
   },
   {
     icon: '⚡',
     title: 'Smart by design',
     details:
-      'Promise → busy, toast.success, Field required — Pomikit infère l’intention.',
+      'Promise to busy, toast.success, Field required: Pomikit infère l’intention.',
   },
   {
     icon: '🧩',

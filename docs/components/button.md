@@ -1,88 +1,73 @@
 # Button
 
-Action Pomikit — déjà premium. Props = intention, pas décoration.
+Primary action control. Lead with intent: async clicks, confirmation, and navigation. The Design Kit owns look and feel.
 
-## Import
-
-```ts
-import { Button } from 'pomikit-ui'
-```
-
-## Chemin recommandé
-
-```vue
-<Button @click="save">Save</Button>
-<Button confirm="Delete project?" @click="remove">Delete</Button>
-<Button href="/docs">Documentation</Button>
-```
-
-Le Design Kit décide couleurs, radius, motion. Tu n’as pas à choisir `variant` / `tone` / `size`.
-
-## Intent
-
-### Async
+## Basic
 
 ```vue
 <script setup lang="ts">
-async function save() {
-  await fetch('/api/profile', { method: 'POST' })
+import { Button } from 'pomikit-ui'
+</script>
+
+<template>
+  <Button>Save</Button>
+</template>
+```
+
+## Async click
+
+If the click handler returns a thenable, Button enters a busy phase until it settles. With `feedback` (default `true`), a short success or error flash follows.
+
+```vue
+<script setup lang="ts">
+import { Button } from 'pomikit-ui'
+
+async function onSave() {
+  await api.save()
 }
 </script>
 
 <template>
-  <Button @click="save">Save</Button>
-  <Button busy-text="Saving…" success-text="Saved" @click="save">
-    Save with labels
+  <Button @click="onSave" busy-text="Saving…" success-text="Saved">Save</Button>
+</template>
+```
+
+## Confirm
+
+Require a second click before committing. `true` uses the default armed label; a string sets a custom one.
+
+```vue
+<template>
+  <Button :confirm="true" @click="remove">Delete</Button>
+  <Button confirm="Really delete?" @click="remove">Delete</Button>
+</template>
+```
+
+## Link intent
+
+Pass `href` (and optional `target` / `rel`) for navigational actions.
+
+```vue
+<template>
+  <Button href="/settings">Settings</Button>
+  <Button href="https://example.com" target="_blank" rel="noopener noreferrer">
+    External
   </Button>
 </template>
 ```
 
-Si `@click` retourne une Promise → busy → success / error (`feedback` défaut `true`).
+## Common props
 
-### Confirm
-
-```vue
-<Button confirm @click="remove">Delete</Button>
-<Button confirm="Really?" @click="remove">Delete</Button>
-```
-
-Premier clic arme. Second clic exécute. Escape / blur désarme.
-
-### Lien
-
-```vue
-<Button href="/docs" target="_blank">Documentation</Button>
-```
-
-## Props d’intention
-
-| Prop | Rôle |
+| Prop | Intent |
 | --- | --- |
-| `confirm` | Second clic requis |
-| `href` / `target` / `rel` | Rend un lien |
-| `busyText` / `successText` / `errorText` | Labels pendant les phases |
-| `feedback` | Flash success/error après Promise (`true` par défaut) |
-| `type` | `button` \| `submit` \| `reset` |
-| `disabled` / `loading` | États contrôlés |
-| `block` | Pleine largeur |
+| `confirm` | Second-click commit |
+| `href` | Render as link |
+| `loading` | Controlled busy (merges with async intent) |
+| `disabled` | Non-interactive |
+| `busyText` / `successText` / `errorText` | Progressive label disclosure |
+| `feedback` | Toggle post-settle flash (default `true`) |
+| `block` | Full-width layout |
 
-## Escape hatches (avancé)
+## Advanced escape hatches
 
-Réservé aux cas rares — **pas** le chemin Getting Started :
-
-| Prop | Type | Défaut |
-| --- | --- | --- |
-| `variant` | `solid` \| `outline` \| `ghost` \| `soft` | `solid` |
-| `tone` | `primary` \| `neutral` \| `danger` \| `success` | `primary` |
-| `size` | `sm` \| `md` \| `lg` \| `icon` | `md` |
-
-Préférer changer le [Design Kit](/guide/theming) plutôt que styliser bouton par bouton.
-
-## Slots
-
-`default`, `leading`, `trailing`
-
-## Notes
-
-- Largeur verrouillée pendant busy / feedback (pas de layout shift)
-- `size="icon"` : fournir un `aria-label` si le contenu n’a pas de texte
+`variant`, `tone`, and `size` exist for rare exceptions. Prefer the Design Kit for brand and density. Do not treat these as the primary Button API.

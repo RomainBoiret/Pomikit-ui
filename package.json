@@ -3,7 +3,10 @@
   "version": "0.2.0",
   "description": "Less decisions. Better interfaces. Premium Vue 3 components that infer intent — design decided once via Design Kits.",
   "type": "module",
-  "author": "",
+  "author": {
+    "name": "Romain Boiret",
+    "url": "https://github.com/RomainBoiret"
+  },
   "license": "MIT",
   "keywords": [
     "vue",

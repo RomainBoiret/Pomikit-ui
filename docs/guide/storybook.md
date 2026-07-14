@@ -1,27 +1,15 @@
-# Outils de développement
+# Development tools
 
-La **documentation officielle** (ce site) est la vitrine Pomikit — playground sur la home.
+## Docs site (official)
 
-## Playground docs
+This VitePress site is the **official** documentation: Getting Started, Design Kits, intent APIs, and component references. Prefer these pages and the [Playground](/playground) when learning or sharing Pomikit.
 
-Sur la [page d’accueil](/) : Design Kit + accent + axes → composants live.
+## Storybook (internal)
 
-```bash
-pnpm docs:dev
-```
+Storybook is an **internal isolation** workspace for contributors:
 
-Le playground illustre surtout le **changement de kit**, pas le réglage `variant`/`tone` par composant.
+- Visual regression and component states
+- Escape-hatch stories (`variant`, `tone`, `size`) kept out of primary docs
+- Accessibility and interaction checks in isolation
 
-## Storybook (interne)
-
-Outil de dev pour isoler des états. Les stories mettent l’**intent** en avant ; les props de style sont dans des stories « Advanced — escape hatches ».
-
-```bash
-pnpm storybook
-```
-
-## Playground app locale
-
-```bash
-pnpm dev
-```
+It is not the product surface. Do not treat Storybook stories as the canonical API guide; they often explore advanced edges that Getting Started deliberately hides.

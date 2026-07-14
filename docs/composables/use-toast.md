@@ -1,33 +1,42 @@
 # useToast
 
+Toast API for transient outcomes. Requires the Pomikit plugin or `<PomikitRoot>`.
+
+## Helpers
+
 ```ts
 import { useToast } from 'pomikit-ui'
 
 const toast = useToast()
 
-toast.success('Profile saved')
-toast.error('Something went wrong')
-toast.warning('Heads up')
-toast.info('Tip')
+toast.success('Profile updated')
+toast.error('Payment failed', 'Card was declined.')
+toast.warning('Almost out of seats')
+toast.info('Sync complete')
 
-toast.show('Hello')
-toast.show({ title: 'Hello', description: '…', duration: 3000 })
-
+const id = toast.show({
+  title: 'Uploading…',
+  description: 'Large file',
+  tone: 'info',
+  duration: 8000,
+})
 toast.dismiss(id)
 toast.clear()
 ```
 
-Pas de `variant` : la sémantique est dans la méthode (`success` / `error` / …).
+## Types
 
-Nécessite le plugin `Pomikit` ou `<PomikitRoot>` (voir [Providers](/guide/providers)).
+```ts
+type ToastTone = 'success' | 'danger' | 'warning' | 'info'
 
-```vue
-<script setup lang="ts">
-import { useToast, Button } from 'pomikit-ui'
-const toast = useToast()
-</script>
-
-<template>
-  <Button @click="toast.success('Saved')">Notify</Button>
-</template>
+type ToastInput = {
+  title: string
+  description?: string
+  tone?: ToastTone
+  duration?: number
+}
 ```
+
+Outcome helpers set tone for you so the call site stays intent-first.
+
+See [Toast](/components/toast) and [Root & services](/guide/providers).

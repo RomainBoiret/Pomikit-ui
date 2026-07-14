@@ -1,39 +1,26 @@
 # Skeleton
 
-Placeholders de chargement — shimmer doux, lignes naturelles.
+Placeholder surface while content loads. Collection uses these automatically on first pending load; use Skeleton directly for custom layouts.
 
-## Import
-
-```ts
-import { Skeleton } from 'pomikit-ui'
-```
-
-## Exemples
+## Variants
 
 ```vue
-<Skeleton :lines="3" />
+<script setup lang="ts">
+import { Skeleton } from 'pomikit-ui'
+</script>
 
-<div style="display:flex;gap:0.85rem;align-items:center">
-  <Skeleton variant="circle" width="3rem" height="3rem" />
-  <Skeleton :lines="2" />
-</div>
-
-<Skeleton variant="rect" height="8rem" />
-<Skeleton :lines="3" :animated="false" />
+<template>
+  <Skeleton variant="text" :lines="3" />
+  <Skeleton variant="rect" width="100%" height="120px" />
+  <Skeleton variant="circle" width="40px" height="40px" />
+</template>
 ```
 
-## Props
+| Prop | Notes |
+| --- | --- |
+| `variant` | `text` \| `rect` \| `circle` |
+| `lines` | Text line count (default `1`) |
+| `width` / `height` | CSS lengths |
+| `animated` | Soft shimmer (default `true`) |
 
-| Prop | Type | Défaut |
-| --- | --- | --- |
-| `variant` | `'text' \| 'rect' \| 'circle'` | `'text'` |
-| `lines` | `number` | `1` |
-| `width` | `string` | — |
-| `height` | `string` | — |
-| `animated` | `boolean` | `true` |
-
-## Intent
-
-- Multi-lignes : largeurs dégressives + délai de shimmer décalé
-- `aria-hidden="true"`
-- Respecte `prefers-reduced-motion`
+Motion follows the Design Kit motion tokens.

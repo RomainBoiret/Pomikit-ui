@@ -1,69 +1,41 @@
-# Philosophie
+# Philosophy
 
 **Less decisions. Better interfaces.**
 
-Ou : **Beautiful by default. Smart by design.**
+Pomikit asks developers for the fewest decisions while shipping premium UI by default. Design is decided once; components consume tokens and infer behavior from business intent.
 
-Pomikit n’existe pas pour exposer plus de composants ou plus de props.  
-Elle existe pour être la bibliothèque Vue qui **demande le moins de décisions** au développeur — tout en produisant des interfaces premium.
+## Decision filter
 
-## La promesse
+Before adding a prop or feature, ask:
 
-```vue
-<Button>Save</Button>
-<Input v-model="email" />
-<Card>…</Card>
-```
+> Does this require an extra decision from the developer?
 
-Importer suffit. Déjà cohérent. Déjà digne d’une app moderne.
+If **yes**, try in order:
 
-Le développeur ne choisit **presque jamais** `variant`, `tone`, `size`, `radius`, etc.
+1. Design Kit / tokens (theme the app once)
+2. Intent inference (async click, `pending`, `options`, `error`)
+3. Conventional behavior (sensible defaults)
 
-## Le design se décide une fois
+Only then expose a prop, and only when it expresses **business intent**.
+
+## Intent vs aesthetics
+
+| Prefer (intent) | Avoid as product API (aesthetics) |
+| --- | --- |
+| `confirm`, `href`, `required` | `variant`, `tone`, `size` |
+| `pending`, `error`, `options` | `radius`, `density` on components |
+| async click handlers | per-instance color / shadow knobs |
+
+Style props may exist as advanced escape hatches. They are not the product: keep them out of Getting Started, playground demos, and primary examples.
+
+## Design once
 
 ```ts
-createTheme({
-  design: 'linear',
-  accent: '#5B5FFF',
-})
+createTheme({ design: 'linear', accent: '#5B5FFF' })
 ```
 
-Couleurs, radius, ombres, spacing, typo, motion, surfaces, hover/focus : le [Design Kit](/guide/theming) décide pour **toute** l’app.
+Design Kits own colors, radius, shadows, spacing, typography, motion, and surfaces. Components do not branch on `design === …`; they read CSS tokens.
 
-## Props = intention métier uniquement
+## Docs stance
 
-| Intention (oui) | Esthétique (non) |
-| --- | --- |
-| `confirm`, `href`, `@click` | `variant`, `tone`, `size` |
-| `required`, `placeholder`, `rules` | styliser chaque champ |
-| `pending`, `error`, `options` | variantes Select / Card |
-| `toast.success(...)` | Toast “success variant” |
-
-Les props de style peuvent encore exister comme **escape hatches internes / avancées**.  
-Elles ne sont pas le produit. Elles ne doivent pas apparaître dans Getting Started, playground, ni exemples principaux.
-
-## Filtre de décision (obligatoire)
-
-Avant d’ajouter une fonctionnalité ou une prop, poser :
-
-> **Est-ce que cela demande une décision supplémentaire au développeur ?**
-
-| Si oui → | D’abord chercher… |
-| --- | --- |
-| Un défaut via Design Kit / tokens | |
-| Une inférence d’intent (`Promise` → busy, `toast.success`) | |
-| Un comportement conventionnel (Field + required) | |
-
-N’expose une prop que si **aucune** de ces voies ne suffit.
-
-## Ce que Pomikit refuse d’être
-
-- Une usine à 70 composants moyens
-- Une API où chaque Button exige `variant` + `tone` + `size`
-- Un système où le développeur “fait le design” composant par composant
-
-## Ce que Pomikit veut être
-
-La bibliothèque Vue qui **réduit la charge mentale** et livre une UI premium par défaut.
-
-→ [Installation](/guide/getting-started) · [Intent](/guide/intent) · [Design Kits](/guide/theming)
+Lead with the minimal API. Storybook escape-hatch stories are internal isolation tools. This docs site is the official surface.

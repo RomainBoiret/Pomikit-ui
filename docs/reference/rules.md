@@ -1,61 +1,46 @@
 # Rules (validation)
 
-Helpers pour la prop `rules` de [`Input`](/components/input).
+Helpers for [Input](/components/input) `rules`. Each factory returns an `InputRule`.
 
-## Type
-
-```ts
-type InputRule = (value: string) => true | string | null | undefined | void
-// true / null / undefined / void = OK
-// string = message d'erreur
-```
-
-## Helpers
+## API
 
 ```ts
 import { rules, runRules } from 'pomikit-ui'
+import type { InputRule } from 'pomikit-ui'
 
-rules.required(message?)
-rules.email(message?)
-rules.min(length, message?)
-rules.max(length, message?)
+type InputRule = (value: string) => true | string | null | undefined | void
 ```
 
-| Helper | Message défaut |
+| Helper | Behavior |
 | --- | --- |
-| `required` | `This field is required` |
-| `email` | `Enter a valid email` |
-| `min(n)` | `Must be at least n characters` |
-| `max(n)` | `Must be at most n characters` |
+| `rules.required(message?)` | Non-empty after trim |
+| `rules.email(message?)` | Empty or valid email |
+| `rules.min(length, message?)` | Minimum length |
+| `rules.max(length, message?)` | Maximum length |
+| `runRules(value, list)` | First failing message, or `undefined` |
 
-`email` laisse passer les valeurs vides — combine avec `required` pour un email obligatoire.
-
-## Exemple
+## Example
 
 ```vue
 <script setup lang="ts">
 import { ref } from 'vue'
 import { Field, Input, rules } from 'pomikit-ui'
 
-const email = ref('')
+const password = ref('')
 </script>
 
 <template>
-  <Field label="Email" required>
+  <Field label="Password" required>
     <Input
-      v-model="email"
-      type="email"
-      :rules="[rules.email()]"
+      v-model="password"
+      type="password"
+      :rules="[
+        rules.required(),
+        rules.min(8, 'Use at least 8 characters'),
+      ]"
     />
   </Field>
 </template>
 ```
 
-## `runRules`
-
-```ts
-const message = runRules(value, [rules.required(), rules.min(8)])
-// string | undefined
-```
-
-Exécute les règles dans l’ordre ; retourne le premier message d’erreur.
+Custom rules are plain functions returning `true` (or nullish) on success, or a string message on failure.

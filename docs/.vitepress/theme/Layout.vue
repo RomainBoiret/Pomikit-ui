@@ -1,20 +1,33 @@
 <script setup lang="ts">
 import DefaultTheme from 'vitepress/theme'
 import { useData } from 'vitepress'
-import { computed } from 'vue'
-import HomeHero from './HomeHero.vue'
-import HomeFeatures from './HomeFeatures.vue'
+import { computed, onMounted, watch } from 'vue'
+import MarketingHome from './MarketingHome.vue'
+import { useSiteTheme } from './site/composables/useSiteTheme'
 
 const { Layout } = DefaultTheme
-const { frontmatter } = useData()
+const { frontmatter, isDark } = useData()
 const isHome = computed(() => frontmatter.value.layout === 'home')
+const { setMode, reapply } = useSiteTheme()
+
+watch(
+  isDark,
+  (dark) => {
+    setMode(dark ? 'dark' : 'light')
+  },
+  { immediate: true },
+)
+
+onMounted(() => {
+  setMode(isDark.value ? 'dark' : 'light')
+  reapply()
+})
 </script>
 
 <template>
   <Layout>
     <template v-if="isHome" #home-hero-before>
-      <HomeHero />
-      <HomeFeatures />
+      <MarketingHome />
     </template>
   </Layout>
 </template>

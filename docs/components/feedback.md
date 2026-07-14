@@ -1,50 +1,52 @@
 # EmptyState · ErrorState
 
-Primitives de feedback utilisées par Collection (et utilisables seules).
-
-## Import
-
-```ts
-import { EmptyState, ErrorState, Button } from 'pomikit-ui'
-```
+Feedback surfaces for “nothing here” and “something failed”. [Collection](/components/collection) uses them from pending / empty / error intent; use standalone when you compose your own layout.
 
 ## EmptyState
 
 ```vue
-<EmptyState title="No people" description="Invite your first teammate.">
-  <template #action>
-    <Button size="sm">Invite</Button>
-  </template>
-</EmptyState>
+<script setup lang="ts">
+import { EmptyState, Button } from 'pomikit-ui'
+</script>
+
+<template>
+  <EmptyState
+    title="No messages"
+    description="When someone writes to you, it will show up here."
+  >
+    <Button href="/compose">Compose</Button>
+  </EmptyState>
+</template>
 ```
 
-| Prop | Type | Défaut |
-| --- | --- | --- |
-| `title` | `string` | **requis** |
-| `description` | `string` | — |
-
-Slots : `icon`, `description`, `action` — `role="status"`
+`title` is required. Default slot is for actions or extra content.
 
 ## ErrorState
 
 ```vue
-<ErrorState
-  title="Couldn't load"
-  :error="err"
-  @retry="reload"
-/>
+<script setup lang="ts">
+import { ErrorState } from 'pomikit-ui'
+
+function reload() {
+  /* refetch */
+}
+</script>
+
+<template>
+  <ErrorState
+    title="Could not load inbox"
+    :error="loadError"
+    retry-label="Try again"
+    @retry="reload"
+  />
+</template>
 ```
 
-| Prop | Type | Défaut |
-| --- | --- | --- |
-| `title` | `string` | `'Something went wrong'` |
-| `description` | `string` | — |
-| `error` | `unknown` | — |
-| `retryLabel` | `string` | `'Retry'` |
+| Prop | Notes |
+| --- | --- |
+| `title` | Default: `'Something went wrong'` |
+| `description` | Optional explicit copy |
+| `error` | `string` \| `Error` \| `unknown` when `description` is omitted |
+| `retryLabel` | Retry button label |
 
-Emit : `retry`
-
-Slots : `icon`, `description`, `action` — `role="alert"`
-
-Description auto depuis `error` (`string` / `Error.message` / fallback).
-Bouton Retry si listener `@retry` ou slot `action`.
+Emit `retry` when the user asks to try again. Prefer Collection for list-shaped data so you do not re-implement the intent matrix.

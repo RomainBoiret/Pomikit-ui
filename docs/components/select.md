@@ -1,60 +1,50 @@
 # Select
 
-Liste d’options — API courte.
+Single-value select from an `options` list. Use `pending` while options load.
 
-## Import
-
-```ts
-import { Select, Field } from 'pomikit-ui'
-```
-
-## Chemin recommandé
+## Basic
 
 ```vue
 <script setup lang="ts">
 import { ref } from 'vue'
 import { Field, Select } from 'pomikit-ui'
 
-const country = ref('fr')
-const countries = [
-  { label: 'France', value: 'fr' },
-  { label: 'Canada', value: 'ca' },
+const role = ref('editor')
+
+const options = [
+  { label: 'Viewer', value: 'viewer' },
+  { label: 'Editor', value: 'editor' },
+  { label: 'Admin', value: 'admin', disabled: true },
 ]
 </script>
 
 <template>
-  <Select v-model="country" :options="countries" />
-
-  <Field label="Country">
-    <Select v-model="country" :options="countries" placeholder="Choose…" />
+  <Field label="Role" required>
+    <Select v-model="role" :options="options" placeholder="Pick a role" />
   </Field>
-
-  <Select pending placeholder="Loading…" />
 </template>
 ```
 
-Pas de variantes visuelles — le Design Kit porte le look.
+## Pending
 
-## Props d’intention
+```vue
+<Select
+  v-model="country"
+  :options="countries"
+  :pending="loading"
+  placeholder="Country"
+  empty-text="No countries"
+/>
+```
 
-| Prop | Type | Défaut |
-| --- | --- | --- |
-| `options` | `SelectOption[]` | `[]` |
-| `pending` | `boolean` | `false` |
-| `placeholder` | `string` | `'Select…'` |
-| `disabled` / `required` | `boolean` | `false` |
-| `emptyText` | `string` | `'No options'` |
+## Option shape
 
-## Escape hatches
+```ts
+type SelectOption = {
+  label: string
+  value: string
+  disabled?: boolean
+}
+```
 
-| Prop | Notes |
-| --- | --- |
-| `size` | Densité rare — préférer le kit |
-
-## Model
-
-`v-model: string`
-
-## Slots
-
-`default` — items custom (remplace `options`)
+`size` is an advanced escape hatch. Prefer wrapping with Field for labels and errors.

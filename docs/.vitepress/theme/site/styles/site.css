@@ -1,0 +1,219 @@
+/* Official site chrome: layout only. Interactive UI comes from Pomikit. */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Marketing surfaces only: leave VitePress doc chrome to --vp-* tokens */
+.marketing-home,
+.site {
+  background: var(--pomi-bg);
+  color: var(--pomi-fg);
+  font-family: var(--pomi-font);
+  font-feature-settings: 'ss01' on, 'cv11' on;
+  letter-spacing: var(--pomi-tracking, -0.011em);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition:
+    background-color var(--pomi-duration-mid, 160ms) var(--pomi-ease, ease),
+    color var(--pomi-duration-mid, 160ms) var(--pomi-ease, ease);
+}
+
+#app {
+  min-height: 100vh;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--pomi-accent) 28%, transparent);
+}
+
+.site {
+  isolation: isolate;
+}
+
+.site-shell {
+  width: min(1120px, calc(100% - 2.5rem));
+  margin-inline: auto;
+}
+
+.site-shell--narrow {
+  width: min(720px, calc(100% - 2.5rem));
+}
+
+.site-section {
+  padding-block: clamp(4.5rem, 10vw, 7.5rem);
+}
+
+.site-section--tight {
+  padding-block: clamp(3.5rem, 8vw, 5.5rem);
+}
+
+.site-kicker {
+  margin: 0 0 0.75rem;
+  color: var(--pomi-accent);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.site-title {
+  margin: 0;
+  max-width: 18ch;
+  font-family: var(--pomi-font-display, var(--pomi-font));
+  font-size: clamp(2rem, 4.2vw, 3rem);
+  font-weight: 650;
+  letter-spacing: var(--pomi-title-tracking, -0.022em);
+  line-height: 1.12;
+  text-wrap: balance;
+}
+
+.site-lead {
+  margin: 1rem 0 0;
+  max-width: 42rem;
+  color: var(--pomi-muted);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  text-wrap: pretty;
+}
+
+.site-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.site-grid--2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.site-grid--3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.site-grid--5 {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+@media (max-width: 960px) {
+  .site-grid--3,
+  .site-grid--5 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .site-shell,
+  .site-shell--narrow {
+    width: min(100% - 1.5rem, 1120px);
+  }
+
+  .site-grid--2,
+  .site-grid--3,
+  .site-grid--5 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.site-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.site-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.site-muted {
+  color: var(--pomi-muted);
+}
+
+.site-panel {
+  border: 1px solid var(--pomi-border);
+  border-radius: var(--pomi-radius-lg, 12px);
+  background: var(--pomi-surface-elevated, var(--pomi-surface));
+  box-shadow: var(--pomi-shadow);
+  transition:
+    border-color var(--pomi-duration-mid, 160ms) var(--pomi-ease, ease),
+    background-color var(--pomi-duration-mid, 160ms) var(--pomi-ease, ease),
+    box-shadow var(--pomi-duration-mid, 160ms) var(--pomi-ease, ease),
+    transform var(--pomi-duration-mid, 160ms) var(--pomi-ease-out, ease);
+}
+
+.site-panel--interactive:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--pomi-shadow-lg, var(--pomi-shadow));
+}
+
+.site-panel--active {
+  border-color: color-mix(in srgb, var(--pomi-accent) 55%, var(--pomi-border));
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--pomi-accent) 35%, transparent),
+    var(--pomi-shadow);
+}
+
+.site-code {
+  margin: 0;
+  overflow-x: auto;
+  border: 1px solid var(--pomi-border);
+  border-radius: var(--pomi-radius-md, 10px);
+  background: color-mix(in srgb, var(--pomi-fg) 4%, var(--pomi-surface));
+  color: var(--pomi-fg);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.8125rem;
+  line-height: 1.7;
+  padding: 1rem 1.1rem;
+  white-space: pre;
+}
+
+.site-divider {
+  height: 1px;
+  border: 0;
+  background: var(--pomi-border);
+  margin: 0;
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(14px) scale(0.985);
+  transition:
+    opacity 520ms var(--pomi-ease-out, cubic-bezier(0.16, 1, 0.3, 1)),
+    transform 520ms var(--pomi-ease-out, cubic-bezier(0.16, 1, 0.3, 1));
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal.is-visible,
+  .site-panel--interactive:hover {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

@@ -1,61 +1,51 @@
 # Input
 
-Champ prêt à l’emploi. L’apparence vient du Design Kit.
+Text entry with optional validation rules. Prefer pairing with [Field](/components/field) for label, helper, and error layout.
 
-## Import
-
-```ts
-import { Input, Field, rules } from 'pomikit-ui'
-```
-
-## Chemin recommandé
+## With Field
 
 ```vue
-<Input />
+<script setup lang="ts">
+import { ref } from 'vue'
+import { Field, Input, rules } from 'pomikit-ui'
 
-<Input v-model="email" type="email" placeholder="Email" required />
+const email = ref('')
+</script>
 
-<Field label="Email" helper="We'll never share your email." required>
-  <Input v-model="email" type="email" placeholder="john@company.com" />
-</Field>
+<template>
+  <Field label="Email" required>
+    <Input
+      v-model="email"
+      type="email"
+      autocomplete="email"
+      :rules="[rules.required(), rules.email()]"
+    />
+  </Field>
+</template>
 ```
 
-Préférer `Field` pour label / helper / error.
+Rules run on blur (and related commit paths). See [Rules](/reference/rules).
 
-## Intent
+## Standalone
 
-| Option | Comportement |
-| --- | --- |
-| `type="search"` | Icône loupe + clear |
-| `type="password"` | Toggle afficher / masquer |
-| `clearable` | Bouton clear |
-| `rules` | Validation blur + submit |
-| `required` | Marqué + a11y |
+`label` / `hint` / `error` still work without Field, but Field is the recommended composition.
 
-## Props d’intention
+```vue
+<Input v-model="q" type="search" placeholder="Search…" clearable :commit-delay="200" />
+```
 
-| Prop | Type | Défaut |
-| --- | --- | --- |
-| `modelValue` | `string` | `''` |
-| `placeholder` | `string` | — |
-| `type` | `InputType` | `'text'` |
-| `required` / `disabled` / `readonly` | `boolean` | `false` |
-| `clearable` | `boolean` | `false` |
-| `rules` | `InputRule[]` | `[]` |
-| `commitDelay` | `number` | search: `300`, sinon `0` |
-| `label` / `hint` / `error` | `string` | standalone (préférer Field) |
+## Types
 
-## Escape hatches
+`type`: `text` | `email` | `password` | `search` | `tel` | `url` | `number`
+
+## Intent props
 
 | Prop | Notes |
 | --- | --- |
-| `size` | `sm` \| `md` \| `lg` — rare ; le kit porte déjà la densité |
+| `rules` | `InputRule[]` validation |
+| `required` | Required intent |
+| `clearable` | Clear affordance |
+| `commitDelay` | Debounce ms for `update:committed` (search-friendly) |
+| `disabled` / `readonly` | Interaction state |
 
-## Slots
-
-`label`, `leading`, `trailing`
-
-## Expose
-
-- `validate()`
-- `focusField()`
+`size` is an advanced escape hatch; prefer Design Kit density.

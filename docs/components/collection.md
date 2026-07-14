@@ -1,51 +1,51 @@
 # Collection
 
-Listes avec intent loading / empty / error.
+List or grid that switches surfaces from **intent**: pending load, empty data, or error. You supply items and state; Collection picks skeleton / empty / error UI.
 
-## Import
-
-```ts
-import { Collection } from 'pomikit-ui'
-```
-
-## Chemin recommandé
+## Basic
 
 ```vue
-<Collection
-  :items="users"
-  :pending="loading"
-  :error="error"
-  @retry="reload"
->
-  <template #item="{ item }">
-    <div>{{ item.name }}</div>
-  </template>
-</Collection>
+<script setup lang="ts">
+import { Collection } from 'pomikit-ui'
+
+type Row = { id: string; name: string }
+
+defineProps<{
+  items: Row[]
+  pending: boolean
+  error: unknown
+}>()
+</script>
+
+<template>
+  <Collection
+    :items="items"
+    :pending="pending"
+    :error="error"
+    layout="stack"
+    empty-title="No projects yet"
+    empty-description="Create your first project to get started."
+    @retry="$emit('retry')"
+  >
+    <template #item="{ item }">
+      {{ item.name }}
+    </template>
+  </Collection>
+</template>
 ```
 
-## Props d’intention
+## Intent matrix
 
-| Prop | Type | Défaut |
-| --- | --- | --- |
-| `items` | `T[] \| null` | `[]` |
-| `pending` | `boolean` | `false` |
-| `error` | `unknown` | — |
-| `emptyTitle` / `emptyDescription` | `string` | — |
-| `errorTitle` | `string` | — |
-| `skeletonCount` | `number` | auto |
-
-## Escape hatches
-
-| Prop | Notes |
+| State | Behavior |
 | --- | --- |
-| `layout` | `stack` \| `grid` |
-| `columns` | colonnes grid |
+| `pending` + no items | Skeleton placeholders (`skeletonCount`) |
+| `pending` + existing items | Keep list; refresh intent |
+| empty `items` | EmptyState (`emptyTitle` / `emptyDescription`) |
+| `error` set | ErrorState + `retry` emit |
 
-## Intent
+## Layout
 
-| État | Affichage |
-| --- | --- |
-| `pending` + pas d’items | Skeleton |
-| `pending` + items | Liste + refresh |
-| `error` + vide | ErrorState |
-| vide | EmptyState |
+- `layout`: `'stack'` \| `'grid'`
+- `columns`: grid column count (default `3`)
+
+Prefer these data intents over wiring Skeleton / EmptyState / ErrorState by hand, unless you need a custom composition outside lists.
