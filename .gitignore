@@ -1,3 +1,17 @@
+# Ignore all local/dot tooling by default
+.*
+!.github/
+!.github/**
+!.vscode/
+!.vscode/**
+!.gitignore
+
+# Keep shared project config that starts with a dot
+!.prettierignore
+!.prettierrc.json
+!.storybook/
+!.storybook/**
+
 # Dependencies
 node_modules
 
@@ -8,11 +22,6 @@ docs/.vitepress/cache
 storybook-static
 coverage
 *.tsbuildinfo
-.vite
-.turbo
-.cache
-.eslintcache
-.stylelintcache
 *.local
 
 # Logs
@@ -22,14 +31,12 @@ pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Env
+# Env (also covered by .*, kept explicit)
 .env
 .env.*
 !.env.example
 
-# Editors / OS
-.vscode/*
-!.vscode/extensions.json
+# Editors / OS leftovers
 .idea
 .DS_Store
 Thumbs.db

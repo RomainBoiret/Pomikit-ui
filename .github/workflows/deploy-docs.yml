@@ -5,6 +5,9 @@ on:
     branches: [main]
   workflow_dispatch:
 
+# Required for GitHub Pages (Actions source).
+# Enable once in the UI: Settings → Pages → Source = GitHub Actions
+# https://github.com/RomainBoiret/Pomikit-ui/settings/pages
 permissions:
   contents: read
   pages: write
@@ -37,6 +40,9 @@ jobs:
 
       - name: Install
         run: pnpm install --frozen-lockfile
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
 
       - name: Build docs
         run: pnpm docs:build
