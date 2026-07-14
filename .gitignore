@@ -1,17 +1,42 @@
-# Editor
-.vscode/*
-!.vscode/extensions.json
-.idea
-
-# Dependencies / build
+# Dependencies
 node_modules
+
+# Builds / caches
 dist
 docs/.vitepress/dist
 docs/.vitepress/cache
 storybook-static
 coverage
-*.local
-.DS_Store
-*.log
+*.tsbuildinfo
 .vite
 .turbo
+.cache
+.eslintcache
+.stylelintcache
+*.local
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Env
+.env
+.env.*
+!.env.example
+
+# Editors / OS
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+Thumbs.db
+Desktop.ini
+*~
+
+# Test / tooling artifacts
+playwright-report
+test-results
+blob-report

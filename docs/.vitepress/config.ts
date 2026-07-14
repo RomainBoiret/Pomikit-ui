@@ -397,6 +397,7 @@ export default defineConfig({
   title: 'Pomikit',
   titleTemplate: ':title | Pomikit',
   description: enUi.description,
+  base: '/Pomikit-ui/',
   cleanUrls: true,
   appearance: true,
   vite: {
@@ -408,8 +409,8 @@ export default defineConfig({
   },
   head: [
     ['meta', { name: 'theme-color', content: '#34C759' }],
-    ['link', { rel: 'icon', href: '/favicon.png', type: 'image/png' }],
-    ['link', { rel: 'apple-touch-icon', href: '/favicon.png' }],
+    ['link', { rel: 'icon', href: '/Pomikit-ui/favicon.png', type: 'image/png' }],
+    ['link', { rel: 'apple-touch-icon', href: '/Pomikit-ui/favicon.png' }],
     [
       'link',
       {
