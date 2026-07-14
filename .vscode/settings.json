@@ -1,0 +1,7 @@
+{
+  "explorer.excludeGitIgnore": true,
+  "files.exclude": {
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true
+  }
+}

@@ -1,49 +1,54 @@
-# Ignore all local/dot tooling by default
-.*
-!.github/
-!.github/**
-!.vscode/
-!.vscode/**
-!.gitignore
+# --- Local tooling / OS (not part of the repo) ---
+.cursor
+.cursor/
+.idea
+.idea/
+.DS_Store
+**/.DS_Store
+Thumbs.db
+Desktop.ini
+*~
+.env
+.env.*
+!.env.example
+.npm/
+.pnpm-store/
+.eslintcache
+.stylelintcache
 
-# Keep shared project config that starts with a dot
-!.prettierignore
-!.prettierrc.json
-!.storybook/
-!.storybook/**
+# --- Dependencies ---
+node_modules/
 
-# Dependencies
-node_modules
+# --- Builds ---
+dist/
+docs/.vitepress/dist/
+storybook-static/
 
-# Builds / caches
-dist
-docs/.vitepress/dist
-docs/.vitepress/cache
-storybook-static
-coverage
+# --- Caches ---
+docs/.vitepress/cache/
+.vite/
+.turbo/
+.cache/
+**/.vite/
+**/.turbo/
+**/.cache/
 *.tsbuildinfo
 *.local
 
-# Logs
+# --- Logs ---
 *.log
 npm-debug.log*
 pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Env (also covered by .*, kept explicit)
-.env
-.env.*
-!.env.example
+# --- Test artifacts ---
+coverage/
+playwright-report/
+test-results/
+blob-report/
 
-# Editors / OS leftovers
-.idea
-.DS_Store
-Thumbs.db
-Desktop.ini
-*~
-
-# Test / tooling artifacts
-playwright-report
-test-results
-blob-report
+# --- Editor: ignore personal settings, keep shared recommendations ---
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
