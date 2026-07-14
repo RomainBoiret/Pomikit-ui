@@ -6,6 +6,10 @@ Pomikit는 제로 설정 기본값과 의도 기반 API를 중심으로 만든 V
 
 ```bash
 npm install pomikit-ui
+# or
+pnpm add pomikit-ui
+# or
+yarn add pomikit-ui
 ```
 
 Peer dependency: Vue 3.

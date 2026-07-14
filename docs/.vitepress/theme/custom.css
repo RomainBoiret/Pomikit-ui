@@ -8,8 +8,74 @@
   --vp-button-brand-active-bg: #249a42;
   --vp-home-hero-name-color: transparent;
   --vp-home-hero-name-background: linear-gradient(120deg, #34c759 30%, #1faa5a);
+  --pomi-theme-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --pomi-theme-duration: 380ms;
+
+  /* Single color pipeline: VitePress chrome follows Pomikit tokens */
+  --vp-c-bg: var(--pomi-bg, #ffffff);
+  --vp-c-bg-alt: var(--pomi-surface, #f8fafc);
+  --vp-c-bg-elv: var(--pomi-surface-elevated, #ffffff);
+  --vp-c-bg-soft: var(--pomi-surface, #f8fafc);
+  --vp-c-border: var(--pomi-border, #e2e8f0);
+  --vp-c-divider: var(--pomi-border, #e2e8f0);
+  --vp-c-gutter: var(--pomi-surface, #f8fafc);
+  --vp-c-text-1: var(--pomi-fg, #0f172a);
+  --vp-c-text-2: var(--pomi-muted, #64748b);
 }
 
+/* Interpolate Pomikit surface tokens together (one clock for the whole UI) */
+@property --pomi-bg {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #ffffff;
+}
+@property --pomi-fg {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #0f172a;
+}
+@property --pomi-muted {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #64748b;
+}
+@property --pomi-surface {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #f8fafc;
+}
+@property --pomi-surface-elevated {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #ffffff;
+}
+@property --pomi-surface-hover {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #f1f5f9;
+}
+@property --pomi-border {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #e2e8f0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html,
+  .hero-showcase,
+  .lab {
+    transition:
+      --pomi-bg var(--pomi-theme-duration) var(--pomi-theme-ease),
+      --pomi-fg var(--pomi-theme-duration) var(--pomi-theme-ease),
+      --pomi-muted var(--pomi-theme-duration) var(--pomi-theme-ease),
+      --pomi-surface var(--pomi-theme-duration) var(--pomi-theme-ease),
+      --pomi-surface-elevated var(--pomi-theme-duration) var(--pomi-theme-ease),
+      --pomi-surface-hover var(--pomi-theme-duration) var(--pomi-theme-ease),
+      --pomi-border var(--pomi-theme-duration) var(--pomi-theme-ease);
+  }
+}
+
+html.dark,
 .dark {
   --vp-c-brand-1: #4ade80;
   --vp-c-brand-2: #34c759;
@@ -18,6 +84,17 @@
   --vp-button-brand-bg: #34c759;
   --vp-button-brand-hover-bg: #4ade80;
   --vp-button-brand-active-bg: #2db84e;
+
+  /* Keep chrome aliased to Pomikit (overrides VitePress default dark literals) */
+  --vp-c-bg: var(--pomi-bg, #16161a);
+  --vp-c-bg-alt: var(--pomi-surface, #1e1e24);
+  --vp-c-bg-elv: var(--pomi-surface-elevated, #26262c);
+  --vp-c-bg-soft: var(--pomi-surface, #1e1e24);
+  --vp-c-border: var(--pomi-border, #2e2e33);
+  --vp-c-divider: var(--pomi-border, #2e2e33);
+  --vp-c-gutter: var(--pomi-surface, #1e1e24);
+  --vp-c-text-1: var(--pomi-fg, #fafafa);
+  --vp-c-text-2: var(--pomi-muted, #a1a1aa);
 }
 
 /* Hide default VitePress home hero/features (marketing home replaces them) */
@@ -31,9 +108,6 @@
   padding-bottom: 0 !important;
   background: var(--pomi-bg, var(--vp-c-bg));
   color: var(--pomi-fg, var(--vp-c-text-1));
-  transition:
-    background-color 0.2s ease,
-    color 0.2s ease;
 }
 
 .VPHome .vp-doc {
@@ -43,8 +117,20 @@
 .VPNavBarTitle .VPImage.logo {
   height: 28px;
   width: 28px;
-  border-radius: 0;
+  padding: 3px;
+  border-radius: 8px;
   object-fit: contain;
+  background: transparent;
+  box-sizing: content-box;
+  transition:
+    background-color var(--pomi-theme-duration, 380ms) var(--pomi-theme-ease, ease),
+    box-shadow var(--pomi-theme-duration, 380ms) var(--pomi-theme-ease, ease);
+}
+
+html.dark .VPNavBarTitle .VPImage.logo,
+.dark .VPNavBarTitle .VPImage.logo {
+  background: #ffffff;
+  box-shadow: 0 0 0 1px color-mix(in srgb, #ffffff 18%, transparent);
 }
 
 .VPNavBarTitle .title {

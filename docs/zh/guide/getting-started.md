@@ -6,6 +6,10 @@ Pomikit 是一个围绕零配置默认值和意图驱动 API 构建的 Vue 3 组
 
 ```bash
 npm install pomikit-ui
+# or
+pnpm add pomikit-ui
+# or
+yarn add pomikit-ui
 ```
 
 Peer dependency：Vue 3。

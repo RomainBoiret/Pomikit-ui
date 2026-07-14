@@ -6,6 +6,10 @@ Pomikit est une bibliothèque de composants Vue 3 conçue autour de valeurs par 
 
 ```bash
 npm install pomikit-ui
+# or
+pnpm add pomikit-ui
+# or
+yarn add pomikit-ui
 ```
 
 Dépendance peer : Vue 3.

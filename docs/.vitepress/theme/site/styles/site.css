@@ -26,9 +26,6 @@ html {
   letter-spacing: var(--pomi-tracking, -0.011em);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  transition:
-    background-color var(--pomi-duration-mid, 160ms) var(--pomi-ease, ease),
-    color var(--pomi-duration-mid, 160ms) var(--pomi-ease, ease);
 }
 
 #app {

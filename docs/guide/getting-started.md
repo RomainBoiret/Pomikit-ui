@@ -6,6 +6,10 @@ Pomikit is a Vue 3 component library built around zero-config defaults and inten
 
 ```bash
 npm install pomikit-ui
+# or
+pnpm add pomikit-ui
+# or
+yarn add pomikit-ui
 ```
 
 Peer dependency: Vue 3.
