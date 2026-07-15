@@ -1,11 +1,19 @@
 {
   "name": "pomikit-ui",
-  "version": "0.2.0",
+  "version": "0.4.1",
   "description": "Less decisions. Better interfaces. Premium Vue 3 components that infer intent — design decided once via Design Kits.",
   "type": "module",
   "author": {
     "name": "Romain Boiret",
     "url": "https://github.com/RomainBoiret"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RomainBoiret/Pomikit-ui.git"
+  },
+  "homepage": "https://romainboiret.github.io/Pomikit-ui/",
+  "bugs": {
+    "url": "https://github.com/RomainBoiret/Pomikit-ui/issues"
   },
   "license": "MIT",
   "keywords": [
